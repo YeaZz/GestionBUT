@@ -1,0 +1,89 @@
+{% extends 'head.html' %}
+{% load static %}
+{% block content %}
+
+<h1>Bienvenue {{ user.last_name }} {{ user.first_name }} !</h1>
+<h2>Vous étudiez dans l'établissement : {{ establishments }}</h2>
+
+<form method="post">
+    <select name="semestre" type="submit">
+        <option value="S1" selected>Semestre 1</option>
+        <option value="S2">Semestre 2</option>
+        <option value="S3">Semestre 3</option>
+        <option value="S4">Semestre 4</option>
+    </select>
+</form>
+
+<div class="content">
+    <section class="semestres">
+        <div class="semestre">
+            <p>Nom de l'UE 1</p>
+            <p>Note UE</p>
+            <p>Classement</p>
+        </div>
+        <div class="semestre">
+            <p>Nom de l'UE 2</p>
+            <p>Note UE</p>
+            <p>Classement</p>
+        </div>
+        <div class="semestre">
+            <p>Nom de l'UE 3</p>
+            <p>Note UE</p>
+            <p>Classement</p>
+        </div>
+        <div class="semestre">
+            <p>Nom de l'UE 1</p>
+            <p>Note UE</p>
+            <p>Classement</p>
+        </div>
+        <div class="semestre">
+            <p>Nom de l'UE 2</p>
+            <p>Note UE</p>
+            <p>Classement</p>
+        </div>
+        <div class="semestre">
+            <p>Nom de l'UE 3</p>
+            <p>Note UE</p>
+            <p>Classement</p>
+        </div>
+        <div class="semestre">
+            <p>Nom de l'UE 1</p>
+            <p>Note UE</p>
+            <p>Classement</p>
+        </div>
+        <div class="semestre">
+            <p>Nom de l'UE 2</p>
+            <p>Note UE</p>
+            <p>Classement</p>
+        </div>
+    </section>
+
+    <aside>
+        <section class="notes">
+            <h3>Mes dernières notes</h3>
+            <div class="note">
+                <p>Nom note 1</p>
+                <p>Note 1</p>
+            </div>
+            <div class="note">
+                <p>Nom note 2</p>
+                <p>Note 1</p>
+            </div>
+            <div class="note">
+                <p>Nom note 3</p>
+                <p>Note 1</p>
+            </div>
+        </section>
+        <section class="links">
+            <h3>Liens utiles</h3>
+            {% for link in usefulLinks %}
+            <div class="link">
+                <img src="{% static link.file_path %}" alt="moodle" />
+                <a href="{{ link.link }}">{{ link.name }}</a>
+            </div>
+            {% endfor %}
+        </section>
+        </aisde>
+</div>
+
+{% endblock %}

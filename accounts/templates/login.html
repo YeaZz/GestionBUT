@@ -1,0 +1,26 @@
+{% extends 'head.html' %}
+{% block content%}
+
+    <h1>Page de connexion</h1>
+
+    <form class="login-form" action="{% url 'accounts:login' %}" method="post">
+        {% csrf_token %}
+        <div class="login-card">
+            <label for="id_username">Nom d'utilisateur</label>
+            {{ form.username }}
+        </div>
+        <div class="login-card">
+            <label for="id_password">Mot de passe</label>
+            {{ form.password }}
+        </div>
+        <button class="login-button" type="submit">Se connecter</button>
+        {% if form.non_field_errors %}
+        <div class="login-errors">
+            {% for error in form.non_field_errors %}
+            <p class="login-error">{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        </form>
+
+{% endblock %}
