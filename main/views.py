@@ -9,10 +9,10 @@ def index(request):
     student = isStudent(user)
 
     if student != False:
-        department = student.group.all().first().department
-
+        group = student.group.all().first()
+        #semester = group.year.semester
+        department = group.department
         establishment = department.establishment
-
         usefulLinks = UsefulLink.objects.all().filter(department_id=department.id)
 
         return render(request, "student_view.html", context={"user": user, "departement": department, "establishment": establishment, "usefulLinks": usefulLinks})
