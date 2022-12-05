@@ -1,27 +1,32 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
-from main.models import Establishment, UsefulLink, Student
+from main.models import Student, Professor
 
 # Create your views here.
 def index(request):
     user = request.user
 
     student = isStudent(user)
+    if student != None:
+        return redirect("student:index")
 
-    if student != False:
-        group = student.group.all().first()
-        #semester = group.year.semester
-        department = group.department
-        establishment = department.establishment
-        usefulLinks = UsefulLink.objects.all().filter(department_id=department.id)
-
-        return render(request, "student_view.html", context={"user": user, "departement": department, "establishment": establishment, "usefulLinks": usefulLinks})
-
+    professor = isProfessor(user)
+    if professor != None:
+        return redirect("professor:index")
+    
     return render(request, "main.html")
+
 
 def isStudent(user):
     students = Student.objects.all();   #récupère tout les étudiants
     for student in students:
         if student.id.id == user.id:    #étudiant loopé est l'utilisateur donné en param
-            return student;             #retourne l'étudiant
-    return False;                       #sinon return False
+            return student              #retourne l'étudiant
+    return None                         #sinon return None
+
+def isProfessor(user):
+    professors = Professor.objects.all();
+    for professor in professors:
+        if professor.id.id == user.id:
+            return professor
+    return None
