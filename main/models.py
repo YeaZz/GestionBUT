@@ -45,6 +45,13 @@ class UE(models.Model):
     def __str__(self):
         return "UE" + str(self.number) + " - " + self.description
 
+class Resource(models.Model):
+    name=models.CharField(max_length=50)
+    ue=models.ManyToManyField(UE)
+
+    def __str__(self):
+        return self.name;
+
 class Semester(models.Model):
     number=models.IntegerField(default=None, blank=False, null=True)
     ue=models.ManyToManyField(UE)
@@ -80,6 +87,7 @@ class Student(models.Model):
 class Professor(models.Model):
     id=models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     department=models.ForeignKey(Department, on_delete=models.CASCADE, default=None, blank=False, null=False)
+    resource=models.ManyToManyField(Resource)
 
     def __str__(self):
         return self.id.username
