@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.template.loader import get_template
 
 from main.models import UsefulLink
 from main.views import isProfessor
@@ -11,8 +12,10 @@ def index(request):
     if professor == None:
         return
 
-    department = professor.deparment.first()
-    establishment = department.establishment
-    usefulLinks = UsefulLink.objects.all().filter(department_id=department.id)
+    departments = professor.departments
 
-    return render(request, "index.html", context={"user": user, "departement": department, "establishment": establishment, "usefulLinks": usefulLinks})
+    return render(request, "p_index.html", context = {
+            "user": user,
+            "departements": departments,
+        }
+    )

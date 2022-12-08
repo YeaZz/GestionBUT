@@ -11,18 +11,18 @@ def index(request):
     if student == None:
         return
 
-    group = student.group.all().first()
+    group = student.groups.all().first()
     semesters = Semester.objects.all()
     department = group.department
     establishment = department.establishment
     usefulLinks = UsefulLink.objects.all().filter(department_id=department.id)
 
-    return render(request, "index.html", context = {
+    return render(request, "s_index.html", context = {
             "user": user,
             "departement": department,
             "establishment": establishment,
             "usefulLinks": usefulLinks,
-            "semesters": semesters
+            "semesters": semesters,
         }
     )
 
