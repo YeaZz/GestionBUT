@@ -1,22 +1,12 @@
-from django.shortcuts import render
-
-from main.models import Establishment, UsefulLink, Student
+from django.shortcuts import render, redirect
+from main.models import Student
 
 # Create your views here.
 def index(request):
     user = request.user
-
     student = isStudent(user)
-
     if student != False:
-        group = student.group.all().first()
-        #semester = group.year.semester
-        department = group.department
-        establishment = department.establishment
-        usefulLinks = UsefulLink.objects.all().filter(department_id=department.id)
-
-        return render(request, "student_view.html", context={"user": user, "departement": department, "establishment": establishment, "usefulLinks": usefulLinks})
-
+        return redirect('student:index')
     return render(request, "main.html")
 
 def isStudent(user):
