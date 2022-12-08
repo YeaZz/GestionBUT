@@ -25,3 +25,6 @@ def index(request):
             "semesters": semesters
         }
     )
+
+def page(request):
+    return render(request, "page.html")
