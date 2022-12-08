@@ -1,10 +1,13 @@
-from django.shortcuts import redirect, HttpResponse
+from django.shortcuts import redirect
 
 from main.models import Student, Professor
 
 # Create your views here.
 def index(request):
     user = request.user
+
+    if not user.is_authenticated:
+        return redirect("accounts:login")
 
     student = isStudent(user)
     if student != None:
@@ -14,7 +17,7 @@ def index(request):
     if professor != None:
         return redirect("professor:index")
     
-    return HttpResponse(status=404)
+    return redirect("accounts:login")
 
 
 def isStudent(user):

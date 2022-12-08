@@ -5,15 +5,14 @@
 <h1>Bienvenue {{ user.last_name }} {{ user.first_name }} !</h1>
 <h2>Vous étudiez dans l'établissement : {{ establishment }}</h2>
 
-<form method="post">
-    <select name="semestre" type="submit">
-        {% for semester in semesters %}
-        <option value="{{ semester }}">Semestre {{ forloop.counter }}</option>
-        {% endfor %}
-    </select>
-</form>
-
 <div class="content">
+    <form method="post">
+        <select name="semestre" type="submit">
+            {% for semester in semesters %}
+            <option value="{{ semester }}">Semestre {{ forloop.counter }}</option>
+            {% endfor %}
+        </select>
+    </form>
     <section class="ues">
         <div class="ue">
             <p>Nom de l'UE 1</p>
@@ -57,7 +56,7 @@
             </div>
             {% endfor %}
         </section>
-        </aisde>
+    </aside>
 </div>
 
 {% endblock %}
