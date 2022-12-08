@@ -7,26 +7,25 @@
 
 <form method="post">
     <select name="semestre" type="submit">
-        <option value="S1" selected>Semestre 1</option>
-        <option value="S2">Semestre 2</option>
-        <option value="S3">Semestre 3</option>
-        <option value="S4">Semestre 4</option>
+        {% for semester in semesters %}
+        <option value="{{ semester }}">Semestre {{ forloop.counter }}</option>
+        {% endfor %}
     </select>
 </form>
 
 <div class="content">
-    <section class="semestres">
-        <div class="semestre">
+    <section class="ues">
+        <div class="ue">
             <p>Nom de l'UE 1</p>
             <p>Note UE</p>
             <p>Classement</p>
         </div>
-        <div class="semestre">
+        <div class="ue">
             <p>Nom de l'UE 2</p>
             <p>Note UE</p>
             <p>Classement</p>
         </div>
-        <div class="semestre">
+        <div class="ue">
             <p>Nom de l'UE 2</p>
             <p>Note UE</p>
             <p>Classement</p>

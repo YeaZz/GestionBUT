@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, HttpResponse
 
 from main.models import Student, Professor
 
@@ -14,7 +14,7 @@ def index(request):
     if professor != None:
         return redirect("professor:index")
     
-    return render(request, "main.html")
+    return HttpResponse(status=404)
 
 
 def isStudent(user):

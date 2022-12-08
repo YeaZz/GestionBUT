@@ -118,18 +118,18 @@ aside {
     padding: 2%;
 }
 
-.semestres, .notes, .links {
+.ues, .notes, .links {
     display: flex;
     flex-wrap: wrap;
 }
 
-.semestres {
-    justify-content: center ;
+.ues {
+    justify-content: center;
 }
 
-.semestre {
+.ue {
     padding: 100px;
-    height: auto;
+    height: max-content;
     border: solid 4px;
     border-color: black;
     margin: 2em;

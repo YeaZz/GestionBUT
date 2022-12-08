@@ -11,7 +11,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('main:main')
+            return redirect('main:index')
     else:
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
