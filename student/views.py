@@ -17,7 +17,7 @@ def index(request):
     establishment = department.establishment
     usefulLinks = UsefulLink.objects.all().filter(department_id=department.id)
 
-    return render(request, "index.html", context = {
+    return render(request, "s_index.html", context = {
             "user": user,
             "departement": department,
             "establishment": establishment,

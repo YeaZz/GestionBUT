@@ -1,0 +1,32 @@
+{% extends 'head.html' %}
+{% load static %}
+{% block content %}
+
+<h1>Bienvenue {{ user.last_name }} {{ user.first_name }} !</h1>
+
+<form method="post">
+    <select name="establishment" type="submit">
+        <option value="">Quel établissement souhaitez-vous voir ?</option>
+        {% for departement in departments %}
+        <option value="{{ department }}">{{department}}</option>
+        {% endfor %}
+    </select>
+</form>
+
+<div class="content">
+    <section class="groupes">
+        <div class="groupe">
+            <p class="grp">nom departement1 année1 grp1</p>
+            <p class="grp">nom departement1 année1 grp2</p>
+            <p class="grp">nom departement1 année1 grp3</p>
+            <p class="grp">nom departement1 année2 grp1</p>
+            <p class="grp">nom departement1 année2 grp2</p>
+            <p class="grp">nom departement1 année3 grp1</p>
+            <p class="grp">nom departement1 année3 grp2</p>
+            <p class="grp">nom departement2 année1 grp1</p>
+            <p class="grp">nom departement2 année2 grp2</p>
+            <p class="grp">nom departement2 année3 grp3</p>
+        </div>
+    </section>
+</div>
+{% endblock %}

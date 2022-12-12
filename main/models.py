@@ -86,8 +86,8 @@ class Student(models.Model):
         
 class Professor(models.Model):
     id=models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    department=models.ForeignKey(Department, on_delete=models.CASCADE, default=None, blank=False, null=False)
-    resource=models.ManyToManyField(Resource)
+    department=models.ManyToManyField(Department)
+    resource=models.ManyToManyField(Resource ,blank=True)
 
     def __str__(self):
         return self.id.username

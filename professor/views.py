@@ -11,8 +11,12 @@ def index(request):
     if professor == None:
         return
 
-    department = professor.deparment.first()
+    department = professor.department.first()
     establishment = department.establishment
     usefulLinks = UsefulLink.objects.all().filter(department_id=department.id)
 
-    return render(request, "index.html", context={"user": user, "departement": department, "establishment": establishment, "usefulLinks": usefulLinks})
+    return render(request, "p_index.html", context={"user": user, "departement": department, "establishment": establishment, "usefulLinks": usefulLinks})
+
+def groupetu(request):
+    user = request.user
+    return render(request, "groupetu.html", context={"user": user})

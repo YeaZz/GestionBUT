@@ -1,0 +1,40 @@
+{% extends 'head.html' %}
+{% load static %}
+{% block content %}
+
+<h1>Bienvenue {{ user.last_name }} {{ user.first_name }} !</h1>
+
+<form method="post">
+    <select name="establishment" type="submit">
+        <option value="">Quel établissement souhaitez-vous voir ?</option>
+        {% for departement in departments %}
+        <option value="{{ department }}">{{department}}</option>
+        {% endfor %}
+    </select>
+</form>
+
+<div class="content">
+    <section class="groupes">
+        <div class="sous_groupe">
+            <p>Info 1AG1.1</p>
+        </div>
+        <div class="sous_groupe">
+            <p>Info 1AG1.2</p>
+        </div>
+    </section>
+    <div class="etu">
+        <p>Noa cavalcante</p>
+        <p>Lilian Ouraha</p>
+        <p>Corto Bouviolle</p>
+        <p>Noa cavalcante</p>
+        <p>Lilian Ouraha</p>
+        <p>Corto Bouviolle</p>
+        <p>Noa cavalcante</p>
+        <p>Lilian Ouraha</p>
+        <p>Corto Bouviolle</p>
+        <p>Noa cavalcante</p>
+        <p>Lilian Ouraha</p>
+        <p>Corto Bouviolle</p>
+    </div>
+</div>
+{% endblock %}
