@@ -1,6 +1,6 @@
 from django.shortcuts import redirect
 
-from main.models import Student, Professor
+from main.models import Student, Professor, Administrator
 
 # Create your views here.
 def index(request):
@@ -16,6 +16,10 @@ def index(request):
     professor = isProfessor(user)
     if professor != None:
         return redirect("professor:index")
+
+    admin = isAdmin(user)
+    if admin != None:
+        return redirect("administrator:index")
     
     return redirect("accounts:login")
 
@@ -32,4 +36,11 @@ def isProfessor(user):
     for professor in professors:
         if professor.id.id == user.id:
             return professor
+    return None
+
+def isAdmin(user):
+    administrators = Administrator.objects.all();
+    for administrator in administrators:
+        if administrator.id.id == user.id:
+            return administrator
     return None

@@ -92,6 +92,14 @@ class Professor(models.Model):
     def __str__(self):
         return self.id.username
 
+class Administrator(models.Model):
+    id=models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    departments=models.ManyToManyField(Department, blank=False)
+    resources=models.ManyToManyField(Resource, blank=True)
+
+    def __str__(self):
+        return self.id.username
+
 class Competence(models.Model):
     name=models.CharField(max_length=50)
     description=models.CharField(max_length=500)
