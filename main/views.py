@@ -5,15 +5,13 @@ from main.models import Student, Professor, Administrator
 # Create your views here.
 def index(request):
     user = request.user
-<<<<<<< HEAD
+
     if (not user.is_authenticated):
         return redirect("accounts:login")
-=======
 
     if not user.is_authenticated:
         return redirect("accounts:login")
 
->>>>>>> cf257c996ac6271d829708a7d9ac7cb76bb62d75
     student = isStudent(user)
     if student != None:
         return redirect("student:index")

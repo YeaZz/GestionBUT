@@ -43,10 +43,7 @@ INSTALLED_APPS = [
     'administrator',
     'professor',
     'student',
-<<<<<<< HEAD
     'professor',
-=======
->>>>>>> cf257c996ac6271d829708a7d9ac7cb76bb62d75
 ]
 
 MIDDLEWARE = [

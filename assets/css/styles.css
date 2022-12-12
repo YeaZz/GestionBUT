@@ -144,17 +144,6 @@ aside {
     justify-content: center;
 }
 
-<<<<<<< HEAD
-.ues,
-.groupes {
-    justify-content: center;
-}
-
-.ue,
-.groupe,
-.sous_groupe {
-    padding: 100px;
-=======
 .semester {
     display: flex;
     flex-wrap: wrap;
@@ -165,13 +154,17 @@ aside {
 .ue {
     padding: 20px;
     width: 35vh;
->>>>>>> cf257c996ac6271d829708a7d9ac7cb76bb62d75
     height: max-content;
     margin: 2em;
     border-radius: 30px;
     background: white;
     box-shadow: 20px 20px 60px #d9d9d9,
-                -20px -20px 60px white;
+        -20px -20px 60px white;
+    transition: transform .5s ease;
+}
+
+.ue:hover {
+    transform: scale(1.1);
     transition: transform .5s ease;
 }
 
@@ -190,16 +183,12 @@ aside {
     align-items: center;
 }
 
-<<<<<<< HEAD
-.link>img {
-=======
-.link > a {
+.link>a {
     text-decoration: none;
     color: black;
 }
 
-.link > img {
->>>>>>> cf257c996ac6271d829708a7d9ac7cb76bb62d75
+.link>img {
     width: 32px;
     height: 32px;
     mix-blend-mode: color-burn;

@@ -86,10 +86,6 @@ class Student(models.Model):
         
 class Professor(models.Model):
     id=models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-<<<<<<< HEAD
-    department=models.ManyToManyField(Department)
-    resource=models.ManyToManyField(Resource ,blank=True)
-=======
     departments=models.ManyToManyField(Department, blank=False)
     resources=models.ManyToManyField(Resource, blank=True)
 
@@ -100,7 +96,6 @@ class Administrator(models.Model):
     id=models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     departments=models.ManyToManyField(Department, blank=False)
     resources=models.ManyToManyField(Resource, blank=True)
->>>>>>> cf257c996ac6271d829708a7d9ac7cb76bb62d75
 
     def __str__(self):
         return self.id.username
