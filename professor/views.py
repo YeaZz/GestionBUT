@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from main.models import UsefulLink
 from main.views import isProfessor
@@ -9,8 +9,9 @@ def index(request):
     professor = isProfessor(user)
 
     if professor == None:
-        return
+        return redirect("accounts:login")
 
+<<<<<<< HEAD
     department = professor.department.first()
     establishment = department.establishment
     usefulLinks = UsefulLink.objects.all().filter(department_id=department.id)
@@ -20,3 +21,12 @@ def index(request):
 def groupetu(request):
     user = request.user
     return render(request, "groupetu.html", context={"user": user})
+=======
+    departments = professor.departments
+
+    return render(request, "p_index.html", context = {
+            "user": user,
+            "departements": departments,
+        }
+    )
+>>>>>>> cf257c996ac6271d829708a7d9ac7cb76bb62d75

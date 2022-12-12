@@ -3,6 +3,7 @@
 {% block content %}
 
 <h1>Bienvenue {{ user.last_name }} {{ user.first_name }} !</h1>
+<<<<<<< HEAD
 
 <form method="post">
     <select name="establishment" type="submit">
@@ -29,4 +30,18 @@
         </div>
     </section>
 </div>
+=======
+<h2>Choisissez l'établissement que vous souhaitez voir :</h2>
+
+<div class="content">
+    <div class="departments">
+        {% for department in departments %}
+        <div class="department">
+            {{ department }}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+>>>>>>> cf257c996ac6271d829708a7d9ac7cb76bb62d75
 {% endblock %}
