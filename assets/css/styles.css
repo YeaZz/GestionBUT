@@ -27,6 +27,10 @@ body {
     font-family: Sora;
 }
 
+h1 {
+    text-align: center;
+}
+
 header {
     width: 100%;
     background-color: dodgerblue;
@@ -59,15 +63,6 @@ nav > div:hover {
 
 .profile span {
     margin-left: 10px;
-}
-
-main {
-    overflow-y: auto;
-    margin-top: 0;
-}
-
-h1 {
-    text-align: center;
 }
 
 .login-form {
@@ -106,33 +101,67 @@ h1 {
     outline: inherit;
 }
 
-.content {
+main {
+    background-color: white;
     display: flex;
-    justify-content: space-between;
-    background-color: bisque;
+    flex-direction: row;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 81%;
+}
+
+#semester {
+    padding: 7px 20px 7px 12px;
+    border: 1px solid #E8EAED;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px -2px #9098A9;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#semester option:disabled {
+    display: none;
 }
 
 aside {
-    min-width: 200px;
-    background-color: lightgray;
+    width: 15%;
     padding: 2%;
+    position: fixed;
+    right: 0;
 }
 
 .ues, .notes, .links {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
-.ues {
+.semester {
+    display: flex;
+    flex-wrap: wrap;
+    display: none;
     justify-content: center;
 }
 
 .ue {
-    padding: 100px;
+    padding: 20px;
+    width: 25vh;
     height: max-content;
-    border: solid 4px;
-    border-color: black;
     margin: 2em;
+    border-radius: 30px;
+    background: white;
+    box-shadow: 20px 20px 60px #d9d9d9,
+                -20px -20px 60px white;
+    transition: transform .5s ease;
+}
+
+.ues > div > div:hover {
+    transform: scale(1.1);
+    transition: transform .5s ease;
 }
 
 .notes, .links {
@@ -144,7 +173,13 @@ aside {
     align-items: center;
 }
 
+.link > a {
+    text-decoration: none;
+    color: black;
+}
+
 .link > img {
     width: 32px;
     height: 32px;
+    mix-blend-mode: color-burn;
 }

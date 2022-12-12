@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from main.models import UsefulLink, Semester
 from main.views import isStudent
@@ -9,15 +9,19 @@ def index(request):
     student = isStudent(user)
 
     if student == None:
-        return
+        return redirect("accounts:login")
 
     group = student.groups.all().first()
     semesters = Semester.objects.all()
+
     department = group.department
     establishment = department.establishment
     usefulLinks = UsefulLink.objects.all().filter(department_id=department.id)
 
-    return render(request, "s_index.html", context = {
+    return render(
+        request, 
+        "s_index.html", 
+        context = {
             "user": user,
             "departement": department,
             "establishment": establishment,

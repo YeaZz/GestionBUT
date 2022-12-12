@@ -1,5 +1,4 @@
-from django.shortcuts import render
-from django.template.loader import get_template
+from django.shortcuts import render, redirect
 
 from main.models import UsefulLink
 from main.views import isProfessor
@@ -10,7 +9,7 @@ def index(request):
     professor = isProfessor(user)
 
     if professor == None:
-        return
+        return redirect("accounts:login")
 
     departments = professor.departments
 
