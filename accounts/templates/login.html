@@ -1,6 +1,6 @@
 {% extends 'head.html' %}
 {% block content%}
-
+<div class="wrapper">
     <h1>Page de connexion</h1>
 
     <form class="login-form" action="{% url 'accounts:login' %}" method="post">
@@ -21,6 +21,6 @@
             {% endfor %}
         </div>
         {% endif %}
-        </form>
-
+    </form>
+</div>
 {% endblock %}
