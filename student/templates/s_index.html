@@ -2,61 +2,58 @@
 {% load static %}
 {% block content %}
 
-<h1>Bienvenue {{ user.last_name }} {{ user.first_name }} !</h1>
-<h2>Vous étudiez dans l'établissement : {{ establishment }}</h2>
+<div class="wrapper">
+    <h1>Bienvenue {{ user.last_name }} {{ user.first_name }} !</h1>
+    <h2>Vous étudiez dans l'établissement : {{ establishment }}</h2>
 
-<div class="content">
     <form method="post">
-        <select name="semestre" type="submit">
+        <select id="semester" name="semestre" type="submit">
+            <option value="" disabled selected>Choisir un semestre</option>
             {% for semester in semesters %}
-            <option value="{{ semester }}">Semestre {{ forloop.counter }}</option>
+            <option value="{{ semester }}">Semestre {{ semester.number }}</option>
             {% endfor %}
         </select>
     </form>
-    <section class="ues">
-        <div class="ue">
-            <p>Nom de l'UE 1</p>
-            <p>Note UE</p>
-            <p>Classement</p>
-        </div>
-        <div class="ue">
-            <p>Nom de l'UE 2</p>
-            <p>Note UE</p>
-            <p>Classement</p>
-        </div>
-        <div class="ue">
-            <p>Nom de l'UE 2</p>
-            <p>Note UE</p>
-            <p>Classement</p>
-        </div>
-    </section>
 
-    <aside>
-        <section class="notes">
-            <h3>Mes dernières notes</h3>
-            <div class="note">
-                <p>Nom note 1</p>
-                <p>Note 1</p>
-            </div>
-            <div class="note">
-                <p>Nom note 2</p>
-                <p>Note 1</p>
-            </div>
-            <div class="note">
-                <p>Nom note 3</p>
-                <p>Note 1</p>
-            </div>
-        </section>
-        <section class="links">
-            <h3>Liens utiles</h3>
-            {% for link in usefulLinks %}
-            <div class="link">
-                <img src="{% static link.file_path %}" alt="moodle" />
-                <a href="{{ link.link }}">{{ link.name }}</a>
+    <section class="ues">
+        {% for semester in semesters %}
+        <div class="semester {{ semester }}">
+            {% for ue in semester.ues.all %}
+            <div class="ue">
+                <p>S{{ semester.number }} UE{{ ue.number }}</p>
+                <p><strong>{{ ue.description }}</strong></p>
+                <p>Note UE</p>
+                <p>Classement</p>
             </div>
             {% endfor %}
-        </section>
-    </aside>
+        </div>
+        {% endfor %}
+    </section>
 </div>
+
+<aside>
+    <section class="notes">
+        <h3>Mes dernières notes</h3>
+        <div class="note">
+            <p>Nom note 1</p>
+            <p>Note 1</p>
+        </div>
+        <div class="note">
+            <p>Nom note 2</p>
+            <p>Note 1</p>
+        </div>
+    </section>
+    <section class="links">
+        <h3>Liens utiles</h3>
+        {% for link in usefulLinks %}
+        <div class="link">
+            <img src="{% static link.file_path %}" alt="moodle" />
+            <a href="{{ link.link }}">{{ link.name }}</a>
+        </div>
+        {% endfor %}
+    </section>
+</aside>
+
+<script src="{% static 'js/student.js' %}"></script>
 
 {% endblock %}
