@@ -2,17 +2,58 @@
 {% load static %}
 {% block content %}
 
-<h1>Bienvenue {{ user.last_name }} {{ user.first_name }} !</h1>
-<h2>Choisissez l'établissement que vous souhaitez voir :</h2>
+<div class="wrapper">
+    <h1>Bienvenue {{ user.last_name }} {{ user.first_name }} !</h1>
+    <h2>Vous étudiez dans l'établissement : {{ establishment }}</h2>
 
-<div class="content">
-    <div class="departments">
-        {% for department in departments %}
-        <div class="department">
-            {{ department }}
+    <form method="post">
+        <select id="semester" name="semestre" type="submit">
+            <option value="" disabled selected>Choisir un semestre</option>
+            {% for semester in semesters %}
+            <option value="{{ semester }}">Semestre {{ semester.number }}</option>
+            {% endfor %}
+        </select>
+    </form>
+
+    <section class="ues">
+        {% for semester in semesters %}
+        <div class="semester {{ semester }}">
+            {% for ue in semester.ues.all %}
+            <div class="ue">
+                <p>S{{ semester.number }} UE{{ ue.number }}</p>
+                <p><strong>{{ ue.description }}</strong></p>
+                <p>Note UE</p>
+                <p>Classement</p>
+            </div>
+            {% endfor %}
         </div>
         {% endfor %}
-    </div>
+    </section>
 </div>
+
+<aside>
+    <section class="notes">
+        <h3>Mes dernières notes</h3>
+        <div class="note">
+            <p>Nom note 1</p>
+            <p>Note 1</p>
+        </div>
+        <div class="note">
+            <p>Nom note 2</p>
+            <p>Note 1</p>
+        </div>
+    </section>
+    <section class="links">
+        <h3>Liens utiles</h3>
+        {% for link in usefulLinks %}
+        <div class="link">
+            <img src="{% static link.file_path %}" alt="moodle" />
+            <a href="{{ link.link }}">{{ link.name }}</a>
+        </div>
+        {% endfor %}
+    </section>
+</aside>
+
+<script src="{% static 'js/student.js' %}"></script>
 
 {% endblock %}
