@@ -7,7 +7,8 @@
     width: 0px;
 }
 
-html, body {
+html,
+body {
     height: 100%;
     padding: 0;
     margin: 0;
@@ -97,6 +98,9 @@ nav > div:hover {
     outline: inherit;
 }
 
+
+
+
 /* GLOBAL STYLING */
 
 main {
@@ -135,10 +139,6 @@ h1 {
     border-color: #0077FF;
 }
 
-#semester:required:invalid {
-    color: #5A667F;
-}
-
 aside {
     width: 15%;
     padding: 2%;
@@ -146,7 +146,10 @@ aside {
     right: 0;
 }
 
-.ues, .notes, .links {
+.ues,
+.groupes,
+.notes,
+.links {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -171,7 +174,7 @@ aside {
     border-radius: 30px;
     background: white;
     box-shadow: 20px 20px 60px #d9d9d9,
-                -20px -20px 60px white;
+        -20px -20px 60px white;
     transition: transform .5s ease;
 }
 
@@ -186,7 +189,8 @@ aside {
 
 /* ASIDE PART */
 
-.notes, .links {
+.notes, 
+.links {
     flex-direction: column;
 }
 
@@ -210,4 +214,31 @@ aside {
     width: 32px;
     height: 32px;
     mix-blend-mode: color-burn;
+}
+
+footer {
+    padding: 30px;
+    background-color: #24262b;
+}
+
+footer h4 {
+    font-size: 25px;
+    color: #ffffff;
+    text-transform: capitalize;
+    text-decoration: underline;
+}
+
+footer p {
+    color: rgb(197, 192, 192);
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #34373d;
+}
+
+.colmn {
+    width: 31%;
+    padding: 1%;
 }
