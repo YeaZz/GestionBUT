@@ -1,9 +1,9 @@
 from django.urls import path
-from student.views import index, page
+from student.views import index, evaluation
 
 app_name = 'student'
 
 urlpatterns = [
     path('', index, name="index"),
-    path('page/', page, name="page")
+    path('<semester_id>/<ue_id>/', evaluation, name="evaluation"),
 ]

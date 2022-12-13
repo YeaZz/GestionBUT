@@ -6,25 +6,25 @@
     <h1>Bienvenue {{ user.last_name }} {{ user.first_name }} !</h1>
     <h2>Vous étudiez dans l'établissement : {{ establishment }}</h2>
 
-    <form method="post">
-        <select id="semester" name="semestre" type="submit">
-            <option value="" disabled selected>Choisir un semestre</option>
-            {% for semester in semesters %}
-            <option value="{{ semester }}">Semestre {{ semester.number }}</option>
-            {% endfor %}
-        </select>
-    </form>
+    <select id="semester" name="semestre" type="submit">
+        {% for semester in semesters %}
+        <option value="{{ semester }}">Semestre {{ semester.number }}</option>
+        {% endfor %}
+    </select>
 
     <section class="ues">
         {% for semester in semesters %}
         <div class="semester {{ semester }}">
             {% for ue in semester.ues.all %}
-            <div class="ue">
-                <p>S{{ semester.number }} UE{{ ue.number }}</p>
-                <p><strong>{{ ue.description }}</strong></p>
-                <p>Note UE</p>
-                <p>Classement</p>
-            </div>
+            <form action="{% url 'student:evaluation' semester_id=semester.id ue_id=ue.id %}" method="post">
+                {% csrf_token %}
+                <div class="ue">
+                    <p>{{ semester }} UE{{ ue.number }}</p>
+                    <p><strong>{{ ue.description }}</strong></p>
+                    <p>Note UE</p>
+                    <p>Classement</p>
+                </div>
+            </form>
             {% endfor %}
         </div>
         {% endfor %}

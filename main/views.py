@@ -6,6 +6,9 @@ from main.models import Student, Professor, Administrator
 def index(request):
     user = request.user
 
+    if (not user.is_authenticated):
+        return redirect("accounts:login")
+
     if not user.is_authenticated:
         return redirect("accounts:login")
 
