@@ -9,8 +9,8 @@ class Establishment(models.Model):
         return self.name
 
 class Department(models.Model):
-    establishment = models.ForeignKey(Establishment, on_delete=models.CASCADE, default=None, blank=False, null=True)
     name = models.CharField(max_length=80)
+    establishment = models.ForeignKey(Establishment, on_delete=models.CASCADE, default=None, blank=False, null=True)
 
     def __str__(self):
         return self.name;
@@ -50,7 +50,7 @@ class Resource(models.Model):
     ues=models.ManyToManyField(UE)
 
     def __str__(self):
-        return self.name;
+        return self.name
 
 class Semester(models.Model):
     number=models.IntegerField(default=None, blank=False, null=True)
@@ -83,7 +83,7 @@ class Student(models.Model):
 
     def __str__(self):
         return self.id.username
-        
+
 class Professor(models.Model):
     id=models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     departments=models.ManyToManyField(Department, blank=False)
@@ -104,6 +104,15 @@ class Competence(models.Model):
     name=models.CharField(max_length=50)
     description=models.CharField(max_length=500)
     ue=models.ForeignKey(UE, on_delete=models.CASCADE, default=None, blank=False, null=True)
+
+    def __str__(self):
+        return self.name;
+
+class Evaluation(models.Model):
+    name=models.CharField(max_length=50)
+    professor=models.ForeignKey(Professor, on_delete=models.CASCADE, default=None, blank=False, null=True)
+    semester=models.ForeignKey(Semester, on_delete=models.CASCADE, default=None, blank=False, null=True)
+    ue=models.ManyToManyField(UE, blank=False)
 
     def __str__(self):
         return self.name;
