@@ -183,3 +183,27 @@ aside {
     height: 32px;
     mix-blend-mode: color-burn;
 }
+
+.blocs{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.bloc{
+    width: 35vh;
+    color: white;
+    background-color: black;
+    margin: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: center;
+    border-radius: 5px;
+    transition: transform .5s ease;
+}
+
+.bloc:hover {
+    transform: scale(1.1);
+    transition: transform .5s ease;
+}
