@@ -1,26 +1,39 @@
 {% extends 'head.html' %}
 {% block content%}
+
 <div class="wrapper">
     <h1>Page de connexion</h1>
-
     <form class="login-form" action="{% url 'accounts:login' %}" method="post">
         {% csrf_token %}
         <div class="login-card">
-            <label for="id_username">Nom d'utilisateur</label>
-            {{ form.username }}
+            <div class="input">
+                <label for="id_username">Nom d'utilisateur</label>
+                {{ form.username }}
+            </div>
+            <div class="input">
+                <label for="id_password">Mot de passe</label>
+                {{ form.password }}
+            </div>
+    
+            <div class="forgotpassword">
+                <div class="input rememberme">
+                    <input id="rememberme" type="checkbox">
+                    <label for="rememberme">Se souvenir de moi</label>
+                </div>
+                <a href="profile.html"><em>Mot de passe oublié ?</em></a>
+            </div>
+
+            <button class="login-button" type="submit">Se connecter</button>
+
+            {% if form.non_field_errors %}
+            <div class="errors">
+                {% for error in form.non_field_errors %}
+                <p class="login-error">{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
         </div>
-        <div class="login-card">
-            <label for="id_password">Mot de passe</label>
-            {{ form.password }}
-        </div>
-        <button class="login-button" type="submit">Se connecter</button>
-        {% if form.non_field_errors %}
-        <div class="login-errors">
-            {% for error in form.non_field_errors %}
-            <p class="login-error">{{ error }}</p>
-            {% endfor %}
-        </div>
-        {% endif %}
     </form>
 </div>
+
 {% endblock %}

@@ -8,28 +8,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion de BUT</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" media="all" />
+    <script src="{% static 'js/script.js' %}" defer></script>
 </head>
 
 <body>
     <header>
         <nav>
-            <div class="homepage" onclick="window.location.href = '/'">
-                Gestion de BUT
-            </div>
-            <div class="profile">
-                {% if user.is_authenticated %}
-                <img src="{% static 'img/jack.jpg' %}" alt="profile picture" />
-                <span>{{ user.last_name|upper }} {{ user.first_name|upper }}</span>
-                <form class="logout" action="{% url 'accounts:logout' %}" method="post">
-                    {% csrf_token %}
-                    <button class="hidden-button" type="submit">Se déconnecter</button>
-                </form>
-                {% else %}
-                <form class="login" action="{% url 'accounts:login' %}" method="post">
-                    <button class="hidden-button" type="submit">Se connecter</button>
-                </form>
-                {% endif %}
-            </div>
+            <form class="auto" action="{% url 'main:index' %}" method="post">
+                {% csrf_token %}
+                <span class="effect-underline">Gestion de BUT</span>
+            </form>
+            {% if user.is_authenticated %}
+            <form class="auto" action="{% url 'accounts:profile' %}" method="post">
+                {% csrf_token %}
+                <span class="effect-underline">{{ user.last_name|upper }} {{ user.first_name|upper }}</span>
+            </form>
+            <form class="auto" action="{% url 'accounts:logout' %}" method="post">
+                {% csrf_token %}
+                <span class="effect-underline">Se déconnecter</span>
+            </form>
+            {% else %}
+            <form class="auto" action="{% url 'accounts:login' %}" method="post">
+                {% csrf_token %}
+                <span class="effect-underline">Se connecter</span>
+            </form>
+            {% endif %}
         </nav>
     </header>
 
@@ -39,31 +42,26 @@
     </main>
 
     <footer>
-        <footer class="footer">
-            <div class="container">
-                <div class="row">
-                    <div class="colmn">
-                        <h4>----------------------</h4>
-                        <p>--------------------</p>
-                        <p>--------------------</p>
-                        <p>--------------------</p>
-                    </div>
-                    <div class="colmn">
-                        <h4>Contact</h4>
-                        <p>lilian.ouraha@etu.univ-lyon1.fr</p>
-                        <p>corto.bouviole@etu.univ-lyon1.fr</p>
-                        <p>noa.cavalcante@etu.univ-lyon1.fr</p>
-                    </div>
-                    <div class="colmn">
-                        <h4>--------------------</h4>
-                        <p>--------------------</p>
-                        <p>--------------------</p>
-                        <p>--------------------</p>
-                    </div>
-                </div>
+        <div class="row">
+            <div class="left">
+                <h4>----------------------</h4>
+                <p>--------------------</p>
+                <p>--------------------</p>
+                <p>--------------------</p>
             </div>
-        </footer>
+            <div class="middle">
+                <h4>Contact</h4>
+                <p>lilian.ouraha@etu.univ-lyon1.fr</p>
+                <p>corto.bouviole@etu.univ-lyon1.fr</p>
+                <p>noa.cavalcante@etu.univ-lyon1.fr</p>
+            </div>
+            <div class="right">
+                <h4>--------------------</h4>
+                <p>--------------------</p>
+                <p>--------------------</p>
+                <p>--------------------</p>
+            </div>
+        </div>
     </footer>
 </body>
-
 </html>
