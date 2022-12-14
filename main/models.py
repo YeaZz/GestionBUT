@@ -94,7 +94,7 @@ class Professor(models.Model):
 
 class Administrator(models.Model):
     id=models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    departments=models.ManyToManyField(Department, blank=False)
+    establishments=models.ManyToManyField(Establishment, blank=False)
     resources=models.ManyToManyField(Resource, blank=True)
 
     def __str__(self):

@@ -4,51 +4,60 @@
 
 <div class="wrapper">
     <h1>Bienvenue {{ user.last_name }} {{ user.first_name }} !</h1>
-    <h2>Vous étudiez dans l'établissement : {{ establishment }}</h2>
 
-    
+    <select id="establishment" name="establishment" type="submit">
+        {% for establishments in establishments.all %}
+        <option value="{{ establishments }}">Semestre {{ semester.number }}</option>
+        {% endfor %}
+    </select>
+
     <div class="blocs">
-        <a href="">
-        <div class="bloc">
-            <p>Ajouter un établissement</p>
-        </div>
-        </a>
+        
+        {%for establishments in establishments.all%}
+        <h3>{{establishment}}</h3>
+        {%endfor%}
 
-        <a href="">
         <div class="bloc">
-            <p>Ajouter un débartement</p>
+            <form action="" method="post">
+                <p>Ajouter un établissement</p>
+            </form>
         </div>
-        </a>
 
-        <a href="">
         <div class="bloc">
-            <p>Gestion des professeurs</p>
+            <form action="" method="post">
+                <p>Ajouter un département</p>
+            </form>
         </div>
-        </a>
 
-        <a href="">
         <div class="bloc">
-            <p>Gestion des notes</p>
+            <form action="{% url 'admin:evaluation' %}" method="post">
+                <p>Gestion des professeurs</p>
+            </form>
         </div>
-        </a>
 
-        <a href="">
         <div class="bloc">
-            <p>Gestion des liens utiles</p>
+            <form action="" method="post">
+                <p>Gestion des notes</p>
+            </form>
         </div>
-        </a>
 
-        <a href="">
         <div class="bloc">
-            <p>Gestion des étudiants</p>
+            <form action="" method="post">
+                <p>Gestion des liens utiles</p>
+            </form>
         </div>
-        </a>
 
-        <a href="">
         <div class="bloc">
-            <p>Modifier l'architecture d'un BUT</p>
+            <form action="" method="post">
+                <p>Gestion des étudiants</p>
+            </form>
         </div>
-        </a>
+
+        <div class="bloc">
+            <form action="" method="post">
+                <p>Modifier l'architecture d'un BUT</p>
+            </form>
+        </div>
     </div>
 
     <aside>

@@ -12,10 +12,10 @@ def index(request):
     if admin == None:
         return
 
-    departments = admin.departments
+    establishments = admin.establishments
 
     return render(request, "a_index.html", context = {
             "user": user,
-            "departements": departments,
+            "establishments" : establishments,
         }
     )
