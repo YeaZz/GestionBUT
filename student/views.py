@@ -1,11 +1,9 @@
 from django.shortcuts import render, redirect
 
-from main.models import UsefulLink, Semester, Evaluation, UE
+from main.models import *
 from main.views import isStudent
 
 # Create your views here.
-
-
 def index(request):
     user = request.user
     student = isStudent(user)
@@ -15,9 +13,8 @@ def index(request):
 
     group = student.groups.all().first()
     semesters = Semester.objects.all()
-
     department = group.department
-    establishment = department.establishment
+    establishment = department.establishments.all().first()
     usefulLinks = UsefulLink.objects.all().filter(department_id=department.id)
 
     return render(
@@ -40,8 +37,6 @@ def evaluation(request, semester_id, ue_id):
     if student == None:
         return redirect("accounts:login")
 
-    print(semester_id)
-
     semester = Semester.objects.all().filter(id=semester_id).first()
     ue = UE.objects.all().filter(id=ue_id).first()
 
@@ -49,7 +44,6 @@ def evaluation(request, semester_id, ue_id):
         return redirect("student:index")
 
     evaluations = Evaluation.objects.all().filter(semester=semester_id, ue=ue_id)
-
     group = student.groups.all().first()
     department = group.department
     usefulLinks = UsefulLink.objects.all().filter(department_id=department.id)

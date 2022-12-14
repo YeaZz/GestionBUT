@@ -3,6 +3,9 @@
     src: url(../fonts/Sora-Regular.ttf);
 }
 
+/* GLOBAL STYLING */
+
+/* HIDE SCROLLBAR */
 *::-webkit-scrollbar {
     width: 0px;
 }
@@ -19,7 +22,19 @@ body {
     flex-direction: column;
     font-family: Sora;
     overflow-y: auto;
-    scrollbar-gutter: stable;
+    box-sizing: border-box;
+}
+
+main {
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    padding: 5vh 0;
+}
+
+h1 {
+    text-align: center;
+    font-size: 40px;
 }
 
 
@@ -30,87 +45,119 @@ body {
 
 header {
     width: 100%;
-    background-color: dodgerblue;
+    background: dodgerblue;
+    color: white;
+    font-size: 18px;
 }
 
 nav {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
-nav > div {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 17px;
+nav > form {
     cursor: pointer;
+    padding: 15px 17px;
 }
 
-nav > div:hover {
-    background-color: red;
+.effect-underline {
+    position: relative;
 }
 
-.profile img {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
+.effect-underline:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    height: 1em;
+    width: 100%;
+    border-bottom: 1px solid;
+    margin-top: 8px;
+    opacity: 0;
+    transition: opacity 0.35s, transform 0.35s;
+    transform: scale(0, 1);
 }
 
-.profile span {
-    margin-left: 10px;
+nav > form:hover .effect-underline:after {
+    opacity: 1;
+    transform: scale(1);
 }
 
-.login-form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-size: 20px;
-}
 
-.login-form input,
-.login-form label {
-    width: max-content;
-}
 
-.login-form input {
-    margin-bottom: 2em;
-}
+
+
+/* LOGIN PAGE */
 
 .login-card {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    margin: 2vh;
+    user-select: none;
+    width: 35vh;
+    padding: 5vh;
+    font-size: 20px;
+    border-radius: 30px;
+    background: white;
+    box-shadow: 20px 20px 60px #d9d9d9,
+        -20px -20px 60px white;
 }
 
-.logout {
-    margin-left: 1em;
+.login-card > * {
+    width: 100%;
 }
 
-.hidden-button {
-    background: none;
-    color: inherit;
+.login-card .input {
+    display: flex;
+    flex-direction: column;
+    margin: 1vh 0;
+}
+
+.login-card input {
+    font-size: inherit;
     border: none;
-    padding: 0;
-    font: inherit;
-    cursor: pointer;
-    outline: inherit;
+    border-bottom: 1px solid;
 }
 
+.login-card input:focus,
+.login-card input:active {
+    outline: none;
+}
 
+.login-card .errors {
+    color: red;
+}
 
-
-/* GLOBAL STYLING */
-
-main {
-    background-color: white;
+.login-card .forgotpassword {
+    all: reset;
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
 }
 
-h1 {
-    text-align: center;
+.login-card .rememberme {
+    flex-direction: row;
+    align-items: center;
+}
+
+.login-card button {
+    height: 6vh;
+    background: dodgerblue;
+    color: white;
+    font-family: inherit;
+    border: none;
+    border-radius: 30px;
+    margin-top: 1vh;
+    cursor: pointer;
+    transition: transform .5s ease;
+}
+
+.login-card button:hover {
+    transform: scale(1.05);
+    transition: transform .5s ease;
 }
 
 
@@ -123,6 +170,10 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
+}
+
+.leftside {
     width: 81%;
 }
 
@@ -132,17 +183,18 @@ h1 {
     border-radius: 5px;
     box-shadow: 0 1px 3px -2px #9098A9;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 20px;
+    font-family: inherit;
 }
 
 #semester:focus {
-    border-color: #0077FF;
+    border-color: dodgerblue;
 }
 
 aside {
     width: 15%;
     padding: 2%;
-    position: fixed;
+    position: block;
     right: 0;
 }
 
@@ -240,6 +292,12 @@ aside {
     transform: scale(1.1);
     transition: transform .5s ease;
 }
+
+
+
+
+/* FOOTER PART */
+
 footer {
     padding: 30px;
     background-color: #24262b;
@@ -253,16 +311,23 @@ footer h4 {
 }
 
 footer p {
-    color: rgb(197, 192, 192);
+    color: white;
 }
 
 .row {
     display: flex;
-    flex-wrap: wrap;
+    justify-content: space-around;
     background-color: #34373d;
 }
 
-.colmn {
-    width: 31%;
-    padding: 1%;
+.middle {
+    text-align: center;
+}
+
+.right {
+    text-align: right;
+}
+
+.left {
+    text-align: left;
 }

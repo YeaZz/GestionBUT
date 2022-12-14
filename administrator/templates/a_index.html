@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 
-<div class="wrapper">
+<div class="wrapper leftside">
     <h1>Bienvenue {{ user.last_name }} {{ user.first_name }} !</h1>
 
     <select id="establishment" name="establishment" type="submit">
@@ -12,7 +12,7 @@
     </select>
 
     <div class="blocs">
-        
+
         {%for establishments in establishments.all%}
         <h3>{{establishment}}</h3>
         {%endfor%}
@@ -59,28 +59,29 @@
             </form>
         </div>
     </div>
+</div>
 
-    <aside>
-        <section class="notes">
-            <h3>Mes dernières notes</h3>
-            <div class="note">
-                <p>Nom note 1</p>
-                <p>Note 1</p>
-            </div>
-            <div class="note">
-                <p>Nom note 2</p>
-                <p>Note 1</p>
-            </div>
-        </section>
-        <section class="links">
-            <h3>Liens utiles</h3>
-            {% for link in usefulLinks %}
-            <div class="link">
-                <img src="{% static link.file_path %}" alt="moodle" />
-                <a href="{{ link.link }}">{{ link.name }}</a>
-            </div>
-            {% endfor %}
-        </section>
-    </aside>
+<aside>
+    <section class="notes">
+        <h3>Mes dernières notes</h3>
+        <div class="note">
+            <p>Nom note 1</p>
+            <p>Note 1</p>
+        </div>
+        <div class="note">
+            <p>Nom note 2</p>
+            <p>Note 1</p>
+        </div>
+    </section>
+    <section class="links">
+        <h3>Liens utiles</h3>
+        {% for link in usefulLinks %}
+        <div class="link">
+            <img src="{% static link.file_path %}" alt="moodle" />
+            <a href="{{ link.link }}">{{ link.name }}</a>
+        </div>
+        {% endfor %}
+    </section>
+</aside>
 
 {% endblock %}

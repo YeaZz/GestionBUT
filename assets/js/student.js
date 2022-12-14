@@ -1,17 +1,9 @@
 const semesterChoice = document.getElementById("semester")
 
-const forms = document.getElementsByTagName("form")
-
 displaySemester()
 
 semesterChoice.addEventListener("click", () => {
     displaySemester()
-})
-
-Array.from(forms).forEach(form => {
-    form.addEventListener("click", form => {
-        form.submit()
-    })
 })
 
 function displaySemester() {
