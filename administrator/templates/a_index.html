@@ -18,9 +18,9 @@
         {%endfor%}
 
         <div class="bloc">
-            <form class="auto" action="{% url 'administrator:addestablishment' %}" method="post">
+            <form class="auto" action="{% url 'administrator:establishmentgest' %}" method="post">
                 {% csrf_token %}
-                <p>Ajouter un établissement</p>
+                <p>Gestion des établissements</p>
             </form>
         </div>
 

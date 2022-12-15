@@ -22,6 +22,22 @@ def index(request):
     )
 
 
+def establishmentgest(request):
+    user = request.user
+    admin = isAdmin(user)
+
+    if admin == None:
+        return
+
+    establishments = Establishment.objects.all()
+
+    return render(request, "establishmentgest.html", context = {
+            "user": user,
+            "establishments" : establishments,
+        }
+    )
+
+
 def addestablishment(request):
     user = request.user
     admin = isAdmin(user)
@@ -29,7 +45,7 @@ def addestablishment(request):
     if admin == None:
         return
 
-    establishments = admin.establishments
+    establishments = Establishment.objects.all()
 
     departments = Department.objects.all()
 
@@ -47,7 +63,7 @@ def adddepartment(request):
     if admin == None:
         return
 
-    establishments = admin.establishments
+    establishments = Establishment.objects.all()
     departments = Department.objects.all()
 
     return render(request, "adddepartment.html", context = {
@@ -64,7 +80,7 @@ def addlink(request):
     if admin == None:
         return
 
-    establishments = admin.establishments
+    establishments = Establishment.objects.all()
 
     return render(request, "addlink.html", context = {
             "user": user,

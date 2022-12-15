@@ -3,16 +3,23 @@
 {% block content %}
 
 <div class="wrapper leftside">
-    <h1>Liste des établissemnts</h1>
+    <h1>Liste des établissements</h1>
 
     <div class="checkbox">
-        {% for department in departments %}
-        <input type="checkbox" class="loisir">{{ department.name }}
-        {% endfor %}
+        <ul>
+            {% for establishment in establishments.all %}
+            <li>{{ establishment.name }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="bloc">
+        <form class="auto" action="{% url 'administrator:addestablishment' %}" method="post">
+            {% csrf_token %}
+            <p>Ajouter un établissement</p>
+        </form>
     </div>
 
 </div>
-
-<script src="{% static 'js/addestablishment.js' %}"></script>
 
 {% endblock %}
