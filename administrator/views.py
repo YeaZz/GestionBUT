@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from django.template.loader import get_template
 
 from main.models import *
 from main.views import isAdmin
@@ -9,10 +8,12 @@ def index(request):
     user = request.user
     admin = isAdmin(user)
 
-    if admin == None:
-        return redirect("accounts:login")
+    print(admin)
 
-    establishments = admin.establishments
+    if admin == None:
+        return redirect("login")
+
+    establishments = Establishment.objects.all()
 
     return render(request, "a_index.html", context = {
             "user": user,

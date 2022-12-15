@@ -9,8 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def login(request):
     user = request.user
-    if user.is_authenticated:
-        return redirect("main:index")
+    
     if request.method == "POST":
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():

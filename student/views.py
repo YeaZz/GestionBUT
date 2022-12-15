@@ -17,12 +17,13 @@ def index(request):
     establishment = department.establishments.all().first()
     usefulLinks = UsefulLink.objects.all().filter(department_id=department.id)
 
+    
+
     return render(
         request,
         "s_index.html",
         context = {
             "user": user,
-            "departement": department,
             "establishment": establishment,
             "usefulLinks": usefulLinks,
             "semesters": semesters,

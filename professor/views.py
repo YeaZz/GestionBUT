@@ -21,15 +21,15 @@ def index(request):
             promos = Group.objects.all().filter(parent=None, department=department.id)
             for promo in promos:
                 eta_dpt_grps[establishment][department][promo] = Group.objects.all().filter(parent=promo, department=department.id)
-                
+
     return render(
         request,
         "p_index.html",
         context={
             "user": user,
             "establishments": establishments,
-            "promos":promos,
-            "eta_dpt_grps":eta_dpt_grps
+            "promos": promos,
+            "eta_dpt_grps": eta_dpt_grps,
         }
     )
 
@@ -49,6 +49,6 @@ def ajoutNote(request):
         request,
         "ajoutnote.html",
         context = {
-            "user":user
+            "user": user
         }
     )
