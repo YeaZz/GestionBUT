@@ -12,7 +12,7 @@ def index(request):
     if admin == None:
         return redirect("accounts:login")
 
-    establishments = admin.establishments
+    establishments = Establishment.objects.all()
 
     return render(request, "a_index.html", context = {
             "user": user,
@@ -28,7 +28,7 @@ def establishmentgest(request):
     if admin == None:
         return
 
-    establishments = admin.establishments
+    establishments = Establishment.objects.all()
 
     return render(request, "establishmentgest.html", context = {
             "user": user,
@@ -44,7 +44,7 @@ def addestablishment(request):
     if admin == None:
         return
 
-    establishments = admin.establishments
+    establishments = Establishment.objects.all()
 
     departments = Department.objects.all()
 
@@ -62,7 +62,7 @@ def adddepartment(request):
     if admin == None:
         return
 
-    establishments = admin.establishments
+    establishments = Establishment.objects.all()
     departments = Department.objects.all()
 
     return render(request, "adddepartment.html", context = {
@@ -79,7 +79,7 @@ def addlink(request):
     if admin == None:
         return
 
-    establishments = admin.establishments
+    establishments = Establishment.objects.all()
 
     return render(request, "addlink.html", context = {
             "user": user,
