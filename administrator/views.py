@@ -21,6 +21,22 @@ def index(request):
     )
 
 
+def establishmentgest(request):
+    user = request.user
+    admin = isAdmin(user)
+
+    if admin == None:
+        return
+
+    establishments = admin.establishments
+
+    return render(request, "establishmentgest.html", context = {
+            "user": user,
+            "establishments" : establishments,
+        }
+    )
+
+
 def addestablishment(request):
     user = request.user
     admin = isAdmin(user)
