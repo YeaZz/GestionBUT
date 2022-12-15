@@ -30,6 +30,7 @@ main {
     display: flex;
     flex-direction: row;
     padding: 8vh 0;
+    min-width: 100vh;
 }
 
 h1 {

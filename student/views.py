@@ -49,7 +49,7 @@ def evaluation(request, semester_id, ue_id):
 
     return render(
         request,
-        "notes.html",
+        "evaluation.html",
         context={
             "semester": semester,
             "ue": ue,
