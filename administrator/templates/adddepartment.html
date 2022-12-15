@@ -1,0 +1,49 @@
+{% extends 'head.html' %}
+{% load static %}
+{% block content %}
+
+<div class="wrapper leftside">
+    <h1>Ajout d'un département</h1>
+
+    <div class="container">
+        <form method="post">
+            {% csrf_token %}
+            <h3>Formulaire d'ajout</h3>
+            <input type="text" id="firstname" placeholder="Nom établissement" required><p id="name-error"></p>
+            <h4>Département :</h4>
+				<div class="checkbox">
+                    {% for department in departments %}
+                    <input type="radio" class="loisir">{{ department.name }}
+                    {% endfor %}
+				</div>
+            <button onclick="subsubmit()" id="submit">Soumettre</button>
+        </form>
+    </div>
+</div>
+
+<aside>
+    <section class="notes">
+        <h3>Mes dernières notes</h3>
+        <div class="note">
+            <p>Nom note 1</p>
+            <p>Note 1</p>
+        </div>
+        <div class="note">
+            <p>Nom note 2</p>
+            <p>Note 1</p>
+        </div>
+    </section>
+    <section class="links">
+        <h3>Liens utiles</h3>
+        {% for link in usefulLinks %}
+        <div class="link">
+            <img src="{% static link.file_path %}" alt="moodle" />
+            <a href="{{ link.link }}">{{ link.name }}</a>
+        </div>
+        {% endfor %}
+    </section>
+</aside>
+
+<script src="{% static 'js/adddepartment.js' %}"></script>
+
+{% endblock %}

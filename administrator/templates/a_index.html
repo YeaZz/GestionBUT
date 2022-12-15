@@ -6,8 +6,8 @@
     <h1>Bienvenue {{ user.last_name }} {{ user.first_name }} !</h1>
 
     <select id="establishment" name="establishment" type="submit">
-        {% for establishments in establishments.all %}
-        <option value="{{ establishments }}">Semestre {{ semester.number }}</option>
+        {% for establishment in establishments.all %}
+        <option value="{{ establishments }}">Etablissement {{ establishment.number }}</option>
         {% endfor %}
     </select>
 
@@ -18,43 +18,50 @@
         {%endfor%}
 
         <div class="bloc">
-            <form action="" method="post">
+            <form class="auto" action="{% url 'administrator:addestablishment' %}" method="post">
+                {% csrf_token %}
                 <p>Ajouter un établissement</p>
             </form>
         </div>
 
         <div class="bloc">
-            <form action="" method="post">
+            <form class="auto" action="{% url 'administrator:adddepartment' %}" method="post">
+                {% csrf_token %}
                 <p>Ajouter un département</p>
             </form>
         </div>
 
         <div class="bloc">
-            <form action="{% url 'admin:evaluation' %}" method="post">
-                <p>Gestion des professeurs</p>
-            </form>
-        </div>
-
-        <div class="bloc">
-            <form action="" method="post">
-                <p>Gestion des notes</p>
-            </form>
-        </div>
-
-        <div class="bloc">
-            <form action="" method="post">
+            <form class="auto" action="{% url 'administrator:addlink' %}" method="post">
+                {% csrf_token %}
                 <p>Gestion des liens utiles</p>
             </form>
         </div>
 
         <div class="bloc">
-            <form action="" method="post">
+            <form class="auto" action="" method="post">
+                {% csrf_token %}
+                <p>Gestion des professeurs</p>
+            </form>
+        </div>
+
+        <div class="bloc">
+            <form class="auto" action="" method="post">
+                {% csrf_token %}
+                <p>Gestion des notes</p>
+            </form>
+        </div>
+
+        <div class="bloc">
+            <form class="auto" action="" method="post">
+                {% csrf_token %}
                 <p>Gestion des étudiants</p>
             </form>
         </div>
 
         <div class="bloc">
-            <form action="" method="post">
+            <form class="auto" action="" method="post">
+                {% csrf_token %}
                 <p>Modifier l'architecture d'un BUT</p>
             </form>
         </div>
