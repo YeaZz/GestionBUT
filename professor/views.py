@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 
-from main.models import UsefulLink
+from main.models import *
 from main.views import isProfessor
 
 # Create your views here.
@@ -9,21 +9,46 @@ def index(request):
     professor = isProfessor(user)
 
     if professor == None:
-        return redirect("accounts:login")
+        return redirect("login")
 
-    department = professor.department.first()
-    establishment = department.establishment
-    usefulLinks = UsefulLink.objects.all().filter(department_id=department.id)
+    establishments = professor.establishments.all()
 
-    return render(request, "p_index.html", context={"user": user, "departement": department, "establishment": establishment, "usefulLinks": usefulLinks})
-
-def groupetu(request):
-    user = request.user
-
-    departments = ""
-
-    return render(request, "p_index.html", context = {
+    eta_dpt_grps = {}
+    for establishment in establishments:
+        eta_dpt_grps[establishment] = {}
+        for department in establishment.departments.all():
+            eta_dpt_grps[establishment][department] = {}
+            promos = Group.objects.all().filter(parent=None, department=department.id)
+            for promo in promos:
+                eta_dpt_grps[establishment][department][promo] = Group.objects.all().filter(parent=promo, department=department.id)
+                
+    return render(
+        request,
+        "p_index.html",
+        context={
             "user": user,
-            "departements": departments,
+            "establishments": establishments,
+            "promos":promos,
+            "eta_dpt_grps":eta_dpt_grps
+        }
+    )
+
+def groupEtu(request):
+    user = request.user
+    return render(
+        request,
+        "groupetu.html",
+        context = {
+            "user": user
+        }
+    )
+
+def ajoutNote(request):
+    user=request.user
+    return render(
+        request,
+        "ajoutnote.html",
+        context = {
+            "user":user
         }
     )

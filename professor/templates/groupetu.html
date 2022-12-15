@@ -2,39 +2,120 @@
 {% load static %}
 {% block content %}
 
-<h1>Bienvenue {{ user.last_name }} {{ user.first_name }} !</h1>
+<h1 class="border">Groupe Informatique  1AG1 de l'IUT Claude Bernard Lyon 1</h1>
 
-<form method="post">
-    <select name="establishment" type="submit">
-        <option value="">Quel établissement souhaitez-vous voir ?</option>
-        {% for departement in departments %}
-        <option value="{{ department }}">{{department}}</option>
-        {% endfor %}
-    </select>
-</form>
 
-<div class="content">
-    <section class="groupes">
-        <div class="sous_groupe">
-            <p>Info 1AG1.1</p>
+<div class="main">
+    <section class="establishment_groupes">
+        <div class="establishment_sous_groupe1">
+            <p class="infogrp">Info 1AG1.1</p>
+            <div class="etu">
+                <div class="noa">
+                    <p>Noa cavalcante</p>
+                    <div class="actionetu">
+                        <button>Supprimer une note</button><br>
+                        <button>Modifier une note</button><br>
+                    </div>
+                </div>
+                <div class="noa">
+                        <p>Lilian Ouraha</p>
+                    <div class="actionetu">
+                        <button>Supprimer une note</button><br>
+                        <button>Modifier une note</button><br>
+                    </div>
+                </div>
+                <div class="noa">
+                        <p>Corto Bouviolle</p>
+                    <div class="actionetu">
+                        <button>Supprimer une note</button><br>
+                        <button>Modifier une note</button><br>
+                    </div>
+                </div>
+                <div class="noa">
+                    <p>Noa cavalcante</p>
+                    <div class="actionetu">
+                        <button>Supprimer une note</button><br>
+                        <button>Modifier une note</button><br>
+                    </div>
+                </div> 
+                <div class="noa">
+                        <p>Lilian Ouraha</p>
+                    <div class="actionetu">
+                        <button>Supprimer une note</button><br>
+                        <button>Modifier une note</button><br>
+                    </div>
+                </div>
+                <div class="noa">
+                        <p>Corto Bouviolle</p>
+                    <div class="actionetu">
+                        <button>Supprimer une note</button><br>
+                        <button>Modifier une note</button><br>
+                    </div>
+                </div>
+                <div class="noa">
+                    <p>Noa cavalcante</p>
+                    <div class="actionetu">
+                        <button>Supprimer une note</button><br>
+                        <button>Modifier une note</button><br>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="sous_groupe">
-            <p>Info 1AG1.2</p>
+        <div class="establishment_sous_groupe2">
+            <p class="infogrp">Info 1AG1.1</p>
+            <div class="etu">
+                <div class="noa">
+                    <p>Noa cavalcante</p>
+                    <div class="actionetu">
+                        <button>Supprimer une note</button><br>
+                        <button>Modifier une note</button><br>
+                    </div>
+                </div>
+                <div class="noa">
+                        <p>Lilian Ouraha</p>
+                    <div class="actionetu">
+                        <button>Supprimer une note</button><br>
+                        <button>Modifier une note</button><br>
+                    </div>
+                </div>
+                <div class="noa">
+                        <p>Corto Bouviolle</p>
+                    <div class="actionetu">
+                        <button>Supprimer une note</button><br>
+                        <button>Modifier une note</button><br>
+                    </div>
+                </div>
+                <div class="noa">
+                    <p>Noa cavalcante</p>
+                    <div class="actionetu">
+                        <button>Supprimer une note</button><br>
+                        <button>Modifier une note</button><br>
+                    </div>
+                </div> 
+                <div class="noa">
+                        <p>Lilian Ouraha</p>
+                    <div class="actionetu">
+                        <button>Supprimer une note</button><br>
+                        <button>Modifier une note</button><br>
+                    </div>
+                </div>
+                <div class="noa">
+                        <p>Corto Bouviolle</p>
+                    <div class="actionetu">
+                        <button>Supprimer une note</button><br>
+                        <button>Modifier une note</button><br>
+                    </div>
+                </div>
+                <div class="noa">
+                    <p>Noa cavalcante</p>
+                    <div class="actionetu">
+                        <button>Supprimer une note</button><br>
+                        <button>Modifier une note</button><br>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
-    <div class="etu">
-        <p>Noa cavalcante</p>
-        <p>Lilian Ouraha</p>
-        <p>Corto Bouviolle</p>
-        <p>Noa cavalcante</p>
-        <p>Lilian Ouraha</p>
-        <p>Corto Bouviolle</p>
-        <p>Noa cavalcante</p>
-        <p>Lilian Ouraha</p>
-        <p>Corto Bouviolle</p>
-        <p>Noa cavalcante</p>
-        <p>Lilian Ouraha</p>
-        <p>Corto Bouviolle</p>
-    </div>
+
 </div>
 {% endblock %}

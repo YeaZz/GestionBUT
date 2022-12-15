@@ -1,3 +1,4 @@
+import math
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -6,7 +7,7 @@ class Department(models.Model):
     name = models.CharField(max_length=80)
 
     def __str__(self):
-        return self.name;
+        return self.name
 
 class Establishment(models.Model):
     name = models.CharField(max_length=80)
@@ -22,7 +23,7 @@ class UsefulLink(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE, default=None, blank=False, null=True)
 
     def __str__(self):
-        return self.name;
+        return self.name
 
 class BUT(models.Model):
     type = models.CharField(max_length=50)
@@ -64,7 +65,7 @@ class Year(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, default=None, blank=True, null=True)
     first_semester = models.ForeignKey(Semester, related_name="first_semester", on_delete=models.CASCADE, default=None, blank=False, null=True)
     second_semester = models.ForeignKey(Semester, related_name="second_semester", on_delete=models.CASCADE, default=None, blank=False, null=True)
-    
+
     def __str__(self):
         return self.name
 
@@ -94,8 +95,6 @@ class Professor(models.Model):
 
 class Administrator(models.Model):
     id = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    establishments = models.ManyToManyField(Establishment, blank=False)
-    resources = models.ManyToManyField(Resource, blank=True)
 
     def __str__(self):
         return self.id.username
@@ -106,9 +105,8 @@ class Competence(models.Model):
     ue = models.ForeignKey(UE, on_delete=models.CASCADE, default=None, blank=False, null=True)
 
     def __str__(self):
-        return self.name;
+        return self.name
 
-import math
 
 class Evaluation(models.Model):
     name = models.CharField(max_length=50)
@@ -117,8 +115,8 @@ class Evaluation(models.Model):
     ue = models.ManyToManyField(UE, blank=False)
 
     def __str__(self):
-        return self.name;
-    
+        return self.name
+
     def calcAverage(self):
         grades = Grade.objects.all().filter(evaluation=self.id)
         if grades.count() <= 0:
@@ -127,7 +125,7 @@ class Evaluation(models.Model):
         for grade in grades.all():
             sum += grade.note
         return sum / grades.count()
-    
+
     def calcMax(self):
         grades = Grade.objects.all().filter(evaluation=self.id)
         if grades.count() <= 0:
@@ -154,9 +152,10 @@ class Grade(models.Model):
     coef = models.FloatField(default=1.0, blank=True, null=False)
 
     def calcNote(self):
-        return self.note * self.coef;
+        return self.note * self.coef
 
 def loadInformatique():
+    empty()
     department = Department(name="Informatique")
     department.save()
 
@@ -198,7 +197,7 @@ def loadInformatique():
     ue5_2.save()
     ue5_3 = UE(number=5, description="Participer à la conception et à la mise en oeuvre d'un projet système d'information")
     ue5_3.save()
-    
+
     ue6_1 = UE(number=6, description="Identifier ses aptitudes pour travailler dans une équipe")
     ue6_1.save()
     ue6_2 = UE(number=6, description="Situer son rôle et ses missions au sein d'une équipe informatique")

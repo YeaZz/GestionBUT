@@ -1,0 +1,18 @@
+{% extends 'head.html' %}
+{% load static %}
+{% block content %}
+
+<div class="wrapper leftside">
+    <h1>Liste des établissemnts</h1>
+
+    <div class="checkbox">
+        {% for department in departments %}
+        <input type="checkbox" class="loisir">{{ department.name }}
+        {% endfor %}
+    </div>
+
+</div>
+
+<script src="{% static 'js/addestablishment.js' %}"></script>
+
+{% endblock %}
