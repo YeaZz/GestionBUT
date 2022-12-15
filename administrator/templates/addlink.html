@@ -15,29 +15,6 @@
     </div>
 </div>
 
-<aside>
-    <section class="notes">
-        <h3>Mes dernières notes</h3>
-        <div class="note">
-            <p>Nom note 1</p>
-            <p>Note 1</p>
-        </div>
-        <div class="note">
-            <p>Nom note 2</p>
-            <p>Note 1</p>
-        </div>
-    </section>
-    <section class="links">
-        <h3>Liens utiles</h3>
-        {% for link in usefulLinks %}
-        <div class="link">
-            <img src="{% static link.file_path %}" alt="moodle" />
-            <a href="{{ link.link }}">{{ link.name }}</a>
-        </div>
-        {% endfor %}
-    </section>
-</aside>
-
 <script src="{% static 'js/addlink.js' %}"></script>
 
 {% endblock %}
