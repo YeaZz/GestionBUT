@@ -1,9 +1,10 @@
 from django.urls import path
-from professor.views import index, groupetu
+from professor.views import *
 
 app_name = 'professor'
 
 urlpatterns = [
     path('', index, name="index"),
-    path('groupetu/',groupetu,name="groupetu")
+    path('groupetu/', groupEtu, name="groupetu"),
+    path('ajoutnote/', ajoutNote, name="ajoutnote"),
 ]
