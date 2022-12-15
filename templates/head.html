@@ -19,16 +19,16 @@
                 <span class="effect-underline">Gestion de BUT</span>
             </form>
             {% if user.is_authenticated %}
-            <form class="auto" action="{% url 'accounts:profile' %}" method="post">
+            <form class="auto" action="{% url 'profile' %}" method="post">
                 {% csrf_token %}
                 <span class="effect-underline">{{ user.last_name|upper }} {{ user.first_name|upper }}</span>
             </form>
-            <form class="auto" action="{% url 'accounts:logout' %}" method="post">
+            <form class="auto" action="{% url 'logout' %}" method="post">
                 {% csrf_token %}
                 <span class="effect-underline">Se déconnecter</span>
             </form>
             {% else %}
-            <form class="auto" action="{% url 'accounts:login' %}" method="post">
+            <form class="auto" action="{% url 'login' %}" method="post">
                 {% csrf_token %}
                 <span class="effect-underline">Se connecter</span>
             </form>

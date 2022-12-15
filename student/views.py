@@ -20,7 +20,7 @@ def index(request):
     return render(
         request,
         "s_index.html",
-        context={
+        context = {
             "user": user,
             "departement": department,
             "establishment": establishment,
@@ -28,7 +28,6 @@ def index(request):
             "semesters": semesters,
         }
     )
-
 
 def evaluation(request, semester_id, ue_id):
     user = request.user

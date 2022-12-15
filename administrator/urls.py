@@ -1,5 +1,5 @@
 from django.urls import path
-from administrator.views import index, addestablishment, adddepartment, addlink
+from administrator.views import *
 
 app_name = 'administrator'
 

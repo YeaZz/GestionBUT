@@ -1,12 +1,26 @@
 {% extends 'head.html' %}
 {% block content%}
 
-    <h1>Page de connexion</h1>
-
-    <form class="login-form" action="{% url 'accounts:login' %}" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Se connecter">
-    </form>
+<div class="wrapper">
+    <div class="info-card">
+        <h1>Profil utilisateur</h1>
+        <div class="info">
+            <p>Nom d'utilisateur</p>
+            <p class="data">{{ user.username }}</p>
+        </div>
+        <div class="info">
+            <p>Nom</p>
+            <p class="data">{{ user.last_name }}</p>
+        </div>
+        <div class="info">
+            <p>Prénom</p>
+            <p class="data">{{ user.first_name }}</p>
+        </div>
+        <div class="info">
+            <p>Email</p>
+            <p class="data">{{ user.email }}</p>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
