@@ -7,10 +7,10 @@ def index(request):
     user = request.user
 
     if (not user.is_authenticated):
-        return redirect("accounts:login")
+        return redirect("login")
 
     if not user.is_authenticated:
-        return redirect("accounts:login")
+        return redirect("login")
 
     student = isStudent(user)
     if student != None:
@@ -24,7 +24,7 @@ def index(request):
     if admin != None:
         return redirect("administrator:index")
     
-    return redirect("accounts:login")
+    return redirect("login")
 
 
 def isStudent(user):

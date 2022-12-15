@@ -29,12 +29,13 @@ main {
     background-color: white;
     display: flex;
     flex-direction: row;
-    padding: 5vh 0;
+    padding: 8vh 0;
 }
 
 h1 {
     text-align: center;
-    font-size: 40px;
+    font-size: 33px;
+    margin-top: 0;
 }
 
 
@@ -78,7 +79,7 @@ nav > form {
     transform: scale(0, 1);
 }
 
-nav > form:hover .effect-underline:after {
+form:hover .effect-underline:after {
     opacity: 1;
     transform: scale(1);
 }
@@ -89,14 +90,15 @@ nav > form:hover .effect-underline:after {
 
 /* LOGIN PAGE */
 
-.login-card {
+.login-card,
+.reset_password-card {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: 2vh;
     user-select: none;
     width: 35vh;
-    padding: 5vh;
+    padding: 8vh;
     font-size: 20px;
     border-radius: 30px;
     background: white;
@@ -104,33 +106,44 @@ nav > form:hover .effect-underline:after {
         -20px -20px 60px white;
 }
 
-.login-card > * {
+.login-card > form,
+.reset_password-card > form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
 }
 
-.login-card .input {
+.login-card > form > *,
+.reset_password-card > form > * {
+    width: 100%;
+}
+
+.login-card .input,
+.reset_password-card .input {
     display: flex;
     flex-direction: column;
-    margin: 1vh 0;
+    margin: 2vh 0;
 }
 
-.login-card input {
-    font-size: inherit;
+.login-card input,
+.reset_password-card input {
     border: none;
     border-bottom: 1px solid;
+    font: inherit;
 }
 
-.login-card input:focus,
-.login-card input:active {
+.login-card input:focus:not([type=checkbox]),
+.reset_password-card input:focus {
     outline: none;
 }
 
 .login-card .errors {
     color: red;
+    
 }
 
 .login-card .forgotpassword {
-    all: reset;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -143,21 +156,66 @@ nav > form:hover .effect-underline:after {
     align-items: center;
 }
 
-.login-card button {
-    height: 6vh;
+.login-card .login-button,
+.reset_password-card .reset_password-button {
     background: dodgerblue;
     color: white;
-    font-family: inherit;
+    font: inherit;
+    height: 6vh;
     border: none;
     border-radius: 30px;
-    margin-top: 1vh;
+    margin-top: 4vh;
     cursor: pointer;
     transition: transform .5s ease;
 }
 
-.login-card button:hover {
+.login-card .login-button:hover,
+.login-card .login-button:focus,
+.reset_password-card .reset_password-button:hover,
+.reset_password-card .reset_password-button:focus {
     transform: scale(1.05);
     transition: transform .5s ease;
+    outline: none;
+}
+
+
+
+
+
+/* PROFILE PAGE */
+
+.info-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2vh;
+    width: 50vh;
+    padding: 8vh;
+    font-size: 20px;
+    border-radius: 30px;
+    background: white;
+    box-shadow: 20px 20px 60px #d9d9d9,
+        -20px -20px 60px white;
+}
+
+.info-card > * {
+    width: 100%;
+}
+
+.info-card .info {
+    display: flex;
+    flex-direction: column;
+    margin: 2vh 0;
+}
+
+.info-card p {
+    margin: unset;
+}
+
+.info-card .data {
+    border: 1px solid black;
+    padding: 1vh;
+    margin-top: 1vh;
 }
 
 
@@ -173,7 +231,7 @@ nav > form:hover .effect-underline:after {
     width: 100%;
 }
 
-.leftside {
+.left-side {
     width: 81%;
 }
 
