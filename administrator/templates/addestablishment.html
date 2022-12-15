@@ -1,0 +1,29 @@
+{% extends 'head.html' %}
+{% load static %}
+{% block content %}
+
+<div class="wrapper">
+    <h1>Ajout d'un établissement</h1>
+
+    <div class="container">
+        <form method="post">
+            {% csrf_token %}
+            <h3>Formulaire d'ajout</h3>
+            <input type="text" id="firstname" placeholder="Nom établissement" required><p id="name-error"></p>
+            <input type="text" id="lastname" placeholder="Adresse" required><p id="surname-error"></p>
+            <input type="text" id="city" placeholder="Ville" required><p id="city-error"></p>
+            <input type="text" id="admin" placeholder="Identifiant admin par défaut" required><p id="admin-error"></p>
+            <h4>Département(s) :</h4>
+				<div class="checkbox">
+                    {% for department in departments %}
+                    <input type="checkbox" class="loisir">{{ department.name }}
+                    {% endfor %}
+				</div>
+            <button onclick="subsubmit()" id="submit">Soumettre</button>
+        </form>
+    </div>
+</div>
+
+<script src="{% static 'js/addestablishment.js' %}"></script>
+
+{% endblock %}
