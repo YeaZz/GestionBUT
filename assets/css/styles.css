@@ -1,3 +1,8 @@
+:root {
+    --primary-color: white;
+    --element-color: #1D4851;
+}
+
 @font-face {
     font-family: Sora;
     src: url(../fonts/Sora-Regular.ttf);
@@ -7,7 +12,7 @@
 
 /* HIDE SCROLLBAR */
 *::-webkit-scrollbar {
-    width: 0px;
+    width: 0;
 }
 
 html,
@@ -26,11 +31,11 @@ body {
 }
 
 main {
-    background-color: white;
+    background-color: var(--primary-color);
     display: flex;
     flex-direction: row;
-    padding: 8vh 0;
-    min-height: 100vh;
+    padding: 80px 0;
+    user-select: none;
 }
 
 h1 {
@@ -47,7 +52,7 @@ h1 {
 
 header {
     width: 100%;
-    background: dodgerblue;
+    background: var(--element-color);
     color: white;
     font-size: 18px;
 }
@@ -96,13 +101,12 @@ form:hover .effect-underline:after {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 2vh;
-    user-select: none;
-    width: 35vh;
-    padding: 8vh;
+    margin: 1%;
+    width: 17%;
+    padding: 4%;
     font-size: 20px;
     border-radius: 30px;
-    background: white;
+    background: var(--primary-color);
     box-shadow: 20px 20px 60px #d9d9d9,
         -20px -20px 60px white;
 }
@@ -124,7 +128,7 @@ form:hover .effect-underline:after {
 .reset_password-card .input {
     display: flex;
     flex-direction: column;
-    margin: 2vh 0;
+    margin: 6% 0;
 }
 
 .login-card input,
@@ -141,10 +145,9 @@ form:hover .effect-underline:after {
 
 .login-card .errors {
     color: red;
-    
 }
 
-.login-card .forgotpassword {
+.forgotpassword {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -152,28 +155,28 @@ form:hover .effect-underline:after {
     font-size: 12px;
 }
 
-.login-card .rememberme {
+.forgotpassword .rememberme {
     flex-direction: row;
     align-items: center;
 }
 
-.login-card .login-button,
-.reset_password-card .reset_password-button {
-    background: dodgerblue;
-    color: white;
+.login-button,
+.reset_password-button {
+    background: var(--element-color);
+    color: var(--primary-color);
     font: inherit;
-    height: 6vh;
+    height: 3em;
     border: none;
     border-radius: 30px;
-    margin-top: 4vh;
+    margin-top: 10%;
     cursor: pointer;
     transition: transform .5s ease;
 }
 
-.login-card .login-button:hover,
-.login-card .login-button:focus,
-.reset_password-card .reset_password-button:hover,
-.reset_password-card .reset_password-button:focus {
+.login-button:hover,
+.login-button:focus,
+.reset_password-button:hover,
+.reset_password-button:focus {
     transform: scale(1.05);
     transition: transform .5s ease;
     outline: none;
@@ -189,12 +192,12 @@ form:hover .effect-underline:after {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 2vh;
-    width: 50vh;
-    padding: 8vh;
+    margin: 1%;
+    width: 25%;
+    padding: 3%;
     font-size: 20px;
     border-radius: 30px;
-    background: white;
+    background: var(--primary-color);
     box-shadow: 20px 20px 60px #d9d9d9,
         -20px -20px 60px white;
 }
@@ -206,7 +209,7 @@ form:hover .effect-underline:after {
 .info-card .info {
     display: flex;
     flex-direction: column;
-    margin: 2vh 0;
+    margin: 5% 0;
 }
 
 .info-card p {
@@ -215,8 +218,8 @@ form:hover .effect-underline:after {
 
 .info-card .data {
     border: 1px solid black;
-    padding: 1vh;
-    margin-top: 1vh;
+    padding: 2%;
+    margin-top: 2%;
 }
 
 
@@ -233,10 +236,12 @@ form:hover .effect-underline:after {
 }
 
 .left-side {
-    width: 81%;
+    width: 80%;
 }
 
-#semester {
+.wrapper select {
+    position: relative;
+    z-index: 2;
     padding: 7px 12px;
     border: 1px solid #E8EAED;
     border-radius: 5px;
@@ -246,168 +251,80 @@ form:hover .effect-underline:after {
     font-family: inherit;
 }
 
-#semester:focus {
-    border-color: dodgerblue;
+.wrapper select:focus {
+    outline: none;
 }
 
-.ues,
-.groupes,
-.notes,
-.links {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.semester {
-    display: flex;
-    flex-wrap: wrap;
-    display: none;
-    justify-content: center;
-}
-
-.semester > form {
-    margin: 5vh;
-}
-
-.ue {
-    padding: 20px;
-    width: 35vh;
-    height: max-content;
-    cursor: pointer;
+.styled-card {
     border-radius: 30px;
-    background: white;
+    background: var(--primary-color);
     box-shadow: 20px 20px 60px #d9d9d9,
         -20px -20px 60px white;
-    transition: transform .5s ease;
 }
 
-.ue:hover {
-    transform: scale(1.1);
-    transition: transform .5s ease;
-}
-
-.bloc{
-    width: 35vh;
-    color: white;
-    background-color: black;
-    margin: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
-    text-align: center;
-    border-radius: 5px;
-    transition: transform .5s ease;
-    cursor: pointer;
-}
-
-.bloc:hover {
-    transform: scale(1.1);
-    transition: transform .5s ease;
-}
-
-form h3{
-    font-size: 2em;
-    margin-bottom: 30px;
-    color: #4400ff;
-    text-align: center;
-}
-
-.container{
-    width: 100%;
+.title {
     display: flex;
-    align-items: center;
-    justify-content: center;
-}
-  
-.container p{
-    color: #4400ff;
-    text-align: center;
-}
-
-.container form{
-    background: rgb(0,0,0,0.75);
-    display: flex;
-    flex-direction: column;
-    padding: 2vw 4vw;
-    width: 90%;
-    max-width: 600px;
-    border-radius: 10px;
-}
-
-.container form input, textarea{
-    border:0;
-    margin: 10px 0;
-    padding: 20px;
-    outline: none;
-    background:#ffffff;
-    font-size:16px;
-}
-
-.container #admin{
-    margin-bottom: 0;
-}
-  
-.container form button:enabled{
-    padding:15px;
-    background: #5f3ced;;
-    color: #ffffff;
-    font-size: 18px;
-    border:0;
-    outline: none;
-    cursor:pointer;
-    width: 150px;
-    margin: 20px auto 0;
-    border-radius: 30px;
-}
-  
-.container form button:disabled{
-    background:#7c8de2;
-    padding:15px;
-    color: #ffffff;
-    font-size: 18px;
-    border:0;
-    outline: none;
-    width: 150px;
-    margin: 20px auto 0;
-    border-radius: 30px;
-}
-
-.container .checkbox{
-    display: flex;
-    flex-wrap: wrap;
     flex-direction: row;
-    color: white;
+    align-items: center;
+    justify-content: space-between;
 }
-  
-.container .loisir{
-    margin-right: 5px;
-    margin-left: 40px;
-  }
 
-.container form h4{
-    font-size: 1.2em;
-    color: white;
+.title > h2 {
+    width: 40%;
 }
+
+.title > p {
+    width: 60%;
+}
+
+.content {
+    width: 100%;
+}
+
+.content form {
+    margin: -25px;
+    padding: 25px;
+}
+
+
+
 
 
 /* ASIDE PART */
 
 aside {
-    width: 15%;
+    position: relative;
+    width: 20%;
+    font-size: 20px;
+}
+
+aside h3 {
+    margin-bottom: 2%;
+    margin-top: 0;
 }
 
 .aside-container {
-    position: fixed;
-    padding: 2%;
+    position: sticky;
+    padding: 8%;
+    margin-right: 15%;
+    margin-bottom: 80px;
+    top: 80px;
     border-radius: 30px;
-    background: white;
+    background: var(--primary-color);
     box-shadow: 20px 20px 60px #d9d9d9,
         -20px -20px 60px white;
 }
 
-.notes, 
+.notes,
 .links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     flex-direction: column;
+}
+
+.note p {
+    margin-top: 0;
 }
 
 .link {
@@ -419,25 +336,20 @@ aside {
     text-decoration: none;
     color: black;
     transition: color .3s ease;
+    margin-left: 4%;
 }
 
 .link > a:hover {
-    color: dodgerblue;
+    color: var(--element-color);
     transition: color .3s ease;
 }
 
 .link > img {
     width: 32px;
     height: 32px;
-    mix-blend-mode: color-burn;
 }
 
-.blocs{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-}
+
 
 
 
@@ -445,12 +357,14 @@ aside {
 
 footer {
     padding: 30px;
-    background-color: #24262b;
+    background-color: var(--element-color);
+    display: flex;
+    justify-content: space-around;
 }
 
 footer h4 {
     font-size: 25px;
-    color: #ffffff;
+    color: white;
     text-transform: capitalize;
     text-decoration: underline;
 }
@@ -459,11 +373,9 @@ footer p {
     color: white;
 }
 
-.row {
-    display: flex;
-    justify-content: space-around;
-    background-color: #34373d;
-}
+
+
+
 
 .middle {
     text-align: center;

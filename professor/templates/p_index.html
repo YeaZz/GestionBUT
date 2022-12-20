@@ -2,52 +2,46 @@
 {% load static %}
 {% block content %}
 
-<h1>Bienvenue {{ user.last_name }} {{ user.first_name }} !</h1>
+<div class="wrapper">
+    <h1>Bonjour {{ user.first_name }} {{ user.last_name }} !</h1>
 
-<form method="post" class="form_establishment">
-    <div class="select">
-        <select id="establishment" name="establishment" type="submit">
-            <option value="">Quel établissement souhaitez-vous voir ?</option>
-            {% for establishment in establishments %}
-            <option value="{{ establishment }}">{{ establishment.name }}</option>
-            {% endfor %}
-        </select>
+    <select id="selection" name="establishment">
+        {% for establishment in esta_dpts_smtrs.keys %}
+        <option value="{{ establishment.id }}">{{ establishment }}</option>
+        {% endfor %}
+    </select>
 
-        <select id="department" name="department" type="submit">
-            <option value="">Quel département souhaitez-vous voir ?</option>
-            {% for etablishment, departments in eta_dpt_grps.items %}
-            {% for department, promos in departments.items %}
-            <option value="{{ department.name}}">Département {{ department.name }}</option>
-            {% endfor %}
-            {% endfor %}
-        </select>
-    </div>
-
-</form>
-
-<div class="content">
-    <section class="groupes">
-        {% for etablishment, departments in eta_dpt_grps.items %}
-        <!--<div class="establishment">
-                <p>{{ etablishment.name }}</p> -->
-        {% for department, promos in departments.items %}
-        <div class="departement">
-            <p>Département {{ department.name }}</p>
-            {% for promo, groups in promos.items %}
-            <p class="promotion">{{ promo.name }}</p>
-            {% for group in groups %}
-            <div class="group">
-                <p class="dpt">{{ group.name }}</p>
-                <button class="dpt">Ajouter une évaluation</button>
+    <div class="content index">
+        {% for establishment, departments in esta_dpts_smtrs.items %}
+        <div class="establishment {{ establishment.id }}">
+            {% for department, semesters in departments.items %}
+            <div class="styled-card department">
+                <form action="{% url 'professor:department' department_id=department.id %}" class="auto department-form" method="post">
+                    {% csrf_token %}
+                    <h2 class="middle">Département {{ department }}</h2>
+                    <div class="styled-card semesters">
+                        {% for semester in semesters %}
+                        <div class="semester">
+                            <p>Semestre {{ semester.number }}</p>
+                            {% if semester == actual_semester %}
+                            <div class="ues">
+                                {% for ue in semester.ues.all %}
+                                <div class="ue">
+                                    {{ ue.number }}
+                                    <button class="department-button {{ semester.id }}">Ajouter une note</button>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            <button class="department-button">Voir</button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </form>
             </div>
-            {% endfor %}
             {% endfor %}
         </div>
         {% endfor %}
+    </div>
 </div>
-{% endfor %}
-</section>
-</div>
-
-<script src="{% static 'js/professor.js' %}"></script>
 {% endblock %}

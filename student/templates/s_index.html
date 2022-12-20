@@ -3,59 +3,94 @@
 {% block content %}
 
 <div class="wrapper left-side">
-    <h1>Bienvenue {{ user.last_name }} {{ user.first_name }} !</h1>
+    <h1>Bonjour {{ user.last_name }} {{ user.first_name }} !</h1>
     <h2>Vous étudiez dans l'établissement : {{ establishment }}</h2>
 
-    <select id="semester" name="semestre" type="submit">
-        {% for semester in semesters %}
-        <option value="{{ semester }}">Semestre {{ semester.number }}</option>
-        {% endfor %}
-    </select>
+    <div class="selections">
+        <select id="semesterSelection" name="semestre">
+            {% for semester in student_view.keys %}
+            <option value="{{ semester.id }}">Semestre {{ semester.number }}</option>
+            {% endfor %}
+        </select>
+        <select id="viewSelection" name="view">
+            <option value="resource">Ressource</option>
+            <option value="ue">UE</option>
+        </select>
+    </div>
 
-    <section class="ues">
-        {% for semester in semesters %}
-        <div class="semester {{ semester }}">
-            {% for ue in semester.ues.all %}
-            <form class="auto" action="{% url 'student:evaluation' semester_id=semester.id ue_id=ue.id %}" method="post">
-                {% csrf_token %}
-                <div class="ue">
-                    <p>{{ semester }} UE{{ ue.number }}</p>
-                    <p><strong>{{ ue.description }}</strong></p>
-                    <p>Note UE</p>
-                    <p>Classement</p>
+    <div class="content">
+        {% for semester, resources_ues in student_view.items %}
+        <div class="semester {{ semester.id }}">
+            {% for resource, evaluations in resources_ues.0.items %}
+            <div class="styled-card resource">
+                <form class="auto" action="{% url 'student:resource' resource_id=resource.id %}" method="post">
+                    {% csrf_token %}
+                    <h2>{{ resource.name }}</h2>
+                    <p><strong>Note ressource</strong><br>{{ evaluations.1|default_if_none:"Non noté" }}</p>
+                    <p><strong>Classement ressource</strong><br>{{ evaluations.2|default_if_none:"Non classé" }}</p>
+                    <div class="styled-card evaluations">
+                        <div class="title">Notes</div>
+                        {% if not evaluations.0 %}
+                        <div class="evaluation">Aucunes notes</div>
+                        {% else %}
+                        {% for evaluation, note in evaluations.0.items %}
+                        <div class="evaluation">
+                            {{ evaluation.name }}
+                            <br>
+                            <em>{{ note|default_if_none:"Non noté" }}</em>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+            {% endfor %}
+            {% for ue, resources in resources_ues.1.items %}
+            <div class="styled-card ue">
+                <h2>UE{{ semester.number }}.{{ ue.number }}</h2>
+                <p><strong>Note UE</strong><br>{{ resources.1|default_if_none:"Non noté" }}</p>
+                <p><strong>Classement UE</strong><br>{{ resources.2|default_if_none:"Non classé" }}</p>
+                {% for resource, evaluations in resources.0.items %}
+                {% if evaluations %}
+                <div class="styled-card evaluations">
+                    <div class="title">{{ resource.name }}<br>Notes</div>
+                    {% for evaluation, note in evaluations.items %}
+                    <div class="evaluation">
+                        {{ evaluation.name }}
+                        <br>
+                        <em>{{ note|default_if_none:"Non noté" }}</em>
+                    </div>
+                    {% endfor %}
                 </div>
-            </form>
+                {% endif %}
+                {% endfor %}
+            </div>
             {% endfor %}
         </div>
         {% endfor %}
-    </section>
+    </div>
 </div>
 
 <aside>
     <div class="aside-container">
-        <section class="notes">
+        <div class="notes">
             <h3>Mes dernières notes</h3>
+            {% for grade in lastGrades %}
             <div class="note">
-                <p>Nom note 1</p>
-                <p>Note 1</p>
+                <p>{{ grade }}<br><em>{{ grade.note }}</em></p>
             </div>
-            <div class="note">
-                <p>Nom note 2</p>
-                <p>Note 1</p>
-            </div>
-        </section>
-        <section class="links">
+            {% endfor %}
+        </div>
+        <div class="links">
             <h3>Liens utiles</h3>
             {% for link in usefulLinks %}
             <div class="link">
                 <img src="{% static link.file_path %}" alt="moodle" />
-                <a href="{{ link.link }}">{{ link.name }}</a>
+                <a href="{{ link.link }}" target="_blank">{{ link.name }}</a>
             </div>
             {% endfor %}
-        </section>
+        </div>
     </div>
 </aside>
-
-<script src="{% static 'js/student.js' %}"></script>
 
 {% endblock %}

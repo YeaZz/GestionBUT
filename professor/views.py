@@ -7,48 +7,59 @@ from main.views import isProfessor
 def index(request):
     user = request.user
     professor = isProfessor(user)
-
     if professor == None:
         return redirect("login")
 
-    establishments = professor.establishments.all()
-
-    eta_dpt_grps = {}
+    esta_dpts_smtrs = {}
+    establishments = professor.getEtablishments()
     for establishment in establishments:
-        eta_dpt_grps[establishment] = {}
-        for department in establishment.departments.all():
-            eta_dpt_grps[establishment][department] = {}
-            promos = Group.objects.all().filter(parent=None, department=department.id)
-            for promo in promos:
-                eta_dpt_grps[establishment][department][promo] = Group.objects.all().filter(parent=promo, department=department.id)
+        esta_dpts_smtrs[establishment] = {}
+        departments = professor.departments.all()
+        for department in departments:
+            semesters = Semester.objects.filter(department=department)
+            esta_dpts_smtrs[establishment][department] = semesters
+
+    actual_semester = Semester.objects.filter(number=1).first()
 
     return render(
         request,
         "p_index.html",
         context={
             "user": user,
-            "establishments": establishments,
-            "promos": promos,
-            "eta_dpt_grps": eta_dpt_grps,
+            "esta_dpts_smtrs": esta_dpts_smtrs,
+            "actual_semester": actual_semester,
         }
     )
 
-def groupEtu(request):
+def department(request, department_id):
     user = request.user
-    return render(
-        request,
-        "groupetu.html",
-        context = {
-            "user": user
-        }
-    )
+    professor = isProfessor(user)
+    if professor == None:
+        return redirect("login")
 
-def ajoutNote(request):
-    user=request.user
+    department = Department.objects.filter(id=department_id).first()
+    if department == None:
+        return redirect("professor:index")
+    establishment = department.establishment
+
+    semesters_ues_evals = {}
+    semesters = Semester.objects.filter(department=department)
+    for semester in semesters:
+        semesters_ues_evals[semester] = {}
+        ues = semester.ues.all()
+        for ue in ues:
+            evaluations = Evaluation.objects.filter(semester=semester, ues=ue)
+            semesters_ues_evals[semester][ue] = evaluations
+
+    usefulLinks = UsefulLink.objects.filter(department=department)
+
     return render(
         request,
-        "ajoutnote.html",
+        "department.html",
         context = {
-            "user": user
+            "establishment": establishment,
+            "department": department,
+            "semesters_ues_evals": semesters_ues_evals,
+            "usefulLinks": usefulLinks,
         }
     )

@@ -1,21 +1,43 @@
-const semesterChoice = document.getElementById("semester")
+const semesterChoice = document.getElementById("semesterSelection")
+const viewChoice = document.getElementById("viewSelection")
 
-displaySemester()
-
-semesterChoice.addEventListener("click", () => {
+if (semesterChoice != undefined) {
     displaySemester()
-})
 
-function displaySemester() {
-    Array.from(semesterChoice.options).forEach(option => {
-        let value = option.value
-        const currentSemester = document.getElementsByClassName(value)[0]
-        if (currentSemester == undefined)
-            return
-        if (option.selected)
-            currentSemester.style.display = "flex"
-        else
-            currentSemester.style.display = "none"
-        return
+    semesterChoice.addEventListener("click", () => {
+        displaySemester()
     })
+
+    function displaySemester() {
+        Array.from(semesterChoice.options).forEach(option => {
+            let value = option.value
+            const currentSemester = document.getElementsByClassName(value)[0]
+            if (currentSemester == undefined) return
+            if (option.selected) currentSemester.style.display = "flex"
+            else currentSemester.style.display = "none"
+            return
+        })
+    }
+}
+
+if (viewChoice != undefined) {
+    const resources = document.getElementsByClassName("resource")
+    const ues = document.getElementsByClassName("ue")
+
+    displayView()
+
+    viewChoice.addEventListener("click", () => {
+        displayView()
+    })
+
+    function displayView() {
+        const value = viewChoice.value
+        console.log(value)
+        Array.from(resources).forEach(resource => {
+            resource.style.display = value == "resource" ? "block" : "none"
+        })
+        Array.from(ues).forEach(ue => {
+            ue.style.display = value == "ue" ? "block" : "none"
+        })
+    }
 }

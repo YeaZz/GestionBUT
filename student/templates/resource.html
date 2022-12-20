@@ -1,0 +1,59 @@
+{% extends 'head.html' %}
+{% load static %}
+{% block content %}
+
+<div class="wrapper left-side">
+    <h1>Semestre {{ resource.semester.number }}</h1>
+    <h2>{{ resource.name }}</h2>
+    <div class="content">
+        <div class="semester">
+        {% for evaluation, stats in evaluations.items %}
+        <div class="styled-card resource">
+            <h2 class="middle">{{ evaluation }}</h2>
+            <div class="stats">
+                <div>
+                    <strong>Note</strong><br>{{ stats.0 }}
+                </div>
+                <div>
+                    <strong>Moyenne</strong><br>{{ stats.2 }}
+                </div>
+            </div>
+            <p></p>
+            <p><strong>Classement</strong><br>{{ stats.1 }}</p>
+            <div class="stats">
+                <div>
+                    <strong>Note maximale</strong><br>{{ stats.3 }}
+                </div>
+                <div>
+                    <strong>Note minimale</strong><br>{{ stats.4 }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+
+<aside>
+    <div class="aside-container">
+        <div class="notes">
+            <h3>Mes dernières notes</h3>
+            {% for grade in lastGrades %}
+            <div class="note">
+                <p>{{ grade }}<br><em>{{ grade.note }}</em></p>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="links">
+            <h3>Liens utiles</h3>
+            {% for link in usefulLinks %}
+            <div class="link">
+                <img src="{% static link.file_path %}" alt="moodle" />
+                <a href="{{ link.link }}" target="_blank">{{ link.name }}</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</aside>
+
+{% endblock %}

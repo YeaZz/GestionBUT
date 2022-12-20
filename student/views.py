@@ -7,17 +7,28 @@ from main.views import isStudent
 def index(request):
     user = request.user
     student = isStudent(user)
-
     if student == None:
-        return redirect("accounts:login")
+        return redirect("login")
 
-    group = student.groups.all().first()
-    semesters = Semester.objects.all()
-    department = group.department
-    establishment = department.establishments.all().first()
-    usefulLinks = UsefulLink.objects.all().filter(department_id=department.id)
+    department = student.department
+    establishment = department.establishment
+    usefulLinks = department.getUsefulLinks()
 
-    
+    student_view = {}
+    for semester in department.getSemesters():
+        student_view[semester] = {}, {}
+
+        for resource in semester.getResources():
+            student_view[semester][0][resource] = {}, resource.getNote(student), resource.getRanking(student)
+            for evaluation in resource.getEvaluations():
+                student_view[semester][0][resource][0][evaluation] = evaluation.getNote(student)
+
+        for ue in semester.getUEs():
+            student_view[semester][1][ue] = {}, ue.getNote(student), ue.getRanking(student)
+            for resource in ue.getResources():
+                student_view[semester][1][ue][0][resource] = {}
+                for evaluation in resource.getEvaluations():
+                    student_view[semester][1][ue][0][resource][evaluation] = evaluation.getNote(student)
 
     return render(
         request,
@@ -25,36 +36,43 @@ def index(request):
         context = {
             "user": user,
             "establishment": establishment,
+            "student_view": student_view,
+            "lastGrades": student.getLastGrades(5),
             "usefulLinks": usefulLinks,
-            "semesters": semesters,
         }
     )
 
-def evaluation(request, semester_id, ue_id):
+def resource(request, resource_id):
     user = request.user
     student = isStudent(user)
-
     if student == None:
-        return redirect("accounts:login")
+        return redirect("login")
 
-    semester = Semester.objects.all().filter(id=semester_id).first()
-    ue = UE.objects.all().filter(id=ue_id).first()
-
-    if semester == None or ue == None:
+    resource = Resource.objects.filter(id=resource_id).first()
+    if resource == None:
         return redirect("student:index")
 
-    evaluations = Evaluation.objects.all().filter(semester=semester_id, ue=ue_id)
-    group = student.groups.all().first()
-    department = group.department
-    usefulLinks = UsefulLink.objects.all().filter(department_id=department.id)
+    evaluations = Evaluation.objects.filter(resource=resource)
+    evaluations_stats = {}
+    for evaluation in evaluations:
+        evaluations_stats[evaluation] = (
+            evaluation.getNote(student),
+            evaluation.getRanking(student),
+            evaluation.getAverage(),
+            evaluation.getMax(),
+            evaluation.getMin()
+        )
+
+    department = student.department
+    usefulLinks = department.getUsefulLinks()
 
     return render(
         request,
-        "evaluation.html",
+        "resource.html",
         context={
-            "semester": semester,
-            "ue": ue,
+            "resource": resource,
+            "evaluations": evaluations_stats,
+            "lastGrades": student.getLastGrades(5),
             "usefulLinks": usefulLinks,
-            "evaluations": evaluations
         }
     )

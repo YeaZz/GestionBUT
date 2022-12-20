@@ -5,6 +5,5 @@ app_name = 'professor'
 
 urlpatterns = [
     path('', index, name="index"),
-    path('groupetu/', groupEtu, name="groupetu"),
-    path('ajoutnote/', ajoutNote, name="ajoutnote"),
+    path('<department_id>/', department, name="department"),
 ]

@@ -1,0 +1,61 @@
+{% extends 'head.html' %}
+{% load static %}
+{% block content %}
+
+<div class="wrapper left-side">
+    <h1>{{ establishment }}<br>Département {{ department }}</h1>
+
+    <select id="selection" name="semestre">
+        {% for semester in semesters_ues_evals.keys %}
+        <option value="{{ semester.id }}">Semestre {{ semester.number }}</option>
+        {% endfor %}
+    </select>
+
+    <div class="content department">
+        {% for semester, ues in semesters_ues_evals.items %}
+        <div class="semester {{ semester.id }}">
+            {% for ue, evaluations in ues.items %}
+            <div class="styled-card ue">
+
+                <div class="modal">
+                    <div class="modal-content">
+                        suuii
+                    </div>
+                </div>
+
+
+                <div class="title">
+                    <h2>{{ semester }} UE{{ ue.number }}</h2>
+                    <p><em>{{ ue.description }}</em></p>
+                </div>
+                <button class="department-button {{ semester.id }}">Ajouter une note</button>
+                <div class="styled-card evaluations">
+                    <strong>Notes</strong>
+                    {% for evaluation in evaluations %}
+                    <div class="evaluation">
+                        {{ evaluation }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<aside>
+    <div class="aside-container">
+        <div class="links">
+            <h3>Liens utiles</h3>
+            {% for link in usefulLinks %}
+            <div class="link">
+                <img src="{% static link.file_path %}" alt="moodle" />
+                <a href="{{ link.link }}">{{ link.name }}</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</aside>
+
+{% endblock %}

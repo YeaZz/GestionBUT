@@ -3,18 +3,33 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
-class Department(models.Model):
-    name = models.CharField(max_length=80)
-
-    def __str__(self):
-        return self.name
-
 class Establishment(models.Model):
     name = models.CharField(max_length=80)
-    departments = models.ManyToManyField(Department, blank=False, related_name="establishments")
 
     def __str__(self):
         return self.name
+
+    def getDepartments(self):
+        return Department.objects.filter(establishment=self)
+
+class Department(models.Model):
+    name = models.CharField(max_length=80)
+    establishment = models.ForeignKey(Establishment, on_delete=models.CASCADE, default=None, blank=False, null=True)
+
+    def __str__(self):
+        return self.name
+
+    def getSemesters(self):
+        return Semester.objects.filter(department=self).order_by("number")
+
+    def getGroups(self):
+        return Group.objects.filter(department=self)
+
+    def getStudents(self):
+        return Student.objects.filter(department=self)
+
+    def getUsefulLinks(self):
+        return UsefulLink.objects.filter(department=self)
 
 class UsefulLink(models.Model):
     name = models.CharField(max_length=30)
@@ -46,19 +61,86 @@ class UE(models.Model):
     def __str__(self):
         return "UE" + str(self.number) + " - " + self.description
 
-class Resource(models.Model):
-    name = models.CharField(max_length=50)
-    ues = models.ManyToManyField(UE)
+    def getName(self, semester):
+        return "UE" + str(semester.number) + "." + str(self.number)
 
-    def __str__(self):
-        return self.name
+    def getResources(self):
+        return Resource.objects.filter(ues=self).order_by("number")
+
+    def getNote(self, student):
+        nb, sum = 0, 0
+        resources = Resource.objects.filter(ues=self)
+        for resource in resources:
+            for evaluation in resource.getEvaluations():
+                note = evaluation.getNote(student)
+                if note != None:
+                    sum += note
+                    nb += 1
+        return sum / nb if nb > 0 else None
+
+    def getRanking(self, student):
+        notes = {}
+        students = student.department.getStudents()
+        for s in students:
+            note = self.getNote(s)
+            if note != None:
+                notes[s] = note
+        if len(notes) > 0:
+            notes = dict(sorted(notes.items(), key=lambda notes:notes[1], reverse=True))
+            index = list(notes.keys()).index(student)
+            return str(index + 1) + "/" + str(len(notes))
+        return None
 
 class Semester(models.Model):
     number = models.IntegerField(default=None, blank=False, null=True)
-    ues = models.ManyToManyField(UE)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE, default=None, blank=False, null=True)
 
     def __str__(self):
         return "S" + str(self.number)
+
+    def getResources(self):
+        return Resource.objects.filter(semester=self).order_by("number")
+
+    def getUEs(self):
+        ues = []
+        for resource in self.getResources():
+            for ue in resource.ues.all():
+                if ue not in ues:
+                    ues.append(ue)
+        return ues
+
+class Resource(models.Model):
+    number = models.IntegerField(default=None, blank=False, null=True)
+    name = models.CharField(max_length=50)
+    semester = models.ForeignKey(Semester, on_delete=models.CASCADE, default=None, blank=False, null=True)
+    ues = models.ManyToManyField(UE, related_name="resources")
+
+    def __str__(self):
+        return "R" + str(self.semester.number) + "." + str(self.name)
+
+    def getEvaluations(self):
+        return Evaluation.objects.filter(resource=self)
+
+    def getNote(self, student):
+        nb, sum = 0, 0
+        for evaluation in self.getEvaluations():
+            note = evaluation.getNote(student)
+            if note != None:
+                sum += note
+                nb += 1
+        return sum / nb if nb > 0 else None
+
+    def getRanking(self, student):
+        notes = {}
+        for s in student.department.getStudents():
+            note = self.getNote(s)
+            if note != None:
+                notes[s] = note
+        if len(notes) > 0:
+            notes = dict(sorted(notes.items(), key=lambda notes:notes[1], reverse=True))
+            index = list(notes.keys()).index(student)
+            return str(index + 1) + "/" + str(len(notes))
+        return None
 
 class Year(models.Model):
     name = models.CharField(max_length=70)
@@ -72,26 +154,57 @@ class Year(models.Model):
 class Group(models.Model):
     name = models.CharField(max_length=10)
     department = models.ForeignKey(Department, on_delete=models.CASCADE, default=None, blank=False, null=True)
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, default=None, blank=True, null=True)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, default=None, blank=True, null=True, related_name="children")
     year = models.ForeignKey(Year, on_delete=models.CASCADE, default=None, blank=False, null=True)
 
     def __str__(self):
         return self.name
 
+    def getStudents(self):
+        return Student.objects.filter(group=self)
+
+    def getDepartmentTree(department):
+        tree = {}
+        for child in Group.objects.filter(parent=None, department=department):
+            tree[child] = child.getTree()
+        return tree
+
+    def getTree(self):
+        if len(self.children.all()) == 0:
+            return {}
+        group = {self: {}}
+        for child in self.children.order_by("name"):
+            group[self].update(child.getTree())
+        return group
+
 class Student(models.Model):
     id = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    groups = models.ManyToManyField(Group)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE, default=None, blank=False, null=True)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, default=None, blank=False, null=True)
 
     def __str__(self):
         return self.id.username
 
+    def getGrades(self):
+        return Grade.objects.filter(student=self)
+
+    def getLastGrades(self, amount):
+        return self.getGrades()[:amount]
+
 class Professor(models.Model):
     id = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    establishments = models.ManyToManyField(Establishment, blank=False)
+    departments = models.ManyToManyField(Department, blank=False)
     resources = models.ManyToManyField(Resource, blank=True)
 
     def __str__(self):
         return self.id.username
+
+    def getEtablishments(self):
+        establishments = []
+        for department in self.departments.all():
+            if department.establishment not in establishments:
+                establishments.append(department.establishment)
+        return establishments
 
 class Administrator(models.Model):
     id = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
@@ -102,66 +215,94 @@ class Administrator(models.Model):
 class Competence(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=500)
-    ue = models.ForeignKey(UE, on_delete=models.CASCADE, default=None, blank=False, null=True)
 
     def __str__(self):
         return self.name
-
 
 class Evaluation(models.Model):
     name = models.CharField(max_length=50)
     professor = models.ForeignKey(Professor, on_delete=models.CASCADE, default=None, blank=False, null=True)
-    semester = models.ForeignKey(Semester, on_delete=models.CASCADE, default=None, blank=False, null=True)
-    ue = models.ManyToManyField(UE, blank=False)
+    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, default=None, blank=False, null=True)
 
     def __str__(self):
         return self.name
 
-    def calcAverage(self):
-        grades = Grade.objects.all().filter(evaluation=self.id)
-        if grades.count() <= 0:
+    def getGrades(self):
+        return Grade.objects.filter(evaluation=self)
+
+    def getGrade(self, student):
+        return Grade.objects.filter(evaluation=self, student=student)
+
+    def getNote(self, student):
+        grades = self.getGrade(student)
+        return grades.first().note if len(grades) == 1 else None
+
+    def getAverage(self):
+        grades = self.getGrades()
+        if len(grades) <= 0:
             return None
         sum = 0
-        for grade in grades.all():
+        for grade in grades:
             sum += grade.note
         return sum / grades.count()
 
-    def calcMax(self):
-        grades = Grade.objects.all().filter(evaluation=self.id)
-        if grades.count() <= 0:
+    def getMax(self):
+        grades = self.getGrades()
+        if len(grades) <= 0:
             return None
         max = -math.inf
-        for grade in grades.all():
-            if max > grade.note:
+        for grade in grades:
+            if max < grade.note:
                 max = grade.note
         return max
 
-    def calcMinus(self):
-        grades = Grade.objects.all().filter(evaluation=self.id)
-        if grades.count() <= 0:
+    def getMin(self):
+        grades = self.getGrades()
+        if len(grades) <= 0:
             return None
         min = math.inf
-        for grade in grades.all():
+        for grade in grades:
             if min > grade.note:
                 min = grade.note
         return min
 
+    def getRanking(self, student):
+        notes = {}
+        for s in student.department.getStudents():
+            note = self.getNote(s)
+            if note != None:
+                notes[s] = note
+        if len(notes) > 0:
+            notes = dict(sorted(notes.items(), key=lambda notes:notes[1], reverse=True))
+            index = list(notes.keys()).index(student)
+            return str(index + 1) + "/" + str(len(notes))
+        return None
+
 class Grade(models.Model):
     evaluation = models.ForeignKey(Evaluation, on_delete=models.CASCADE, default=None, blank=False, null=True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, default=None, blank=False, null=True)
     note = models.FloatField(default=0.0, blank=False, null=False)
     coef = models.FloatField(default=1.0, blank=True, null=False)
+
+    def __str__(self):
+        return self.evaluation.name
 
     def calcNote(self):
         return self.note * self.coef
 
-def loadInformatique():
+def load():
     empty()
-    department = Department(name="Informatique")
-    department.save()
 
     establishment = Establishment(name="IUT Claude Bernard Lyon 1 - Bourg en bresse")
     establishment.save()
-    establishment.departments.add(department)
+
+    department = Department(name="Informatique", establishment=establishment)
+    department.save()
+
+    moodle = UsefulLink(name="Moodle", file_path="img/moodle.png", link="https://moodle.univ-lyon1.fr/", department=department)
+    moodle.save()
+    mail = UsefulLink(name="Mail", file_path="img/mail.png", link="https://mail.univ-lyon1.fr/", department=department)
+    mail.save()
 
     ue1_1 = UE(number=1, description="Développer des applications informatiques simples")
     ue1_1.save()
@@ -205,26 +346,28 @@ def loadInformatique():
     ue6_3 = UE(number=6, description="Manager une équipe informatique")
     ue6_3.save()
 
-    semester1 = Semester(number=1)
+    semester1 = Semester(number=1, department=department)
     semester1.save()
-    semester1.ues.add(ue1_1, ue2_1, ue3_1, ue4_1, ue5_1, ue6_1)
-    semester2 = Semester(number=2)
+    semester2 = Semester(number=2, department=department)
     semester2.save()
-    semester2.ues.add(ue1_1, ue2_1, ue3_1, ue4_1, ue5_1, ue6_1)
 
-    semester3 = Semester(number=3)
+    semester3 = Semester(number=3, department=department)
     semester3.save()
-    semester3.ues.add(ue1_2, ue2_2, ue3_2, ue4_2, ue5_2, ue6_2)
-    semester4 = Semester(number=4)
+    semester4 = Semester(number=4, department=department)
     semester4.save()
-    semester4.ues.add(ue1_2, ue2_2, ue3_2, ue4_2, ue5_2, ue6_2)
 
-    semester5 = Semester(number=5)
+    semester5 = Semester(number=5, department=department)
     semester5.save()
-    semester5.ues.add(ue1_3, ue2_3, ue3_3, ue4_3, ue5_3, ue6_3)
-    semester6 = Semester(number=6)
+    semester6 = Semester(number=6, department=department)
     semester6.save()
-    semester6.ues.add(ue1_3, ue2_3, ue3_3, ue4_3, ue5_3, ue6_3)
+
+    resource1 = Resource(number="1", name="Initiation au dev.", semester=semester1)
+    resource1.save()
+    resource1.ues.add(ue1_1, ue3_1)
+
+    resource2 = Resource(number="2", name="Développement d'interfaces web", semester=semester1)
+    resource2.save()
+    resource2.ues.add(ue1_1, ue5_1, ue6_1)
 
     year1 = Year(name="Première année", first_semester=semester1, second_semester=semester2)
     year1.save()
@@ -237,24 +380,56 @@ def loadInformatique():
     groupS1.save()
     groupS1G1 = Group(name="S1G1", department=department, parent=groupS1, year=year1)
     groupS1G1.save()
-    groupS1G1_1 = Group(name="S1G1.1", department=department, parent=groupS1, year=year1)
+    groupS1G1_1 = Group(name="S1G1.1", department=department, parent=groupS1G1, year=year1)
     groupS1G1_1.save()
+    groupS1G1_2 = Group(name="S1G1.2", department=department, parent=groupS1G1, year=year1)
+    groupS1G1_2.save()
 
-    noa = Student(id=User.objects.all().filter(username="noa_cavalcante").first())
+    groupS2 = Group(name="S2", department=department, parent=None, year=year1)
+    groupS2.save()
+    groupS2G1 = Group(name="S2G1", department=department, parent=groupS2, year=year1)
+    groupS2G1.save()
+    groupS2G1_1 = Group(name="S2G1.1", department=department, parent=groupS2G1, year=year1)
+    groupS2G1_1.save()
+    groupS2G1_2 = Group(name="S2G1.2", department=department, parent=groupS2G1, year=year1)
+    groupS2G1_2.save()
+
+    noa = Student(id=User.objects.all().filter(username="noa_cavalcante").first(), department=department, group=groupS1G1_1)
     noa.save()
-    noa.groups.add(groupS1, groupS1G1, groupS1G1_1)
 
-    lilian = Student(id=User.objects.all().filter(username="lilian_ouraha").first())
+    lilian = Student(id=User.objects.all().filter(username="lilian_ouraha").first(), department=department, group=groupS1G1_1)
     lilian.save()
-    lilian.groups.add(groupS1, groupS1G1, groupS1G1_1)
 
-    corto = Student(id=User.objects.all().filter(username="corto_bouviolle").first())
+    corto = Student(id=User.objects.all().filter(username="corto_bouviolle").first(), department=department, group=groupS1G1_1)
     corto.save()
-    corto.groups.add(groupS1, groupS1G1, groupS1G1_1)
 
     peytavie = Professor(id=User.objects.all().filter(username="adrien_peytavie").first())
     peytavie.save()
-    peytavie.establishments.add(establishment)
+    peytavie.departments.add(department)
+    peytavie.resources.add(resource1, resource2)
+
+    administrator = Administrator(id=User.objects.all().filter(username="administrateur").first())
+    administrator.save()
+
+    evaluation = Evaluation(name="TP 1", professor=peytavie, resource=resource1)
+    evaluation.save()
+
+    grade = Grade(evaluation=evaluation, student=noa, note=20.0)
+    grade.save()
+    grade = Grade(evaluation=evaluation, student=corto, note=4.0)
+    grade.save()
+    grade = Grade(evaluation=evaluation, student=lilian, note=1.5)
+    grade.save()
+
+    evaluation = Evaluation(name="TP 2", professor=peytavie, resource=resource1)
+    evaluation.save()
+
+    grade = Grade(evaluation=evaluation, student=noa, note=16.0)
+    grade.save()
+    grade = Grade(evaluation=evaluation, student=corto, note=10.0)
+    grade.save()
+    grade = Grade(evaluation=evaluation, student=lilian, note=11.5)
+    grade.save()
 
 def empty():
     Professor.objects.all().delete()

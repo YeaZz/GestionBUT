@@ -1,0 +1,54 @@
+.semester {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+}
+
+.resource,
+.evaluations,
+.ue {
+    padding: 25px;
+    width: 24%;
+    height: max-content;
+    cursor: pointer;
+}
+
+.resource,
+.ue {
+    margin: 3%;
+    transition: transform .5s ease;
+}
+
+.resource:hover,
+.ue:hover {
+    transform: scale(1.05);
+    transition: transform .5s ease;
+}
+
+.evaluations {
+    width: unset;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px 30px;
+}
+
+.title {
+    width: 100%;
+    font-weight: bold;
+}
+
+.evaluation {
+    margin-top: 1vh;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 10px;
+}
+
+h2 {
+    margin-top: 0;
+}

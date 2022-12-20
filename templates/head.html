@@ -9,9 +9,21 @@
     <title>Gestion de BUT</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" media="all" />
     <script src="{% static 'js/script.js' %}" defer></script>
+
+    {% if "/student/" in request.path %}
+    <link rel="stylesheet" href="{% static 'css/student.css' %}" media="all" />
+    <script src="{% static 'js/student.js' %}" defer></script>
+    {% elif "/professor/" in request.path %}
+    <link rel="stylesheet" href="{% static 'css/professor.css' %}" media="all" />
+    <script src="{% static 'js/professor.js' %}" defer></script>
+    {% elif "/administrator/" in request.path %}
+    <link rel="stylesheet" href="{% static 'css/administrator.css' %}" media="all" />
+    {% endif %}
+
 </head>
 
 <body>
+    {{request.current_app}}
     <header>
         <nav>
             <form class="auto" action="{% url 'main:index' %}" method="post">
@@ -42,25 +54,23 @@
     </main>
 
     <footer>
-        <div class="row">
-            <div class="left">
-                <h4>----------------------</h4>
-                <p>--------------------</p>
-                <p>--------------------</p>
-                <p>--------------------</p>
-            </div>
-            <div class="middle">
-                <h4>Contact</h4>
-                <p>lilian.ouraha@etu.univ-lyon1.fr</p>
-                <p>corto.bouviole@etu.univ-lyon1.fr</p>
-                <p>noa.cavalcante@etu.univ-lyon1.fr</p>
-            </div>
-            <div class="right">
-                <h4>--------------------</h4>
-                <p>--------------------</p>
-                <p>--------------------</p>
-                <p>--------------------</p>
-            </div>
+        <div class="left">
+            <h4>----------------------</h4>
+            <p>--------------------</p>
+            <p>--------------------</p>
+            <p>--------------------</p>
+        </div>
+        <div class="middle">
+            <h4>Contact</h4>
+            <p>lilian.ouraha@etu.univ-lyon1.fr</p>
+            <p>corto.bouviole@etu.univ-lyon1.fr</p>
+            <p>noa.cavalcante@etu.univ-lyon1.fr</p>
+        </div>
+        <div class="right">
+            <h4>--------------------</h4>
+            <p>--------------------</p>
+            <p>--------------------</p>
+            <p>--------------------</p>
         </div>
     </footer>
 </body>

@@ -1,15 +1,12 @@
 from django.shortcuts import render, redirect
 
 from main.models import *
-from main.views import isAdmin
+from main.views import isAdministrator
 
 # Create your views here.
 def index(request):
     user = request.user
-    admin = isAdmin(user)
-
-    print(admin)
-
+    admin = isAdministrator(user)
     if admin == None:
         return redirect("login")
 
@@ -24,7 +21,7 @@ def index(request):
 
 def establishmentgest(request):
     user = request.user
-    admin = isAdmin(user)
+    admin = isAdministrator(user)
 
     if admin == None:
         return
@@ -40,8 +37,7 @@ def establishmentgest(request):
 
 def addestablishment(request):
     user = request.user
-    admin = isAdmin(user)
-
+    admin = isAdministrator(user)
     if admin == None:
         return
 
@@ -58,7 +54,7 @@ def addestablishment(request):
 
 def adddepartment(request):
     user = request.user
-    admin = isAdmin(user)
+    admin = isAdministrator(user)
 
     if admin == None:
         return
@@ -75,7 +71,7 @@ def adddepartment(request):
 
 def addlink(request):
     user = request.user
-    admin = isAdmin(user)
+    admin = isAdministrator(user)
 
     if admin == None:
         return
