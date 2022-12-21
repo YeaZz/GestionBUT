@@ -6,35 +6,34 @@
     <h1>Bonjour {{ user.first_name }} {{ user.last_name }} !</h1>
 
     <select id="selection" name="establishment">
-        {% for establishment in esta_dpts_smtrs.keys %}
+        {% for establishment in professor_view.keys %}
         <option value="{{ establishment.id }}">{{ establishment }}</option>
         {% endfor %}
     </select>
 
-    <div class="content index">
-        {% for establishment, departments in esta_dpts_smtrs.items %}
+    <div class="content">
+        {% for establishment, departments in professor_view.items %}
         <div class="establishment {{ establishment.id }}">
             {% for department, semesters in departments.items %}
             <div class="styled-card department">
                 <form action="{% url 'professor:department' department_id=department.id %}" class="auto department-form" method="post">
                     {% csrf_token %}
-                    <h2 class="middle">Département {{ department }}</h2>
-                    <div class="styled-card semesters">
-                        {% for semester in semesters %}
-                        <div class="semester">
-                            <p>Semestre {{ semester.number }}</p>
-                            {% if semester == actual_semester %}
-                            <div class="ues">
-                                {% for ue in semester.ues.all %}
-                                <div class="ue">
-                                    {{ ue.number }}
-                                    <button class="department-button {{ semester.id }}">Ajouter une note</button>
+                    <h2 class="middle">Département {{ department.name }}</h2>
+                    <div class="semesters">
+                        {% for semester, resources in semesters.items %}
+                        {% if resources %}
+                        <div class="styled-card semester">
+                            <h2>Semestre {{ semester.number }}</h2>
+                            <div class="resources">
+                                {% for resource in resources %}
+                                <div class="resource">
+                                    <p>{{ resource.name }}</p>
+                                    <button class="resource-button {{ resource.id }}">Ajouter une note</button>
                                 </div>
                                 {% endfor %}
                             </div>
-                            {% endif %}
-                            <button class="department-button">Voir</button>
                         </div>
+                        {% endif %}
                         {% endfor %}
                     </div>
                 </form>

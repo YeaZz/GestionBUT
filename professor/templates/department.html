@@ -3,40 +3,64 @@
 {% block content %}
 
 <div class="wrapper left-side">
-    <h1>{{ establishment }}<br>Département {{ department }}</h1>
+    <h1>{{ department.establishment }}<br>Département {{ department }}</h1>
 
     <select id="selection" name="semestre">
-        {% for semester in semesters_ues_evals.keys %}
+        {% for semester in professor_view.keys %}
         <option value="{{ semester.id }}">Semestre {{ semester.number }}</option>
         {% endfor %}
     </select>
 
-    <div class="content department">
-        {% for semester, ues in semesters_ues_evals.items %}
+    {% for semester, resources in professor_view.items %}
+    {% for resource in resources.keys %}
+    <div class="modal {{ resource.id }}">
+        <div class="modal-content">
+            <h2>Ajouter une note</h2>
+            {{ resource.name }}
+            <form action="{% url 'professor:createNote' department_id=department.id resource_id=resource.id %}" method="post">
+                {% csrf_token %}
+                <div class="input">
+                    <label for="name">Nom de l'évaluation</label>
+                    <input type="text" name="name" id="name" required>
+                </div>
+                <div class="input">
+                    <select class="group" name="group">
+                        <option value="" selected>Veuillez choisir un groupe</option>
+                        {% for group in department.getGroups %}
+                        <option value="{{ group.id }}">{{ group.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% for group in department.getGroups %}
+                <div class="students {{ group.id }}">
+                    {% for student in group.students.all %}
+                    <div>{{ student.id.last_name }} {{ student.id.first_name }}</div>
+                    <input type="number" name="note {{ group.id }} {{ student.id.id }}" step="any">
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                <button class="resource-button">Ajouter</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+    {% endfor %}
+
+    <div class="content">
+        {% for semester, resources in professor_view.items %}
         <div class="semester {{ semester.id }}">
-            {% for ue, evaluations in ues.items %}
-            <div class="styled-card ue">
-
-                <div class="modal">
-                    <div class="modal-content">
-                        suuii
-                    </div>
-                </div>
-
-
-                <div class="title">
-                    <h2>{{ semester }} UE{{ ue.number }}</h2>
-                    <p><em>{{ ue.description }}</em></p>
-                </div>
-                <button class="department-button {{ semester.id }}">Ajouter une note</button>
+            {% for resource, evaluations in resources.items %}
+            <div class="styled-card resource">
+                <h2>{{ resource.name }}</h2>
+                <button class="resource-button {{ resource.id }}">Ajouter une évaluation</button>
+                {% if evaluations %}
                 <div class="styled-card evaluations">
                     <strong>Notes</strong>
                     {% for evaluation in evaluations %}
-                    <div class="evaluation">
-                        {{ evaluation }}
-                    </div>
+                    <div class="evaluation">{{ evaluation }} - {{ evaluation.professor }}</div>
                     {% endfor %}
                 </div>
+                {% endif %}
             </div>
             {% endfor %}
         </div>

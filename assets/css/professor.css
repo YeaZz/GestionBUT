@@ -1,53 +1,61 @@
-.content.index .establishment {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+.content > .establishment /* index */,
+.content > .semester /* department */ {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 25px;
+    margin: 25px;
 }
 
-.content.index .department {
-    margin: 5vh;
-    transition: transform .5s ease;
-}
-
-.content.index .department,
-.content.index .semester {
-    padding: 20px;
-    width: 50vh;
+.establishment > .department, .semesters > .semester, /* index */ 
+.semester > .resource, .resource > .evaluations /* department */ {
+    padding: 25px;
+    width: auto;
     height: max-content;
     cursor: pointer;
 }
 
-.content.index .semester {
-    width: unset;
+.resource > .evaluations {
+    margin-top: 25px;
 }
 
-.content.index .department:hover {
+.establishment > .department, /* index */
+.semester > .resource /* department */ {
+    margin: 3%;
+    transition: transform .5s ease;
+}
+
+.establishment .department:hover,
+.semester > .resource:hover {
     transform: scale(1.01);
     transition: transform .5s ease;
 }
 
-.content.index .semesters {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: center;
+.semesters > .semester {
+    width: auto;
 }
 
-.content.index .semester {
+.department > form > .semesters,
+.department > .semesters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 25px;
+    margin-top: 5%;
+}
+
+.semesters > .semester {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.content.index .semester > p {
+.semesters > .semester > p {
     margin-top: 0;
 }
 
-.department-button {
+.resource-button {
     position: relative;
     z-index: 1;
-    width: 20vh;
-    height: 5vh;
+    height: 3em;
     background: var(--element-color);
     color: var(--primary-color);
     font: inherit;
@@ -58,54 +66,18 @@
     transition: transform .5s ease;
 }
 
-.department-button:hover,
-.department-button:focus {
+.resource-button:hover,
+.resource-button:focus {
     transform: scale(1.05);
     transition: transform .5s ease;
     outline: none;
 }
 
-
-
-
-
-.content.department .semester {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+h2 {
+    margin-top: 0;
 }
 
-.content.department .ue {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: 3vh;
-    margin: 5vh;
-    transition: transform .5s ease;
-}
-
-.content.department .ue,
-.content.department .evaluations {
-    padding: 20px;
-    width: 35vh;
-    height: max-content;
-    cursor: pointer;
-}
-
-.content.department .evaluations {
-    width: calc(35vh - 40px);
-} 
-
-.content.department .evaluation {
-    margin-top: 1vh;
-}
-
-.content.department .ue:hover {
-    transform: scale(1.02);
-    transition: transform .5s ease;
-}
-
-.content.department .modal {
+.modal {
     display: none;
     position: fixed;
     width: 100%;
@@ -113,14 +85,52 @@
     top: 0;
     left: 0;
     overflow: auto;
-    z-index: 999;
+    z-index: 9;
     background-color: rgba(0,0,0,0.4);
 }
 
-.content.department .modal-content {
+.modal-content {
     position: relative;
     background-color: var(--primary-color);
-    width: 80%;
+    width: 60%;
+    height: 60%;
     margin: auto;
-    padding: 5vh;
+    margin-top: 5%;
+    padding: 45px;
+    border-radius: 30px;
+    overflow: scroll;
+}
+
+.students {
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    margin: 2% 0    ;
+}
+.students > * {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid;
+    width: auto;
+    height: 50px;
+    padding: 0 5%;
+    font: inherit;
+}
+
+.input {
+    display: flex;
+    flex-direction: column;
+    margin: 2% 0;
+    width: 30%;
+}
+
+.input > input {
+    border: none;
+    border-bottom: 1px solid;
+    font: inherit;
+}
+
+.input > input:focus,
+.students > input:focus {
+    outline: none;
 }

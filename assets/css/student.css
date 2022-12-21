@@ -1,22 +1,19 @@
 .semester {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 25px;
+    margin: 25px;
 }
 
-.resource,
-.evaluations,
-.ue {
+.resource, .ue,
+.evaluations {
     padding: 25px;
-    width: 24%;
     height: max-content;
     cursor: pointer;
+    width: auto;
 }
 
-.resource,
-.ue {
-    margin: 3%;
+.resource, .ue {
     transition: transform .5s ease;
 }
 
@@ -32,6 +29,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     gap: 10px 30px;
+    margin-top: 25px;
 }
 
 .title {
@@ -46,7 +44,7 @@
 .stats {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-column-gap: 10px;
+    grid-gap: 10px;
 }
 
 h2 {

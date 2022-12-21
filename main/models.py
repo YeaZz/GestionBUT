@@ -23,13 +23,13 @@ class Department(models.Model):
         return Semester.objects.filter(department=self).order_by("number")
 
     def getGroups(self):
-        return Group.objects.filter(department=self)
+        return Group.objects.filter(department=self).order_by("name")
 
     def getStudents(self):
         return Student.objects.filter(department=self)
 
     def getUsefulLinks(self):
-        return UsefulLink.objects.filter(department=self)
+        return UsefulLink.objects.filter(department=self).order_by("name")
 
 class UsefulLink(models.Model):
     name = models.CharField(max_length=30)
@@ -76,7 +76,7 @@ class UE(models.Model):
                 if note != None:
                     sum += note
                     nb += 1
-        return sum / nb if nb > 0 else None
+        return round(sum / nb, 2) if nb > 0 else None
 
     def getRanking(self, student):
         notes = {}
@@ -116,7 +116,7 @@ class Resource(models.Model):
     ues = models.ManyToManyField(UE, related_name="resources")
 
     def __str__(self):
-        return "R" + str(self.semester.number) + "." + str(self.name)
+        return f"R{self.semester.number}.{self.number} {self.name}"
 
     def getEvaluations(self):
         return Evaluation.objects.filter(resource=self)
@@ -160,9 +160,6 @@ class Group(models.Model):
     def __str__(self):
         return self.name
 
-    def getStudents(self):
-        return Student.objects.filter(group=self)
-
     def getDepartmentTree(department):
         tree = {}
         for child in Group.objects.filter(parent=None, department=department):
@@ -180,7 +177,7 @@ class Group(models.Model):
 class Student(models.Model):
     id = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     department = models.ForeignKey(Department, on_delete=models.CASCADE, default=None, blank=False, null=True)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, default=None, blank=False, null=True)
+    groups = models.ManyToManyField(Group, blank=False, related_name="students")
 
     def __str__(self):
         return self.id.username
@@ -193,15 +190,28 @@ class Student(models.Model):
 
 class Professor(models.Model):
     id = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    departments = models.ManyToManyField(Department, blank=False)
     resources = models.ManyToManyField(Resource, blank=True)
 
     def __str__(self):
-        return self.id.username
+        return f"{self.id.first_name} {self.id.last_name}"
+
+    def getResources(self, department):
+        resources = []
+        for resource in self.resources.all():
+            if resource.semester.department == department:
+                resources.append(resource)
+        return resources
+
+    def getDepartments(self):
+        departments = []
+        for resource in self.resources.all():
+            if resource.semester.department not in departments:
+                departments.append(resource.semester.department)
+        return departments
 
     def getEtablishments(self):
         establishments = []
-        for department in self.departments.all():
+        for department in self.getDepartments():
             if department.establishment not in establishments:
                 establishments.append(department.establishment)
         return establishments
@@ -244,7 +254,7 @@ class Evaluation(models.Model):
         sum = 0
         for grade in grades:
             sum += grade.note
-        return sum / grades.count()
+        return round(sum / len(grades), 2)
 
     def getMax(self):
         grades = self.getGrades()
@@ -394,18 +404,20 @@ def load():
     groupS2G1_2 = Group(name="S2G1.2", department=department, parent=groupS2G1, year=year1)
     groupS2G1_2.save()
 
-    noa = Student(id=User.objects.all().filter(username="noa_cavalcante").first(), department=department, group=groupS1G1_1)
+    noa = Student(id=User.objects.all().filter(username="noa_cavalcante").first(), department=department)
     noa.save()
+    noa.groups.add(groupS1, groupS1G1, groupS1G1_1)
 
-    lilian = Student(id=User.objects.all().filter(username="lilian_ouraha").first(), department=department, group=groupS1G1_1)
+    lilian = Student(id=User.objects.all().filter(username="lilian_ouraha").first(), department=department)
     lilian.save()
+    lilian.groups.add(groupS1, groupS1G1, groupS1G1_1)
 
-    corto = Student(id=User.objects.all().filter(username="corto_bouviolle").first(), department=department, group=groupS1G1_1)
+    corto = Student(id=User.objects.all().filter(username="corto_bouviolle").first(), department=department)
     corto.save()
+    corto.groups.add(groupS1, groupS1G1, groupS1G1_2)
 
     peytavie = Professor(id=User.objects.all().filter(username="adrien_peytavie").first())
     peytavie.save()
-    peytavie.departments.add(department)
     peytavie.resources.add(resource1, resource2)
 
     administrator = Administrator(id=User.objects.all().filter(username="administrateur").first())

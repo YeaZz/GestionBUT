@@ -13,7 +13,7 @@ if (semesterChoice != undefined) {
             let value = option.value
             const currentSemester = document.getElementsByClassName(value)[0]
             if (currentSemester == undefined) return
-            if (option.selected) currentSemester.style.display = "flex"
+            if (option.selected) currentSemester.style.display = "grid"
             else currentSemester.style.display = "none"
             return
         })
@@ -32,7 +32,6 @@ if (viewChoice != undefined) {
 
     function displayView() {
         const value = viewChoice.value
-        console.log(value)
         Array.from(resources).forEach(resource => {
             resource.style.display = value == "resource" ? "block" : "none"
         })
