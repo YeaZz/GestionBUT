@@ -1,25 +1,25 @@
 .semester {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 25px;
+    grid-gap: 50px;
     margin: 25px;
 }
 
 .resource, .ue,
 .evaluations {
+    position: relative;
+    z-index: 1;
     padding: 25px;
+    width: auto;
     height: max-content;
     cursor: pointer;
-    width: auto;
-}
-
-.resource, .ue {
     transition: transform .5s ease;
 }
 
 .resource:hover,
 .ue:hover {
-    transform: scale(1.05);
+    z-index: 2;
+    transform: scale(1.01);
     transition: transform .5s ease;
 }
 
@@ -45,8 +45,4 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 10px;
-}
-
-h2 {
-    margin-top: 0;
 }

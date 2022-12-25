@@ -25,7 +25,7 @@
                 </div>
                 <div class="input">
                     <select class="group" name="group">
-                        <option value="" selected>Veuillez choisir un groupe</option>
+                        <option value="none" selected>Veuillez choisir un groupe</option>
                         {% for group in department.getGroups %}
                         <option value="{{ group.id }}">{{ group.name }}</option>
                         {% endfor %}
@@ -39,7 +39,7 @@
                     {% endfor %}
                 </div>
                 {% endfor %}
-                <button class="resource-button">Ajouter</button>
+                <button class="modal-button">Ajouter</button>
             </form>
         </div>
     </div>

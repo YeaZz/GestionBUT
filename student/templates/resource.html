@@ -12,20 +12,20 @@
             <h2 class="middle">{{ evaluation }}</h2>
             <div class="stats">
                 <div>
-                    <strong>Note</strong><br>{{ stats.0 }}
+                    <strong>Note</strong><br>{{ stats.0|default_if_none:"Non noté" }}
                 </div>
                 <div>
-                    <strong>Moyenne</strong><br>{{ stats.2 }}
+                    <strong>Moyenne</strong><br>{{ stats.2|default_if_none:"Aucune" }}
                 </div>
             </div>
             <p></p>
-            <p><strong>Classement</strong><br>{{ stats.1 }}</p>
+            <p><strong>Classement</strong><br>{{ stats.1|default_if_none:"Non classé" }}</p>
             <div class="stats">
                 <div>
-                    <strong>Note maximale</strong><br>{{ stats.3 }}
+                    <strong>Note maximale</strong><br>{{ stats.3|default_if_none:"Aucune" }}
                 </div>
                 <div>
-                    <strong>Note minimale</strong><br>{{ stats.4 }}
+                    <strong>Note minimale</strong><br>{{ stats.4|default_if_none:"Aucune" }}
                 </div>
             </div>
         </div>

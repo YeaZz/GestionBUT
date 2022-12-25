@@ -10,76 +10,51 @@ def index(request):
     if admin == None:
         return redirect("login")
 
+    administrator_view = {}
     establishments = Establishment.objects.all()
+    for establishment in establishments:
+        administrator_view[establishment] = establishment.getDepartments()
 
     return render(request, "a_index.html", context = {
             "user": user,
-            "establishments" : establishments,
+            "administrator_view" : administrator_view,
         }
     )
 
-
-def establishmentgest(request):
-    user = request.user
-    admin = isAdministrator(user)
-
-    if admin == None:
-        return
-
-    establishments = Establishment.objects.all()
-
-    return render(request, "establishmentgest.html", context = {
-            "user": user,
-            "establishments" : establishments,
-        }
-    )
-
-
-def addestablishment(request):
+def establishment(request, establishment_id):
     user = request.user
     admin = isAdministrator(user)
     if admin == None:
-        return
+        return redirect("login")
 
-    establishments = Establishment.objects.all()
+    establishment = Establishment.objects.filter(id=establishment_id).first()
+    if establishment == None:
+        return redirect("administrator:index")
 
-    departments = Department.objects.all()
+    administrator_view = {}
+    for department in establishment.getDepartments():
+        administrator_view[department] = department.getSemesters()
 
-    return render(request, "addestablishment.html", context = {
+    return render(request, "department.html", context= {
             "user": user,
-            "establishments" : establishments,
-            "departments": departments
+            "administrator_view": administrator_view
         }
     )
 
-def adddepartment(request):
+def createEstablishment(request):
     user = request.user
     admin = isAdministrator(user)
-
     if admin == None:
-        return
+        return redirect("main:index")
 
-    establishments = Establishment.objects.all()
-    departments = Department.objects.all()
+    if request.method != "POST":
+        return redirect("administrator:index")
 
-    return render(request, "adddepartment.html", context = {
-            "user": user,
-            "establishments" : establishments,
-            "departments": departments
-        }
-    )
+    post = request.POST
+    if "name" in post:
+        establishment = Establishment(name=post.get("name"))
+        establishment.save()
+        if "it_department" in post:
+            establishment.createITDepartment()
 
-def addlink(request):
-    user = request.user
-    admin = isAdministrator(user)
-
-    if admin == None:
-        return
-
-    establishments = Establishment.objects.all()
-
-    return render(request, "addlink.html", context = {
-            "user": user,
-            "establishments" : establishments,
-        }
-    )
+    return redirect("administrator:index")

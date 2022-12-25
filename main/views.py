@@ -1,4 +1,5 @@
 from django.shortcuts import redirect
+from django.contrib.auth.models import User
 
 from main.models import Student, Professor, Administrator
 
@@ -6,7 +7,7 @@ from main.models import Student, Professor, Administrator
 def index(request):
     user = request.user
 
-    # Redirecting to related pages
+    # Redirecting to related page
     if isStudent(user) != None:
         return redirect("student:index")
     if isProfessor(user) != None:
@@ -19,18 +20,19 @@ def index(request):
 
 def isStudent(user):
     try:
-        return Student.objects.get(id=user)
+        return Student.objects.get(id=user if isinstance(user, int) else user.id)
     except Student.DoesNotExist:
         return None
+        
 
 def isProfessor(user):
     try:
-        return Professor.objects.get(id=user)
+        return Professor.objects.get(id=user if isinstance(user, int) else user.id)
     except Professor.DoesNotExist:
         return None
 
 def isAdministrator(user):
     try:
-        return Administrator.objects.get(id=user)
+        return Administrator.objects.get(id=user if isinstance(user, int) else user.id)
     except Administrator.DoesNotExist:
         return None

@@ -68,6 +68,7 @@ if (students.length > 0) {
         Array.from(select.options).forEach(option => {
             let value = option.value
             let currentStudents = select.parentNode.parentNode.getElementsByClassName("students " + value)[0]
+            if (currentStudents == undefined) return
             if (option.selected) currentStudents.style.display = "grid"
             else currentStudents.style.display = "none"
             return

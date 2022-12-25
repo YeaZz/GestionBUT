@@ -1,0 +1,72 @@
+.content > .establishments {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 50px;
+    margin: 25px;
+}
+
+.establishments > .establishment,
+.establishment > .department {
+    position: relative;
+    z-index: 1;
+    padding: 25px;
+    width: auto;
+    cursor: pointer;
+    transition: transform .5s ease;
+}
+
+.establishments > .establishment:hover {
+    z-index: 2;
+    transform: scale(1.01);
+    transition: transform .5s ease;
+}
+
+.establishments > #add_establishment {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 100px;
+    color: #e5e5e5;
+}
+
+.department > p {
+    margin-bottom: 0;
+}
+
+.establishment-button {
+    position: relative;
+    z-index: 999;
+    height: 3em;
+    background: var(--element-color);
+    color: var(--primary-color);
+    font: inherit;
+    font-size: 15px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: transform .5s ease;
+}
+
+.establishment-button:hover,
+.establishment-button:focus {
+    transform: scale(1.05);
+    transition: transform .5s ease;
+    outline: none;
+}
+
+.input {
+    display: flex;
+    flex-direction: column;
+    margin: 2% 0;
+    width: 30%;
+}
+
+.input > input {
+    border: none;
+    border-bottom: 1px solid;
+    font: inherit;
+}
+
+.input > input:focus {
+    outline: none;
+}
