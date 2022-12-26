@@ -75,7 +75,7 @@
             {% for link in usefulLinks %}
             <div class="link">
                 <img src="{% static link.file_path %}" alt="moodle" />
-                <a href="{{ link.link }}">{{ link.name }}</a>
+                <a href="{{ link.link }}" target="_blank">{{ link.name }}</a>
             </div>
             {% endfor %}
         </div>

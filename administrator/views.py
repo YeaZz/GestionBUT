@@ -16,7 +16,6 @@ def index(request):
         administrator_view[establishment] = establishment.getDepartments()
 
     return render(request, "a_index.html", context = {
-            "user": user,
             "administrator_view" : administrator_view,
         }
     )
@@ -36,7 +35,6 @@ def establishment(request, establishment_id):
         administrator_view[department] = department.getSemesters()
 
     return render(request, "department.html", context= {
-            "user": user,
             "administrator_view": administrator_view
         }
     )
@@ -56,5 +54,4 @@ def createEstablishment(request):
         establishment.save()
         if "it_department" in post:
             establishment.createITDepartment()
-
     return redirect("administrator:index")

@@ -7,7 +7,7 @@
     <h2>{{ resource.name }}</h2>
     <div class="content">
         <div class="semester">
-        {% for evaluation, stats in evaluations.items %}
+        {% for evaluation, stats in student_view.items %}
         <div class="styled-card resource">
             <h2 class="middle">{{ evaluation }}</h2>
             <div class="stats">

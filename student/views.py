@@ -11,18 +11,18 @@ def index(request):
         return redirect("login")
 
     department = student.department
-    establishment = department.establishment
-    usefulLinks = department.getUsefulLinks()
 
     student_view = {}
     for semester in department.getSemesters():
         student_view[semester] = {}, {}
 
+        # Vue ressource
         for resource in semester.getResources():
             student_view[semester][0][resource] = {}, resource.getNote(student), resource.getRanking(student)
             for evaluation in resource.getEvaluations():
                 student_view[semester][0][resource][0][evaluation] = evaluation.getNote(student)
 
+        # Vue UE
         for ue in semester.getUEs():
             student_view[semester][1][ue] = {}, ue.getNote(student), ue.getRanking(student)
             for resource in ue.getResources():
@@ -34,15 +34,15 @@ def index(request):
         request,
         "s_index.html",
         context = {
-            "user": user,
-            "establishment": establishment,
+            "establishment": department.establishment,
             "student_view": student_view,
             "lastGrades": student.getLastGrades(5),
-            "usefulLinks": usefulLinks,
+            "usefulLinks": department.getUsefulLinks(),
         }
     )
 
 def resource(request, resource_id):
+    # Quand on clique sur une ressource
     user = request.user
     student = isStudent(user)
     if student == None:
@@ -53,9 +53,9 @@ def resource(request, resource_id):
         return redirect("student:index")
 
     evaluations = Evaluation.objects.filter(resource=resource)
-    evaluations_stats = {}
+    student_view = {}
     for evaluation in evaluations:
-        evaluations_stats[evaluation] = (
+        student_view[evaluation] = (
             evaluation.getNote(student),
             evaluation.getRanking(student),
             evaluation.getAverage(),
@@ -63,16 +63,13 @@ def resource(request, resource_id):
             evaluation.getMin()
         )
 
-    department = student.department
-    usefulLinks = department.getUsefulLinks()
-
     return render(
         request,
         "resource.html",
         context={
             "resource": resource,
-            "evaluations": evaluations_stats,
+            "student_view": student_view,
             "lastGrades": student.getLastGrades(5),
-            "usefulLinks": usefulLinks,
+            "usefulLinks": student.department.getUsefulLinks(),
         }
     )

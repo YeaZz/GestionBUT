@@ -10,14 +10,15 @@ class Establishment(models.Model):
         return self.name
 
     def getDepartments(self):
+        # Retourne les départements appartenant à l'établissement
         return Department.objects.filter(establishment=self)
 
     def getProfessors(self):
-        professors = []
-        for department in self.getDepartments():
-            for professor in department.getProfessors():
-                if professor not in professors:
-                    professors.append(professor)
+        professors = []                                 # Liste de retour
+        for department in self.getDepartments():        # Loop les départements de l'établissement
+            for professor in department.getProfessors():    # Loop les professeurs associés
+                if professor not in professors:                 # Check pour l'insertion unique de prof
+                    professors.append(professor)                    # Insert le prof dans la liste
         return professors
 
     def createITDepartment(self):
@@ -182,6 +183,8 @@ class Establishment(models.Model):
                 )
             }
         }
+        # R1.2 => (1=semestre, 2=number)
+        # str_resources = { semester: { number: ("name", [ues]), ... }, ... }
         for semester, r in str_resources.items():
             for resource, content in r.items():
                 resource = Resource(number=resource, name=content[0], semester=semester)
@@ -197,27 +200,33 @@ class Department(models.Model):
         return self.name
 
     def getUEs(self):
+        # Retourne les UEs appartenant au département
         return UE.objects.filter(department=self).order_by("number")
 
     def getSemesters(self):
+        # Retourne les semestres appartenant au département
         return Semester.objects.filter(department=self).order_by("number")
 
     def getGroups(self):
+        # Retourne les groupes appartenant au département
         return Group.objects.filter(department=self).order_by("name")
 
     def getStudents(self):
+        # Retourne les étudiants appartenant au département
         return Student.objects.filter(department=self)
 
     def getProfessors(self):
-        professors = []
-        for semester in self.getSemesters():
-            for resource in semester.getResources():
-                for professor in resource.professors.all():
-                    if professor not in professors:
-                        professors.append(professor)
+        # Retourne les professeurs appartenant au département
+        professors = []                         # Liste de retour
+        for semester in self.getSemesters():    # Loop les semestres du département
+            for resource in semester.getResources():    # Loop les ressources associés
+                for professor in resource.professors.all(): # Loop les professeurs associés
+                    if professor not in professors:             # Check pour l'insertion unique de prof
+                        professors.append(professor)                # Insert le prof dans la liste
         return professors
 
     def getUsefulLinks(self):
+        # Retourne les liens utiles appartenant au département
         return UsefulLink.objects.filter(department=self).order_by("name")
 
 class UsefulLink(models.Model):
@@ -252,31 +261,34 @@ class UE(models.Model):
         return "UE" + str(self.number) + " - " + self.description
 
     def getResources(self):
+        # Retourne les ressources appartenant à l'UE
         return Resource.objects.filter(ues=self).order_by("number")
 
     def getNote(self, student):
-        nb, sum = 0, 0
-        resources = Resource.objects.filter(ues=self)
-        for resource in resources:
-            for evaluation in resource.getEvaluations():
-                note = evaluation.getNote(student)
-                if note != None:
-                    sum += note
-                    nb += 1
-        return round(sum / nb, 2) if nb > 0 else None
+        # Retourne la note de l'UE d'un étudiant donné
+        nb, sum = 0, 0                                  # Nombre de note, Somme des notes
+        for resource in self.getResources():            # Loop les ressources de l'UE
+            for evaluation in resource.getEvaluations():    # Loop les évaluations associés
+                note = evaluation.getNote(student)              # Prend la note de l'étudiant de l'évaluation
+                if note != None:                                # Si la note existe
+                    sum += note                                     # Ajoute la note à la somme
+                    nb += 1                                         # Incrémente le nombre de note
+        return round(sum / nb, 2) if nb > 0 else None   # Si le nombre de note > 0, retourne une moyenne, sinon None
 
     def getRanking(self, student):
-        notes = {}
-        students = student.department.getStudents()
-        for s in students:
-            note = self.getNote(s)
-            if note != None:
-                notes[s] = note
-        if len(notes) > 0:
+    	# Retourne le classement de l'UE d'un étudiant donné
+        notes = {}										# notes = { student: note, ... }
+        students = student.department.getStudents()		# Prend tout les étudiants du départment de l'étudiant
+        for s in students:								# Loop les étudiants
+            note = self.getNote(s)							# Prend la note de l'UE associé
+            if note != None:								# Si la note existe
+                notes[s] = note									# Rempli le dictionnaire notes
+        if len(notes) > 0:								# S'il y a des notes
+															# Tri le dictionnaire en fonction des notes
             notes = dict(sorted(notes.items(), key=lambda notes:notes[1], reverse=True))
-            index = list(notes.keys()).index(student)
-            return str(index + 1) + "/" + str(len(notes))
-        return None
+            index = list(notes.keys()).index(student)		# Prend la place de l'étudiant
+            return str(index + 1) + "/" + str(len(notes))	# Retourne le classement (i.e. "1/4")
+        return None										# Sinon renvoie None
 
 class Semester(models.Model):
     number = models.IntegerField(default=None, blank=False, null=True)
@@ -286,18 +298,21 @@ class Semester(models.Model):
         return "S" + str(self.number)
 
     def getResources(self):
+        # Retourne les ressources appartenant au semestre
         return Resource.objects.filter(semester=self).order_by("number")
 
     def getProfessorResources(self, professor):
+        # Retourne les ressources d'un professeur donné
         resources = Resource.objects.filter(semester=self).order_by("number")
         return list(set(resources & professor.resources.all()))
 
     def getUEs(self):
-        ues = []
-        for resource in self.getResources():
-            for ue in resource.ues.all():
-                if ue not in ues:
-                    ues.append(ue)
+        # Retourne les UEs appartenant au semestre
+        ues = []								# Liste de retour
+        for resource in self.getResources():	# Loop les ressources du semestre
+            for ue in resource.ues.all():			# Loop les UEs associés
+                if ue not in ues:						# Check pour l'insertion unique d'UE
+                    ues.append(ue)							# Insert l'UE dans la liste
         return ues
 
 class Resource(models.Model):
@@ -310,9 +325,11 @@ class Resource(models.Model):
         return f"R{self.semester.number}.{self.number} {self.name}"
 
     def getEvaluations(self):
+        # Retourne les évaluations appartenant à la ressource
         return Evaluation.objects.filter(resource=self)
 
     def getNote(self, student):
+        # Retourne la note de la ressource d'un étudiant donné
         nb, sum = 0, 0
         for evaluation in self.getEvaluations():
             note = evaluation.getNote(student)
@@ -322,6 +339,7 @@ class Resource(models.Model):
         return sum / nb if nb > 0 else None
 
     def getRanking(self, student):
+        # Retourne le classement de la ressource d'un étudiant donné
         notes = {}
         for s in student.department.getStudents():
             note = self.getNote(s)
@@ -373,9 +391,11 @@ class Student(models.Model):
         return self.id.username
 
     def getGrades(self):
+        # Retourne les notes d'un étudiant donné
         return Grade.objects.filter(student=self)
 
     def getLastGrades(self, amount):
+        # Retourne les {amount} dernières notes d'un étudiant donné
         return self.getGrades()[:amount]
 
 class Professor(models.Model):
@@ -438,33 +458,33 @@ class Evaluation(models.Model):
         return grades.first().note if len(grades) == 1 else None
 
     def getAverage(self):
-        grades = self.getGrades()
-        if len(grades) <= 0:
-            return None
-        sum = 0
-        for grade in grades:
-            sum += grade.note
-        return round(sum / len(grades), 2)
+        grades = self.getGrades()	# Prend les notes de l'évaluation
+        if len(grades) <= 0:		# S'il n'y a pas de note
+            return None					# Retourne None
+        nb, sum = len(grades), 0	# Nombre de note, Somme des notes
+        for grade in grades:		# Loop les notes
+            sum += grade.note			# Ajoute la note à la somme
+        return round(sum / nb, 2)	# Retourne une moyenne
 
     def getMax(self):
-        grades = self.getGrades()
-        if len(grades) <= 0:
-            return None
-        max = -math.inf
-        for grade in grades:
-            if max < grade.note:
-                max = grade.note
-        return max
+        grades = self.getGrades()	# Prend les notes de l'évaluation
+        if len(grades) <= 0:		# S'il n'y a pas de note
+            return None					# Retourne None
+        max = -math.inf				# Note maximale stockée (- infini)
+        for grade in grades:		# Loop les notes
+            if max < grade.note:		# Si la note stockée est plus petite que la note associée
+                max = grade.note			# Affecte la note associée à la note stockée
+        return max					# Retourne la note stockée
 
     def getMin(self):
-        grades = self.getGrades()
-        if len(grades) <= 0:
-            return None
-        min = math.inf
-        for grade in grades:
-            if min > grade.note:
-                min = grade.note
-        return min
+        grades = self.getGrades()	# Prend les notes de l'évaluation
+        if len(grades) <= 0:		# S'il n'y a pas de note
+            return None					# Retourne None
+        min = math.inf				# Note minimale stockée (+ infini)
+        for grade in grades:		# Loop les notes
+            if min > grade.note:		# Si la note stockée est plus grande que la note associée
+                min = grade.note			# Affecte la note associée à la note stockée
+        return min					# Retourne la note stockée
 
     def getRanking(self, student):
         notes = {}

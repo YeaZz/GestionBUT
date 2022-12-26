@@ -22,8 +22,7 @@ def index(request):
         request,
         "p_index.html",
         context={
-            "user": user,
-            "professor_view": professor_view,
+            "professor_view": professor_view
         }
     )
 
@@ -43,15 +42,13 @@ def department(request, department_id):
         for resource in semester.getProfessorResources(professor):
             professor_view[semester][resource] = resource.getEvaluations()
 
-    usefulLinks = UsefulLink.objects.filter(department=department)
-
     return render(
         request,
         "department.html",
         context = {
-            "department": department,
             "professor_view": professor_view,
-            "usefulLinks": usefulLinks,
+            "department": department,
+            "usefulLinks": department.getUsefulLinks(),
         }
     )
 
