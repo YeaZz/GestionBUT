@@ -451,6 +451,7 @@ class Evaluation(models.Model):
             return None					# Retourne None
         nb, sum = len(grades), 0	# Nombre de note, Somme des notes
         for grade in grades:		# Loop les notes
+            print(grade.note)
             sum += grade.note			# Ajoute la note à la somme
         return round(sum / nb, 2)	# Retourne une moyenne
 
@@ -493,8 +494,8 @@ class Evaluation(models.Model):
 class Grade(models.Model):
     evaluation = models.ForeignKey(Evaluation, on_delete=models.CASCADE, default=None, blank=False, null=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE, default=None, blank=False, null=True)
-    note = models.FloatField(default=0.0, blank=False, null=True)
-    coef = models.FloatField(default=1.0, blank=True, null=False)
+    note = models.FloatField(default=0, blank=False, null=False)
+    coef = models.FloatField(default=1, blank=True, null=False)
 
     def __str__(self):
         return self.evaluation.name
