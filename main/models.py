@@ -200,23 +200,18 @@ class Department(models.Model):
         return self.name
 
     def getUEs(self):
-        # Retourne les UEs appartenant au département
         return UE.objects.filter(department=self).order_by("number")
 
     def getSemesters(self):
-        # Retourne les semestres appartenant au département
         return Semester.objects.filter(department=self).order_by("number")
 
     def getGroups(self):
-        # Retourne les groupes appartenant au département
         return Group.objects.filter(department=self).order_by("name")
 
     def getStudents(self):
-        # Retourne les étudiants appartenant au département
         return Student.objects.filter(department=self)
 
     def getProfessors(self):
-        # Retourne les professeurs appartenant au département
         professors = []                         # Liste de retour
         for semester in self.getSemesters():    # Loop les semestres du département
             for resource in semester.getResources():    # Loop les ressources associés
@@ -226,7 +221,6 @@ class Department(models.Model):
         return professors
 
     def getUsefulLinks(self):
-        # Retourne les liens utiles appartenant au département
         return UsefulLink.objects.filter(department=self).order_by("name")
 
 class UsefulLink(models.Model):
@@ -261,11 +255,9 @@ class UE(models.Model):
         return "UE" + str(self.number) + " - " + self.description
 
     def getResources(self):
-        # Retourne les ressources appartenant à l'UE
         return Resource.objects.filter(ues=self).order_by("number")
 
     def getNote(self, student):
-        # Retourne la note de l'UE d'un étudiant donné
         nb, sum = 0, 0                                  # Nombre de note, Somme des notes
         for resource in self.getResources():            # Loop les ressources de l'UE
             for evaluation in resource.getEvaluations():    # Loop les évaluations associés
@@ -276,7 +268,6 @@ class UE(models.Model):
         return round(sum / nb, 2) if nb > 0 else None   # Si le nombre de note > 0, retourne une moyenne, sinon None
 
     def getRanking(self, student):
-    	# Retourne le classement de l'UE d'un étudiant donné
         notes = {}										# notes = { student: note, ... }
         students = student.department.getStudents()		# Prend tout les étudiants du départment de l'étudiant
         for s in students:								# Loop les étudiants
@@ -284,10 +275,12 @@ class UE(models.Model):
             if note != None:								# Si la note existe
                 notes[s] = note									# Rempli le dictionnaire notes
         if len(notes) > 0:								# S'il y a des notes
-															# Tri le dictionnaire en fonction des notes
-            notes = dict(sorted(notes.items(), key=lambda notes:notes[1], reverse=True))
-            index = list(notes.keys()).index(student)		# Prend la place de l'étudiant
-            return str(index + 1) + "/" + str(len(notes))	# Retourne le classement (i.e. "1/4")
+            notes = dict(sorted(notes.items(), key=lambda notes:notes[1], reverse=True)) # Tri le dictionnaire en fonction des notes
+            try:
+                index = list(notes.keys()).index(student)		# Prend la place de l'étudiant
+                return str(index + 1) + "/" + str(len(notes))	# Retourne le classement (i.e. "1/4")
+            except ValueError:
+                return None
         return None										# Sinon renvoie None
 
 class Semester(models.Model):
@@ -298,16 +291,13 @@ class Semester(models.Model):
         return "S" + str(self.number)
 
     def getResources(self):
-        # Retourne les ressources appartenant au semestre
         return Resource.objects.filter(semester=self).order_by("number")
 
     def getProfessorResources(self, professor):
-        # Retourne les ressources d'un professeur donné
         resources = Resource.objects.filter(semester=self).order_by("number")
         return list(set(resources & professor.resources.all()))
 
     def getUEs(self):
-        # Retourne les UEs appartenant au semestre
         ues = []								# Liste de retour
         for resource in self.getResources():	# Loop les ressources du semestre
             for ue in resource.ues.all():			# Loop les UEs associés
@@ -325,21 +315,18 @@ class Resource(models.Model):
         return f"R{self.semester.number}.{self.number} {self.name}"
 
     def getEvaluations(self):
-        # Retourne les évaluations appartenant à la ressource
         return Evaluation.objects.filter(resource=self)
 
     def getNote(self, student):
-        # Retourne la note de la ressource d'un étudiant donné
         nb, sum = 0, 0
         for evaluation in self.getEvaluations():
             note = evaluation.getNote(student)
             if note != None:
                 sum += note
                 nb += 1
-        return sum / nb if nb > 0 else None
+        return round(sum / nb, 2) if nb > 0 else None
 
     def getRanking(self, student):
-        # Retourne le classement de la ressource d'un étudiant donné
         notes = {}
         for s in student.department.getStudents():
             note = self.getNote(s)
@@ -347,8 +334,11 @@ class Resource(models.Model):
                 notes[s] = note
         if len(notes) > 0:
             notes = dict(sorted(notes.items(), key=lambda notes:notes[1], reverse=True))
-            index = list(notes.keys()).index(student)
-            return str(index + 1) + "/" + str(len(notes))
+            try:
+                index = list(notes.keys()).index(student)
+                return str(index + 1) + "/" + str(len(notes))
+            except ValueError:
+                return None
         return None
 
 # class Year(models.Model):
@@ -391,11 +381,9 @@ class Student(models.Model):
         return self.id.username
 
     def getGrades(self):
-        # Retourne les notes d'un étudiant donné
         return Grade.objects.filter(student=self)
 
     def getLastGrades(self, amount):
-        # Retourne les {amount} dernières notes d'un étudiant donné
         return self.getGrades()[:amount]
 
 class Professor(models.Model):
@@ -494,14 +482,18 @@ class Evaluation(models.Model):
                 notes[s] = note
         if len(notes) > 0:
             notes = dict(sorted(notes.items(), key=lambda notes:notes[1], reverse=True))
-            index = list(notes.keys()).index(student)
-            return str(index + 1) + "/" + str(len(notes))
+            index = 0
+            try:
+                index = list(notes.keys()).index(student)
+                return str(index + 1) + "/" + str(len(notes))
+            except ValueError:
+                return None
         return None
 
 class Grade(models.Model):
     evaluation = models.ForeignKey(Evaluation, on_delete=models.CASCADE, default=None, blank=False, null=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE, default=None, blank=False, null=True)
-    note = models.FloatField(default=0.0, blank=False, null=False)
+    note = models.FloatField(default=0.0, blank=False, null=True)
     coef = models.FloatField(default=1.0, blank=True, null=False)
 
     def __str__(self):

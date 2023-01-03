@@ -76,7 +76,7 @@ def createNote(request, department_id, resource_id):
                     user_id = int(str_student.split(" ")[2])
                     student = isStudent(user_id)
                     if student == None: continue
-                    grade = Grade(evaluation=evaluation, student=student, note=float(note))
+                    grade = Grade(evaluation=evaluation, student=student, note=float(note) if note != '' else None)
                     grade.save()
 
     return redirect("professor:department", department_id=department.id)

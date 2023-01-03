@@ -10,9 +10,19 @@
 
 /* GLOBAL STYLING */
 
-/* HIDE SCROLLBAR */
+/* CUSTOM SCROLLBAR */
 *::-webkit-scrollbar {
-    width: 0;
+    width: 10px;
+    position: absolute;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: lightgray;
+    border-radius: 30px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background-color: var(--element-color);
 }
 
 html,
@@ -26,7 +36,7 @@ body {
     display: flex;
     flex-direction: column;
     font-family: Sora;
-    overflow-y: auto;
+    overflow-y: overlay;
     box-sizing: border-box;
 }
 
@@ -208,7 +218,7 @@ form:hover .effect-underline:after {
     margin-top: 5%;
     padding: 45px;
     border-radius: 30px;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 
 

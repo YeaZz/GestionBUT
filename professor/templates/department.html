@@ -16,7 +16,7 @@
     <div class="modal {{ resource.id }}">
         <div class="modal-content">
             <h2>Ajouter une note</h2>
-            {{ resource.name }}
+            {{ resource }}
             <form action="{% url 'professor:createNote' department_id=department.id resource_id=resource.id %}" method="post">
                 {% csrf_token %}
                 <div class="input">
@@ -51,7 +51,7 @@
         <div class="semester {{ semester.id }}">
             {% for resource, evaluations in resources.items %}
             <div class="styled-card resource">
-                <h2>{{ resource.name }}</h2>
+                <h2>{{ resource }}</h2>
                 <button class="resource-button {{ resource.id }}">Ajouter une évaluation</button>
                 {% if evaluations %}
                 <div class="styled-card evaluations">

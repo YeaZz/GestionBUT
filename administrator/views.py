@@ -15,7 +15,10 @@ def index(request):
     for establishment in establishments:
         administrator_view[establishment] = establishment.getDepartments()
 
-    return render(request, "a_index.html", context = {
+    return render(
+        request,
+        "a_index.html",
+        context = {
             "administrator_view" : administrator_view,
         }
     )
@@ -34,7 +37,10 @@ def establishment(request, establishment_id):
     for department in establishment.getDepartments():
         administrator_view[department] = department.getSemesters()
 
-    return render(request, "department.html", context= {
+    return render(
+        request,
+        "department.html",
+        context= {
             "administrator_view": administrator_view
         }
     )

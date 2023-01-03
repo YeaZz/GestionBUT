@@ -21,7 +21,7 @@ if (establishmentChoice != undefined) {
             let value = option.value
             const currentEstablishment = document.getElementsByClassName("establishment " + value)[0]
             if (currentEstablishment == undefined) return
-            if (option.selected) currentEstablishment.style.display = "grid"
+            if (option.selected) currentEstablishment.style.display = "flex"
             else currentEstablishment.style.display = "none"
             return
         })
@@ -40,7 +40,7 @@ if (semesterChoice != undefined) {
             let value = option.value
             let currentSemester = document.getElementsByClassName("semester " + value)[0]
             if (currentSemester == undefined) return
-            if (option.selected) currentSemester.style.display = "grid"
+            if (option.selected) currentSemester.style.display = "flex"
             else currentSemester.style.display = "none"
             return
         })
