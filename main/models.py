@@ -21,8 +21,8 @@ class Establishment(models.Model):
                     professors.append(professor)                    # Insert le prof dans la liste
         return professors
 
-    def createITDepartment(self):
-        department = Department(name="Informatique", establishment=self)
+    def createITDepartment(self, name="Informatique"):
+        department = Department(name=name, establishment=self)
         department.save()
         str_ues = {
             1: [

@@ -1,0 +1,55 @@
+{% extends 'head.html' %}
+{% load static %}
+{% block content %}
+
+<div class="wrapper">
+    <h1>{{ establishment }}<br>Bonjour {{ user.last_name }} {{ user.first_name }} !</h1>
+
+    <div class="modal add">
+        <div class="modal-content">
+            <h2>Ajouter un Département</h2>
+            <form action="{% url 'administrator:createDepartment' establishment_id=establishment.id %}" method="post">
+                {% csrf_token %}
+                <div class="input">
+                    <label for="name">Nom du département</label>
+                    <input type="text" name="name" id="name" required>
+                </div>
+                <div class="input">
+                    Liste des départements disponibles:
+                    <ul>
+                        <li>
+                            <input type="checkbox" name="it_department" id="it_department">
+                            <label for="it_department">Départment informatique</label>
+                        </li>
+                    </ul>
+                </div>
+                <button class="department-button">Ajouter</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="departments">
+            {% for department, semesters in administrator_view.items %}
+            <div class="department styled-card">
+                <form action="{% url 'administrator:establishment' establishment_id=department.id %}"  class="auto establishment-form" method="post">
+                    {% csrf_token %}
+                    <h2>{{ department.name }}</h2>
+                    {% if not semesters %}
+                    <p>Aucun semestre</p>
+                    {% else %}
+                    {% for semester in semesters %}
+                    <div class="semester styled-card">
+                        <h2>{{ semester.name }}</h2>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                </form>
+            </div>
+            {% endfor %}
+            <div id="add_department" class="department styled-card">+</div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

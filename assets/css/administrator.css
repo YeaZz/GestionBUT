@@ -1,4 +1,5 @@
-.content > .establishments {
+.content > .establishments,
+.content > .departments {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-gap: 50px;
@@ -6,7 +7,8 @@
 }
 
 .establishments > .establishment,
-.establishment > .department {
+.establishment > form > .department,
+.departments > .department {
     position: relative;
     z-index: 1;
     padding: 25px;
@@ -15,13 +17,15 @@
     transition: transform .5s ease;
 }
 
-.establishments > .establishment:hover {
+.establishments > .establishment:hover,
+.departments > .department:hover {
     z-index: 2;
     transform: scale(1.01);
     transition: transform .5s ease;
 }
 
-.establishments > #add_establishment {
+.establishments > #add_establishment,
+.departments > #add_department {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -47,8 +51,8 @@
     transition: transform .5s ease;
 }
 
-.establishment-button:hover,
-.establishment-button:focus {
+.establishment-button:is(:hover, :focus),
+.department-button:is(:hover, :focus) {
     transform: scale(1.05);
     transition: transform .5s ease;
     outline: none;
