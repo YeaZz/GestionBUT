@@ -83,12 +83,16 @@
         </div>
         <div class="links">
             <h3>Liens utiles</h3>
+            {% if not usefulLinks %}
+            Aucun liens utiles.
+            {% else %}
             {% for link in usefulLinks %}
             <div class="link">
                 <img src="{% static link.file_path %}" alt="moodle" />
                 <a href="{{ link.link }}" target="_blank">{{ link.name }}</a>
             </div>
             {% endfor %}
+            {% endif %}
         </div>
     </div>
 </aside>

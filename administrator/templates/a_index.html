@@ -29,6 +29,7 @@
     </div>
 
     <div class="content">
+        <h2>Liste des établissements</h2>
         <div class="establishments">
             {% for establishment, departments in administrator_view.items %}
             <div class="establishment styled-card">
@@ -36,15 +37,17 @@
                     {% csrf_token %}
                     <h2>{{ establishment.name }}</h2>
                     {% if not departments %}
-                    <p>Aucun départment</p>
+                    <p class="middle">Aucun départment</p>
                     {% else %}
-                    {% for department in departments %}
-                    <div class="department styled-card">
-                        <h2>{{ department.name }}</h2>
-                        <p>Nombre de professeurs : {{ department.getProfessors|length }}</p>
-                        <p>Nombre d'étudiants : {{ department.getStudents|length }}</p>
+                    <div class="departments">
+                        {% for department in departments %}
+                        <div class="department styled-card">
+                            <h2>{{ department.name }}</h2>
+                            <p>Nombre de professeurs : {{ department.getProfessors|length }}</p>
+                            <p>Nombre d'étudiants : {{ department.getStudents|length }}</p>
+                        </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
                     {% endif %}
                 </form>
             </div>

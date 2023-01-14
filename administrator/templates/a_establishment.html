@@ -3,8 +3,6 @@
 {% block content %}
 
 <div class="wrapper">
-    <h1>{{ establishment }}<br>Bonjour {{ user.last_name }} {{ user.first_name }} !</h1>
-
     <div class="modal add">
         <div class="modal-content">
             <h2>Ajouter un Département</h2>
@@ -23,24 +21,25 @@
                         </li>
                     </ul>
                 </div>
-                <button class="department-button">Ajouter</button>
+                <button class="establishment-button">Ajouter</button>
             </form>
         </div>
     </div>
 
     <div class="content">
+        <h2>Liste des départements de <strong>{{ establishment }}</strong></h2>
         <div class="departments">
             {% for department, semesters in administrator_view.items %}
             <div class="department styled-card">
-                <form action="{% url 'administrator:establishment' establishment_id=department.id %}"  class="auto establishment-form" method="post">
+                <form action="{% url 'administrator:department' establishment_id=establishment.id department_id=department.id %}"  class="auto establishment-form" method="post">
                     {% csrf_token %}
-                    <h2>{{ department.name }}</h2>
+                    <h2>{{ department }}</h2>
                     {% if not semesters %}
                     <p>Aucun semestre</p>
                     {% else %}
                     {% for semester in semesters %}
                     <div class="semester styled-card">
-                        <h2>{{ semester.name }}</h2>
+                        <h2>{{ semester }}</h2>
                     </div>
                     {% endfor %}
                     {% endif %}

@@ -18,7 +18,10 @@
             <div class="styled-card department">
                 <form action="{% url 'professor:department' department_id=department.id %}" class="auto department-form" method="post">
                     {% csrf_token %}
-                    <h2 class="middle">Département {{ department.name }}</h2>
+                    <h2 class="middle">{{ department }}</h2>
+                    {% if not semesters %}
+                    <p class="middle">Aucun semestre</p>
+                    {% else %}
                     <div class="semesters">
                         {% for semester, resources in semesters.items %}
                         {% if resources %}
@@ -36,6 +39,7 @@
                         {% endif %}
                         {% endfor %}
                     </div>
+                    {% endif %}
                 </form>
             </div>
             {% endfor %}

@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="wrapper left-side">
-    <h1>{{ department.establishment }}<br>Département {{ department }}</h1>
+    <h1>{{ department.establishment }}<br>{{ department }}</h1>
 
     <select id="selection" name="semestre">
         {% for semester in professor_view.keys %}
@@ -47,6 +47,7 @@
     {% endfor %}
 
     <div class="content">
+        <h2>Liste des ressources </h2>
         {% for semester, resources in professor_view.items %}
         <div class="semester {{ semester.id }}">
             {% for resource, evaluations in resources.items %}
@@ -72,12 +73,16 @@
     <div class="aside-container">
         <div class="links">
             <h3>Liens utiles</h3>
+            {% if not usefulLinks %}
+            Aucun liens utiles.
+            {% else %}
             {% for link in usefulLinks %}
             <div class="link">
                 <img src="{% static link.file_path %}" alt="moodle" />
                 <a href="{{ link.link }}" target="_blank">{{ link.name }}</a>
             </div>
             {% endfor %}
+            {% endif %}
         </div>
     </div>
 </aside>

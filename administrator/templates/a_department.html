@@ -1,0 +1,41 @@
+{% extends 'head.html' %}
+{% load static %}
+{% block content %}
+
+<div class="wrapper left-side">
+    <div class="content">
+        <h2>Liste des Competences</h2>
+        <div class="competences">
+            {% for competence in competences %}
+            <div class="competence styled-card">
+                <h2 class="middle">{{ competence }}</h2>
+                <h2>{{ competence.name }}</h2>
+            </div>
+            {% endfor %}
+            <div id="add_competence" class="competence styled-card">+</div>
+        </div>
+        <h2>Liste des Ressources</h2>
+        <h2>Liste des Liens Utiles</h2>
+        <h2>Liste des Groupes</h2>
+    </div>
+</div>
+
+<aside>
+    <div class="aside-container">
+        <div class="links">
+            <h3>Liens utiles</h3>
+            {% if not usefulLinks %}
+            Aucun liens utiles.
+            {% else %}
+            {% for link in usefulLinks %}
+            <div class="link">
+                <img src="{% static link.file_path %}" alt="{{ link.name }}" />
+                <a href="{{ link.link }}" target="_blank">{{ link.name }}</a>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</aside>
+
+{% endblock %}

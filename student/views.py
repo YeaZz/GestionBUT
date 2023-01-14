@@ -65,7 +65,7 @@ def resource(request, resource_id):
 
     return render(
         request,
-        "resource.html",
+        "s_resource.html",
         context={
             "resource": resource,
             "student_view": student_view,

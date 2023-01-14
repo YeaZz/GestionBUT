@@ -10,7 +10,6 @@ class Establishment(models.Model):
         return self.name
 
     def getDepartments(self):
-        # Retourne les départements appartenant à l'établissement
         return Department.objects.filter(establishment=self)
 
     def getProfessors(self):
@@ -24,6 +23,22 @@ class Establishment(models.Model):
     def createITDepartment(self, name="Informatique"):
         department = Department(name=name, establishment=self)
         department.save()
+
+        str_competences = {
+            1: "Réaliser un développement d'application",
+            2: "Optimiser des applications",
+            3: "Administrer des systèmes informatiques communicants complexes",
+            4: " Gérer des données de l'information",
+            5: "Conduire un projet",
+            6: "Collaborer au sein d'une équipe informatique"
+        }
+
+        competences = {}
+        for number, name in str_competences.items():
+            competence = Competence(number=number, name=name, department=department)
+            competence.save()
+            competences[number] = competence
+
         str_ues = {
             1: [
                 "Développer des applications informatiques simples",
@@ -63,7 +78,7 @@ class Establishment(models.Model):
         for number, names in str_ues.items():
             ues[number] = []
             for name in names:
-                ue = UE(department=department, number=number, description=name)
+                ue = UE(competence=competences[number], number=number, description=name)
                 ue.save()
                 ues[number].append(ue)
 
@@ -197,10 +212,18 @@ class Department(models.Model):
     establishment = models.ForeignKey(Establishment, on_delete=models.CASCADE, default=None, blank=False, null=True)
 
     def __str__(self):
-        return self.name
+        return "Département " + self.name
+
+    def getCompetences(self):
+        return Competence.objects.filter(department=self).order_by("number")
 
     def getUEs(self):
-        return UE.objects.filter(department=self).order_by("number")
+        ues = []
+        for competence in self.getCompetences():
+            for ue in competence.getUEs():
+                if ue not in ues:
+                    ues.append(ue)
+        return ues
 
     def getSemesters(self):
         return Semester.objects.filter(department=self).order_by("number")
@@ -246,10 +269,47 @@ class UsefulLink(models.Model):
 #     def __str__(self):
 #         return self.name
 
-class UE(models.Model):
+class Competence(models.Model):
+    number = models.IntegerField(default=None, blank=False, null=True)
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=500, default="")
     department = models.ForeignKey(Department, on_delete=models.CASCADE, default=None, blank=False, null=True)
+
+    def __str__(self):
+        return "Compétence " + str(self.number)
+
+    def getUEs(self):
+        return UE.objects.filter(competence=self).order_by("number")
+
+    def getNote(self, student):
+        nb, sum = 0, 0
+        for ue in self.getUES():
+            note = ue.getNote(student)
+            if note != None:
+                sum += note
+                nb += 1
+        return round(sum / nb, 2) if nb > 0 else None
+
+    def getRanking(self, student):
+        notes = {}
+        students = student.department.getStudents()
+        for s in students:
+            note = self.getNote(s)
+            if note != None:
+                notes[s] = note
+        if len(notes) > 0:
+            notes = dict(sorted(notes.items(), key=lambda notes:notes[1], reverse=True))
+            try:
+                index = list(notes.keys()).index(student)
+                return str(index + 1) + "/" + str(len(notes))
+            except ValueError:
+                return None
+        return None
+
+class UE(models.Model):
     number = models.IntegerField(default=None, blank=False, null=True)
     description = models.CharField(max_length=500, default="")
+    competence = models.ForeignKey(Competence, on_delete=models.CASCADE, default=None, blank=False, null=True)
 
     def __str__(self):
         return "UE" + str(self.number) + " - " + self.description
@@ -420,13 +480,6 @@ class Administrator(models.Model):
     def __str__(self):
         return self.id.username
 
-class Competence(models.Model):
-    name = models.CharField(max_length=50)
-    description = models.CharField(max_length=500)
-
-    def __str__(self):
-        return self.name
-
 class Evaluation(models.Model):
     name = models.CharField(max_length=50)
     professor = models.ForeignKey(Professor, on_delete=models.CASCADE, default=None, blank=False, null=True)
@@ -451,7 +504,6 @@ class Evaluation(models.Model):
             return None					# Retourne None
         nb, sum = len(grades), 0	# Nombre de note, Somme des notes
         for grade in grades:		# Loop les notes
-            print(grade.note)
             sum += grade.note			# Ajoute la note à la somme
         return round(sum / nb, 2)	# Retourne une moyenne
 
@@ -517,46 +569,59 @@ def load():
     mail = UsefulLink(name="Mail", file_path="img/mail.png", link="https://mail.univ-lyon1.fr/", department=department)
     mail.save()
 
-    ue1_1 = UE(department=department, number=1, description="Développer des applications informatiques simples")
+    competence1 = Competence(department=department, number=1, name="Réaliser un développement d'application")
+    competence1.save()
+    competence2 = Competence(department=department, number=2, name="Optimiser des applications")
+    competence2.save()
+    competence3 = Competence(department=department, number=3, name="Administrer des systèmes informatiques communicants complexes")
+    competence3.save()
+    competence4 = Competence(department=department, number=4, name="Gérer des données de l'information")
+    competence4.save()
+    competence5 = Competence(department=department, number=5, name="Conduire un projet")
+    competence5.save()
+    competence6 = Competence(department=department, number=6, name="Collaborer au sein d'une équipe informatique")
+    competence6.save()
+
+    ue1_1 = UE(competence=competence1, number=1, description="Développer des applications informatiques simples")
     ue1_1.save()
-    ue1_2 = UE(department=department, number=1, description="Partir des exigences et aller jusqu'à une application complète")
+    ue1_2 = UE(competence=competence1, number=1, description="Partir des exigences et aller jusqu'à une application complète")
     ue1_2.save()
-    ue1_3 = UE(department=department, number=1, description="Adapter des applications sur un ensemble de supports (embarqué, web, mobile, IoT…)")
+    ue1_3 = UE(competence=competence1, number=1, description="Adapter des applications sur un ensemble de supports (embarqué, web, mobile, IoT…)")
     ue1_3.save()
 
-    ue2_1 = UE(department=department, number=2, description="Appréhender et construire des algorithmes")
+    ue2_1 = UE(competence=competence2, number=2, description="Appréhender et construire des algorithmes")
     ue2_1.save()
-    ue2_2 = UE(department=department, number=2, description="Sélectionner les algorithmes adéquats pour répondre à un problème donné")
+    ue2_2 = UE(competence=competence2, number=2, description="Sélectionner les algorithmes adéquats pour répondre à un problème donné")
     ue2_2.save()
-    ue2_3 = UE(department=department, number=2, description="Analyser et optimiser des applications")
+    ue2_3 = UE(competence=competence2, number=2, description="Analyser et optimiser des applications")
     ue2_3.save()
 
-    ue3_1 = UE(department=department, number=3, description="Installer et configurer un poste de travail")
+    ue3_1 = UE(competence=competence3, number=3, description="Installer et configurer un poste de travail")
     ue3_1.save()
-    ue3_2 = UE(department=department, number=3, description="Déployer des services dans une architecture réseau")
+    ue3_2 = UE(competence=competence3, number=3, description="Déployer des services dans une architecture réseau")
     ue3_2.save()
-    ue3_3 = UE(department=department, number=3, description="Faire évoluer et maintenir un système informatique communicant en conditions opérationnelles")
+    ue3_3 = UE(competence=competence3, number=3, description="Faire évoluer et maintenir un système informatique communicant en conditions opérationnelles")
     ue3_3.save()
 
-    ue4_1 = UE(department=department, number=4, description="Concevoir et mettre en place une base de données à partir d'un cahier des charges client")
+    ue4_1 = UE(competence=competence4, number=4, description="Concevoir et mettre en place une base de données à partir d'un cahier des charges client")
     ue4_1.save()
-    ue4_2 = UE(department=department, number=4, description="Optimiser une base de données, interagir avec une application et mettre en œuvre la sécurité")
+    ue4_2 = UE(competence=competence4, number=4, description="Optimiser une base de données, interagir avec une application et mettre en œuvre la sécurité")
     ue4_2.save()
-    ue4_3 = UE(department=department, number=4, description="Administrer une base de données, concevoir et réaliser des systèmes d'informations décisionnels")
+    ue4_3 = UE(competence=competence4, number=4, description="Administrer une base de données, concevoir et réaliser des systèmes d'informations décisionnels")
     ue4_3.save()
 
-    ue5_1 = UE(department=department, number=5, description="Identifier les besoins métiers des clients et des utilisateurs")
+    ue5_1 = UE(competence=competence5, number=5, description="Identifier les besoins métiers des clients et des utilisateurs")
     ue5_1.save()
-    ue5_2 = UE(department=department, number=5, description="Appliquer une démarche de suivi de projet en fonction des besoins métiers des clients et des utilisateurs")
+    ue5_2 = UE(competence=competence5, number=5, description="Appliquer une démarche de suivi de projet en fonction des besoins métiers des clients et des utilisateurs")
     ue5_2.save()
-    ue5_3 = UE(department=department, number=5, description="Participer à la conception et à la mise en oeuvre d'un projet système d'information")
+    ue5_3 = UE(competence=competence5, number=5, description="Participer à la conception et à la mise en oeuvre d'un projet système d'information")
     ue5_3.save()
 
-    ue6_1 = UE(department=department, number=6, description="Identifier ses aptitudes pour travailler dans une équipe")
+    ue6_1 = UE(competence=competence6, number=6, description="Identifier ses aptitudes pour travailler dans une équipe")
     ue6_1.save()
-    ue6_2 = UE(department=department, number=6, description="Situer son rôle et ses missions au sein d'une équipe informatique")
+    ue6_2 = UE(competence=competence6, number=6, description="Situer son rôle et ses missions au sein d'une équipe informatique")
     ue6_2.save()
-    ue6_3 = UE(department=department, number=6, description="Manager une équipe informatique")
+    ue6_3 = UE(competence=competence6, number=6, description="Manager une équipe informatique")
     ue6_3.save()
 
     semester1 = Semester(number=1, department=department)
@@ -643,8 +708,8 @@ def empty():
     Professor.objects.all().delete()
     Student.objects.all().delete()
     Group.objects.all().delete()
-    # Year.objects.all().delete()
     Semester.objects.all().delete()
     UE.objects.all().delete()
+    Competence.objects.all().delete()
     Department.objects.all().delete()
     Establishment.objects.all().delete()

@@ -37,7 +37,7 @@ def establishment(request, establishment_id):
 
     return render(
         request,
-        "establishment.html",
+        "a_establishment.html",
         context= {
             "establishment": establishment,
             "administrator_view": administrator_view
@@ -59,6 +59,33 @@ def createEstablishment(request):
         if "it_department" in post:
             establishment.createITDepartment()
     return redirect("administrator:index")
+
+def department(request, establishment_id, department_id):
+    admin = isAdministrator(request.user)
+    if admin == None:
+        return redirect("login")
+
+    establishment = Establishment.objects.filter(id=establishment_id).first()
+    department = Department.objects.filter(id=department_id).first()
+    if establishment == None:
+        return redirect("administrator:index")
+    if department == None:
+        return redirect("administrator:establishment", establishment.id)
+
+    administrator_view = {}
+    for department in establishment.getDepartments():
+        administrator_view[department] = department.getSemesters()
+
+    return render(
+        request,
+        "a_department.html",
+        context= {
+            "department": department,
+            "competences": department.getCompetences(),
+            "administrator_view": administrator_view,
+            "usefulLinks": department.getUsefulLinks()
+        }
+    )
 
 def createDepartment(request, establishment_id):
     admin = isAdministrator(request.user)

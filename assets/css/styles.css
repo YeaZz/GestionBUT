@@ -5,7 +5,13 @@
 
 @font-face {
     font-family: Sora;
-    src: url(../fonts/Sora-Regular.ttf);
+    src: url(../fonts/Sora-Light.ttf);
+}
+
+@font-face {
+    font-family: SoraBold;
+    font-weight: bold;
+    src: url(../fonts/Sora-Bold.ttf);
 }
 
 /* GLOBAL STYLING */
@@ -56,8 +62,12 @@ h1 {
 
 h2 {
     position: relative;
-    z-index: 2;
+    z-index: 99;
     margin-top: 0;
+}
+
+strong {
+    font-family: SoraBold;
 }
 
 
@@ -204,7 +214,7 @@ form:hover .effect-underline:after {
     top: 0;
     left: 0;
     overflow: auto;
-    z-index: 9;
+    z-index: 999;
     background-color: rgba(0,0,0,0.5);
 }
 
@@ -322,6 +332,10 @@ form:hover .effect-underline:after {
 .content form {
     margin: -25px;
     padding: 25px;
+}
+
+.content > h2 {
+    margin-left: 25px;
 }
 
 

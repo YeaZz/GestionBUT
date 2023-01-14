@@ -44,7 +44,7 @@ def department(request, department_id):
 
     return render(
         request,
-        "department.html",
+        "p_department.html",
         context = {
             "professor_view": professor_view,
             "department": department,
