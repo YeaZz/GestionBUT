@@ -1,13 +1,12 @@
-const bodyElement = document.getElementById("body")
-const establishmentChoice = document.getElementById("selection")
-const semesterChoice = document.getElementById("selection")
+const establishmentChoice = document.getElementById("establishmentSelection")
+const semesterChoice = document.getElementById("semesterSelection")
 
-const students = document.getElementsByClassName("students")
-const groupChoices = document.getElementsByClassName("group")
-const resourceButtons = document.getElementsByClassName("resource-button")
-const departmentForms = document.getElementsByClassName("department-form")
+const students = document.querySelectorAll(".students")
+const groupChoices = document.querySelectorAll(".group")
+const resourceButtons = document.querySelectorAll(".resource-button")
+const departmentForms = document.querySelectorAll(".department-form")
 
-const resourceModals = document.getElementsByClassName("modal")
+const resourceModals = document.querySelectorAll(".modal")
 
 if (establishmentChoice != undefined) {
     displayEstablishment()
@@ -47,15 +46,6 @@ if (semesterChoice != undefined) {
     }
 }
 
-Array.from(resourceModals).forEach(modal => {
-    modal.addEventListener("click", (event) => {
-        if (event.target == modal) {
-            modal.style.display = "none"
-            bodyElement.style.overflow = "auto"
-        }
-    })
-})
-
 if (students.length > 0) {
 
     Array.from(groupChoices).forEach(select => {
@@ -91,7 +81,7 @@ function showModal(resource) {
     Array.from(resourceModals).forEach(modal => {
         if (modal.classList[1] == resource) {
             modal.style.display = "block"
-            bodyElement.style.overflow = "hidden"
+            document.body.style.overflow = "hidden"
         }
     })
 }

@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="wrapper">
-    <div class="modal add">
+    <div class="modal add_department">
         <div class="modal-content">
             <h2>Ajouter un Département</h2>
             <form action="{% url 'administrator:createDepartment' establishment_id=establishment.id %}" method="post">
@@ -21,7 +21,7 @@
                         </li>
                     </ul>
                 </div>
-                <button class="establishment-button">Ajouter</button>
+                <button class="establishment-button hoverable">Ajouter</button>
             </form>
         </div>
     </div>
@@ -30,12 +30,12 @@
         <h2>Liste des départements de <strong>{{ establishment }}</strong></h2>
         <div class="departments">
             {% for department, semesters in administrator_view.items %}
-            <div class="department styled-card">
+            <div class="department styled-card hoverable">
                 <form action="{% url 'administrator:department' establishment_id=establishment.id department_id=department.id %}"  class="auto establishment-form" method="post">
                     {% csrf_token %}
                     <h2>{{ department }}</h2>
                     {% if not semesters %}
-                    <p>Aucun semestre</p>
+                    <p>Aucun semestre.</p>
                     {% else %}
                     {% for semester in semesters %}
                     <div class="semester styled-card">
@@ -46,7 +46,7 @@
                 </form>
             </div>
             {% endfor %}
-            <div id="add_department" class="department styled-card">+</div>
+            <div id="add_department" class="department plus styled-card hoverable">+</div>
         </div>
     </div>
 </div>

@@ -15,30 +15,12 @@
     width: auto;
     height: max-content;
     cursor: pointer;
-    transition: transform .5s ease;
 }
 
 form > .departments {
     display: flex;
     flex-direction: column;
     gap: 25px;
-}
-
-.establishments > .establishment:hover,
-.departments > .department:hover {
-    z-index: 2;
-    transform: scale(1.01);
-    transition: transform .5s ease;
-}
-
-.establishments > #add_establishment,
-.departments > #add_department,
-.competences > #add_competence {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 70px;
-    color: #e5e5e5;
 }
 
 .department > p {
@@ -56,50 +38,31 @@ form > .departments {
     border: none;
     border-radius: 30px;
     cursor: pointer;
-    transition: transform .5s ease;
 }
 
-.establishment-button:is(:hover, :focus),
-.department-button:is(:hover, :focus) {
-    transform: scale(1.05);
-    transition: transform .5s ease;
-    outline: none;
-}
-
-.input {
-    display: flex;
-    flex-direction: column;
-    margin: 2% 0;
-    width: 30%;
-}
-
-.input > input {
-    border: none;
-    border-bottom: 1px solid;
-    font: inherit;
-}
-
-.input > input:focus {
-    outline: none;
-}
-
-.competences {
+.carousel {
     display: flex;
     flex-direction: row;
     gap: 25px;
-    margin: 0 25px;
+    margin-right: 30px;
+    padding: 20px 60px 50px 30px;
     overflow-x: auto;
-    z-index: 1;
 }
 
-.competences::-webkit-scrollbar {
+.plus {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 70px;
+    color: #e5e5e5;
+}
+
+.carousel::-webkit-scrollbar {
     display: none;
 }
 
-.competence {
-    z-index: 2;
+.carousel-item {
     min-width: 20%;
     min-height: max-content;
-    margin: 60px 0;
     padding: 25px;
 }

@@ -5,7 +5,7 @@
 <div class="wrapper">
     <h1>Bonjour {{ user.last_name }} {{ user.first_name }} !</h1>
 
-    <div class="modal add">
+    <div class="modal add_establishment">
         <div class="modal-content">
             <h2>Ajouter un établissement</h2>
             <form action="{% url 'administrator:createEstablishment' %}" method="post">
@@ -23,7 +23,7 @@
                         </li>
                     </ul>
                 </div>
-                <button class="establishment-button">Ajouter</button>
+                <button class="establishment-button hoverable">Ajouter</button>
             </form>
         </div>
     </div>
@@ -32,8 +32,8 @@
         <h2>Liste des établissements</h2>
         <div class="establishments">
             {% for establishment, departments in administrator_view.items %}
-            <div class="establishment styled-card">
-                <form action="{% url 'administrator:establishment' establishment_id=establishment.id %}"  class="auto establishment-form" method="post">
+            <div class="establishment styled-card hoverable">
+                <form action="{% url 'administrator:establishment' establishment_id=establishment.id %}"  class="auto" method="post">
                     {% csrf_token %}
                     <h2>{{ establishment.name }}</h2>
                     {% if not departments %}
@@ -41,7 +41,7 @@
                     {% else %}
                     <div class="departments">
                         {% for department in departments %}
-                        <div class="department styled-card">
+                        <div class="department styled-card hoverable">
                             <h2>{{ department.name }}</h2>
                             <p>Nombre de professeurs : {{ department.getProfessors|length }}</p>
                             <p>Nombre d'étudiants : {{ department.getStudents|length }}</p>
@@ -52,7 +52,7 @@
                 </form>
             </div>
             {% endfor %}
-            <div id="add_establishment" class="establishment styled-card">+</div>
+            <div id="add_establishment" class="establishment plus styled-card hoverable">+</div>
         </div>
     </div>
 </div>

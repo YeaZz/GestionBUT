@@ -3,25 +3,98 @@
 {% block content %}
 
 <div class="wrapper left-side">
+    <div class="modal add_competence">
+        <div class="modal-content">
+            <h2>Ajouter une compétence</h2>
+            <form action="{% url 'administrator:createCompetence' establishment_id=department.establishment.id department_id=department.id %}" method="post">
+                {% csrf_token %}
+                <div class="input">
+                    <label for="number">Numéro de la compétence</label>
+                    <input type="number" name="number" id="number" required>
+                </div>
+                <div class="input">
+                    <label for="name">Nom de la compétence</label>
+                    <input type="text" name="name" id="name" required>
+                </div>
+                <div class="input">
+                    <label for="description">Description de la compétence</label>
+                    <textarea name="description" id="description" cols="30" rows="10"></textarea>
+                </div>
+                <button class="establishment-button hoverable">Ajouter</button>
+            </form>
+        </div>
+    </div>
+    <div class="modal add_semester">
+        <div class="modal-content">
+            <h2>Ajouter un semestre</h2>
+            <form action="{% url 'administrator:createSemester' establishment_id=department.establishment.id department_id=department.id %}" method="post">
+                {% csrf_token %}
+                <div class="input">
+                    <label for="number">Numéro du semestre</label>
+                    <input type="number" name="number" id="number" required>
+                </div>
+                <button class="establishment-button hoverable">Ajouter</button>
+            </form>
+        </div>
+    </div>
+    <div class="modal add_group">
+        <div class="modal-content">
+            <h2>Ajouter un groupe</h2>
+            <form action="{% url 'administrator:createGroup' establishment_id=department.establishment.id department_id=department.id %}" method="post">
+                {% csrf_token %}
+                <div class="input">
+                    <label for="name">Nom du groupe</label>
+                    <input type="text" name="name" id="name" required>
+                </div>
+                <div class="input">
+                    <label for="parent">Groupe parent</label>
+                    <select name="parent" id="parent">
+                        <option value="none">Aucun</option>
+                        {% for group in groups %}
+                        <option value="group.id">{{ group.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button class="establishment-button hoverable">Ajouter</button>
+            </form>
+        </div>
+    </div>
+
     <div class="content">
         <h2>Liste des Competences</h2>
-        <div class="competences">
+        <div class="carousel competences">
             {% for competence in competences %}
-            <div class="competence styled-card">
+            <div class="carousel-item styled-card hoverable">
                 <h2 class="middle">{{ competence }}</h2>
                 <h2>{{ competence.name }}</h2>
             </div>
             {% endfor %}
-            <div id="add_competence" class="competence styled-card">+</div>
+            <div id="add_competence" class="carousel-item plus styled-card hoverable">+</div>
         </div>
-        <h2>Liste des Ressources</h2>
-        <h2>Liste des Liens Utiles</h2>
+        <h2>Liste des Semestres</h2>
+        <div class="carousel semesters">
+            {% for resource in semesters %}
+            <div class="carousel-item styled-card hoverable">
+                <h2 class="middle">{{ semester }}</h2>
+            </div>
+            {% endfor %}
+            <div id="add_semester" class="carousel-item plus styled-card hoverable">+</div>
+        </div>
         <h2>Liste des Groupes</h2>
+        <div class="carousel groups">
+            {% for group in groups %}
+            <div class="carousel-item styled-card hoverable">
+                <h2 class="middle">{{ group }}</h2>
+                <h2>{{ group.size }} étudiants</h2>
+            </div>
+            {% endfor %}
+            <div id="add_group" class="carousel-item plus styled-card hoverable">+</div>
+        </div>
     </div>
 </div>
 
 <aside>
-    <div class="aside-container">
+    <div class="aside-container styled-card">
         <div class="links">
             <h3>Liens utiles</h3>
             {% if not usefulLinks %}

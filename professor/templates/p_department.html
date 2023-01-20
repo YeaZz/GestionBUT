@@ -5,7 +5,7 @@
 <div class="wrapper left-side">
     <h1>{{ department.establishment }}<br>{{ department }}</h1>
 
-    <select id="selection" name="semestre">
+    <select id="semesterSelection" name="semestre">
         {% for semester in professor_view.keys %}
         <option value="{{ semester.id }}">Semestre {{ semester.number }}</option>
         {% endfor %}
@@ -39,7 +39,7 @@
                     {% endfor %}
                 </div>
                 {% endfor %}
-                <button class="modal-button">Ajouter</button>
+                <button class="modal-button hoverable">Ajouter</button>
             </form>
         </div>
     </div>
@@ -51,7 +51,7 @@
         {% for semester, resources in professor_view.items %}
         <div class="semester {{ semester.id }}">
             {% for resource, evaluations in resources.items %}
-            <div class="styled-card resource">
+            <div class="resource styled-card hoverable">
                 <h2>{{ resource }}</h2>
                 <button class="resource-button {{ resource.id }}">Ajouter une évaluation</button>
                 {% if evaluations %}

@@ -1,17 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;700&display=swap');
+
 :root {
-    --primary-color: white;
+    --primary-color: #ffffff;
     --element-color: #1D4851;
-}
-
-@font-face {
-    font-family: Sora;
-    src: url(../fonts/Sora-Light.ttf);
-}
-
-@font-face {
-    font-family: SoraBold;
-    font-weight: bold;
-    src: url(../fonts/Sora-Bold.ttf);
 }
 
 /* GLOBAL STYLING */
@@ -58,16 +49,30 @@ h1 {
     text-align: center;
     font-size: 33px;
     margin-top: 0;
+    font-weight: 600;
 }
 
 h2 {
     position: relative;
     z-index: 99;
     margin-top: 0;
+    font-weight: 400;
 }
 
 strong {
-    font-family: SoraBold;
+    font-weight: 700;
+}
+
+.middle {
+    text-align: center;
+}
+
+.right {
+    text-align: right;
+}
+
+.left {
+    text-align: left;
 }
 
 
@@ -78,7 +83,7 @@ strong {
 header {
     width: 100%;
     background: var(--element-color);
-    color: white;
+    color: var(--primary-color);
     font-size: 18px;
 }
 
@@ -119,93 +124,6 @@ form:hover .effect-underline:after {
 
 
 
-/* LOGIN PAGE */
-
-.login-card,
-.reset_password-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 1%;
-    padding: 4%;
-    font-size: 20px;
-    border-radius: 30px;
-    background: var(--primary-color);
-    box-shadow: 20px 20px 60px #d9d9d9,
-        -20px -20px 60px white;
-}
-
-.login-card > form,
-.reset_password-card > form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
-.login-card > form > *,
-.reset_password-card > form > * {
-    width: 100%;
-}
-
-.login-card .input,
-.reset_password-card .input {
-    display: flex;
-    flex-direction: column;
-    margin: 6% 0;
-}
-
-.login-card input,
-.reset_password-card input {
-    border: none;
-    border-bottom: 1px solid;
-    font: inherit;
-}
-
-.login-card input:focus:not([type=checkbox]),
-.reset_password-card input:focus {
-    outline: none;
-}
-
-.login-card .errors {
-    color: red;
-}
-
-.forgotpassword {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 12px;
-}
-
-.forgotpassword .rememberme {
-    flex-direction: row;
-    align-items: center;
-}
-
-.login-button,
-.reset_password-button {
-    background: var(--element-color);
-    color: var(--primary-color);
-    font: inherit;
-    height: 3em;
-    border: none;
-    border-radius: 30px;
-    margin-top: 10%;
-    cursor: pointer;
-    transition: transform .5s ease;
-}
-
-.login-button:hover,
-.login-button:focus,
-.reset_password-button:hover,
-.reset_password-button:focus {
-    transform: scale(1.05);
-    transition: transform .5s ease;
-    outline: none;
-}
-
 .modal {
     display: none;
     position: fixed;
@@ -242,10 +160,6 @@ form:hover .effect-underline:after {
     width: 25%;
     padding: 3%;
     font-size: 20px;
-    border-radius: 30px;
-    background: var(--primary-color);
-    box-shadow: 20px 20px 60px #d9d9d9,
-        -20px -20px 60px white;
 }
 
 .info-card > * {
@@ -306,8 +220,20 @@ form:hover .effect-underline:after {
     z-index: 1;
     border-radius: 30px;
     background: var(--primary-color);
-    box-shadow: 20px 20px 60px #d9d9d9,
-        -20px -20px 60px white;
+    box-shadow:  20px 20px 60px #d9d9d9,
+                -20px -20px 60px white;
+}
+
+.hoverable {
+    transition: transform .5s ease;
+}
+
+.hoverable:hover,
+.hoverable:focus {
+    z-index: 2;
+    transform: scale(1.02);
+    transition: transform .5s ease;
+    outline: none;
 }
 
 .title {
@@ -338,6 +264,86 @@ form:hover .effect-underline:after {
     margin-left: 25px;
 }
 
+.input {
+    display: flex;
+    flex-direction: column;
+    margin: 6% 0;
+    width: 30%;
+}
+
+.input > input {
+    border: none;
+    border-bottom: 1px solid;
+    font: inherit;
+}
+
+.input > input:focus:not([type=checkbox]) {
+    outline: none;
+}
+
+
+
+
+/* LOGIN PAGE */
+
+.login-card,
+.reset_password-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1%;
+    padding: 4%;
+    font-size: 20px;
+    border-radius: 30px;
+}
+
+.login-card > form,
+.reset_password-card > form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.login-card > form > *,
+.reset_password-card > form > * {
+    width: 100%;
+}
+
+.login-card .errors {
+    margin-top: 6%;
+    font-size: 13px;
+    color: red;
+    width: 300px;
+}
+
+.forgotpassword {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 50px;
+    font-size: 12px;
+}
+
+.rememberme {
+    flex-direction: row;
+    align-items: center;
+    width: max-content;
+}
+
+.login-button,
+.reset_password-button {
+    background: var(--element-color);
+    color: var(--primary-color);
+    font: inherit;
+    height: 3em;
+    border: none;
+    border-radius: 30px;
+    margin-top: 10%;
+    cursor: pointer;
+}
+
 
 
 
@@ -362,9 +368,6 @@ aside h3 {
     margin-bottom: 80px;
     top: 80px;
     border-radius: 30px;
-    background: var(--primary-color);
-    box-shadow: 20px 20px 60px #d9d9d9,
-        -20px -20px 60px white;
 }
 
 .notes,
@@ -416,27 +419,11 @@ footer {
 
 footer h4 {
     font-size: 25px;
-    color: white;
+    color: var(--primary-color);
     text-transform: capitalize;
     text-decoration: underline;
 }
 
 footer p {
-    color: white;
-}
-
-
-
-
-
-.middle {
-    text-align: center;
-}
-
-.right {
-    text-align: right;
-}
-
-.left {
-    text-align: left;
+    color: var(--primary-color);
 }

@@ -22,7 +22,7 @@
         {% for semester, resources_ues in student_view.items %}
         <div class="semester {{ semester.id }}">
             {% for resource, evaluations in resources_ues.0.items %}
-            <div class="styled-card resource">
+            <div class="resource styled-card hoverable">
                 <form class="auto" action="{% url 'student:resource' resource_id=resource.id %}" method="post">
                     {% csrf_token %}
                     <h2>{{ resource.name }}</h2>
@@ -46,7 +46,7 @@
             </div>
             {% endfor %}
             {% for ue, resources in resources_ues.1.items %}
-            <div class="styled-card ue">
+            <div class="ue styled-card hoverable">
                 <h2>UE{{ semester.number }}.{{ ue.number }}</h2>
                 <p><strong>Note UE</strong><br>{{ resources.1|default_if_none:"Non noté" }}</p>
                 <p><strong>Classement UE</strong><br>{{ resources.2|default_if_none:"Non classé" }}</p>
@@ -72,7 +72,7 @@
 </div>
 
 <aside>
-    <div class="aside-container">
+    <div class="aside-container styled-card">
         <div class="notes">
             <h3>Mes dernières notes</h3>
             {% for grade in lastGrades %}

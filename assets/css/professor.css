@@ -16,19 +16,11 @@
     width: 27%;
     height: max-content;
     cursor: pointer;
-    transition: transform .5s ease;
 }
 
 .resource > .evaluations /* department */ {
     width: unset;
     margin-top: 25px;
-}
-
-.establishment .department:hover, /* index */
-.semester > .resource:hover /* department */ {
-    z-index: 2;
-    transform: scale(1.01);
-    transition: transform .5s ease;
 }
 
 .department > form > .semesters, /* index */
@@ -61,14 +53,6 @@
     border: none;
     border-radius: 30px;
     cursor: pointer;
-    transition: transform .5s ease;
-}
-
-.modal-button:is(:hover, :focus),
-.resource-button:is(:hover, :focus) {
-    transform: scale(1.05);
-    transition: transform .5s ease;
-    outline: none;
 }
 
 .students {
@@ -86,22 +70,4 @@
     height: 50px;
     padding: 0 5%;
     font: inherit;
-}
-
-.input {
-    display: flex;
-    flex-direction: column;
-    margin: 2% 0;
-    width: 30%;
-}
-
-.input > input {
-    border: none;
-    border-bottom: 1px solid;
-    font: inherit;
-}
-
-.input > input:focus,
-.students > input:focus {
-    outline: none;
 }

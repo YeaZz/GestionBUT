@@ -15,14 +15,6 @@
     width: 27%;
     height: max-content;
     cursor: pointer;
-    transition: transform .5s ease;
-}
-
-.resource:hover,
-.ue:hover {
-    z-index: 2;
-    transform: scale(1.01);
-    transition: transform .5s ease;
 }
 
 .evaluations {

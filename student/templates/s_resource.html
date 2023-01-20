@@ -8,7 +8,7 @@
     <div class="content">
         <div class="semester">
         {% for evaluation, stats in student_view.items %}
-        <div class="styled-card resource">
+        <div class="resource styled-card hoverable">
             <h2 class="middle">{{ evaluation }}</h2>
             <div class="stats">
                 <div>
@@ -35,7 +35,7 @@
 </div>
 
 <aside>
-    <div class="aside-container">
+    <div class="aside-container styled-card">
         <div class="notes">
             <h3>Mes dernières notes</h3>
             {% for grade in lastGrades %}

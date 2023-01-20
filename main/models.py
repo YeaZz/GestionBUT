@@ -228,6 +228,14 @@ class Department(models.Model):
     def getSemesters(self):
         return Semester.objects.filter(department=self).order_by("number")
 
+    def getResources(self):
+        resources = []
+        for semester in self.getSemesters():
+            for resource in semester.getResources():
+                if resource not in resources:
+                    resources.append(resource)
+        return resources
+
     def getGroups(self):
         return Group.objects.filter(department=self).order_by("name")
 
@@ -348,7 +356,7 @@ class Semester(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE, default=None, blank=False, null=True)
 
     def __str__(self):
-        return "S" + str(self.number)
+        return "Semestre " + str(self.number)
 
     def getResources(self):
         return Resource.objects.filter(semester=self).order_by("number")
@@ -372,7 +380,7 @@ class Resource(models.Model):
     ues = models.ManyToManyField(UE, related_name="resources")
 
     def __str__(self):
-        return f"R{self.semester.number}.{self.number} {self.name}"
+        return f"Ressource {self.semester.number}.{self.number}"
 
     def getEvaluations(self):
         return Evaluation.objects.filter(resource=self)
@@ -417,6 +425,9 @@ class Group(models.Model):
 
     def __str__(self):
         return self.name
+
+    def size(self):
+        return len(Student.objects.filter(groups=self))
 
     def getDepartmentTree(department):
         tree = {}

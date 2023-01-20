@@ -5,7 +5,7 @@
 <div class="wrapper">
     <h1>Bonjour {{ user.first_name }} {{ user.last_name }} !</h1>
 
-    <select id="selection" name="establishment">
+    <select id="establishmentSelection" name="establishment">
         {% for establishment in professor_view.keys %}
         <option value="{{ establishment.id }}">{{ establishment }}</option>
         {% endfor %}
@@ -15,7 +15,7 @@
         {% for establishment, departments in professor_view.items %}
         <div class="establishment {{ establishment.id }}">
             {% for department, semesters in departments.items %}
-            <div class="styled-card department">
+            <div class="department styled-card hoverable">
                 <form action="{% url 'professor:department' department_id=department.id %}" class="auto department-form" method="post">
                     {% csrf_token %}
                     <h2 class="middle">{{ department }}</h2>
@@ -31,7 +31,7 @@
                                 {% for resource in resources %}
                                 <div class="resource">
                                     <p>{{ resource }}</p>
-                                    <button class="resource-button {{ resource.id }}">Ajouter une note</button>
+                                    <button class="resource-button {{ resource.id }} hoverable">Ajouter une note</button>
                                 </div>
                                 {% endfor %}
                             </div>

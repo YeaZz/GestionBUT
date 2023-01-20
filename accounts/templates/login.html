@@ -2,7 +2,7 @@
 {% block content%}
 
 <div class="wrapper">
-    <div class="login-card">
+    <div class="login-card styled-card">
         <h1>Page de connexion</h1>
         <form class="login-form" action="{% url 'login' %}" method="post">
             {% csrf_token %}
@@ -21,7 +21,7 @@
                 </div>
                 <a href="{% url 'password_reset' %}"><em>Mot de passe oublié ?</em></a>
             </div>
-            <button class="login-button" type="submit">Se connecter</button>
+            <button class="login-button hoverable" type="submit">Se connecter</button>
             {% if form.non_field_errors %}
             <div class="errors">
                 {% for error in form.non_field_errors %}

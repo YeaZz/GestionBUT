@@ -1,34 +1,19 @@
-const bodyElement = document.getElementById("body")
 const addEstablishment = document.getElementById("add_establishment")
 const addDepartment = document.getElementById("add_department")
+const addCompetence = document.getElementById("add_competence")
+const addSemester = document.getElementById("add_semester")
+const addGroup = document.getElementById("add_group")
 
-const modals = document.getElementsByClassName("modal")
-
-if (addEstablishment != undefined) {
-    const addModal = document.getElementsByClassName("modal add")[0]
-    if (addModal != undefined) {
-        addEstablishment.addEventListener("click", () => {
-            addModal.style.display = "block"
-            bodyElement.style.overflow = "hidden"
-        })
-    }
-}
-
-if (addDepartment != undefined) {
-    const addModal = document.getElementsByClassName("modal add")[0]
-    if (addModal != undefined) {
-        addDepartment.addEventListener("click", () => {
-            addModal.style.display = "block"
-            bodyElement.style.overflow = "hidden"
-        })
-    }
-}
-
-Array.from(modals).forEach(modal => {
-    modal.addEventListener("click", (event) => {
-        if (event.target == modal) {
-            modal.style.display = "none"
-            bodyElement.style.overflow = "auto"
-        }
+function modalAddListener(add, modal) {
+    if (add == undefined || modal == undefined) return
+    add.addEventListener("click", () => {
+        modal.style.display = "block"
+        document.body.style.overflow = "hidden"
     })
-})
+}
+
+modalAddListener(addEstablishment, document.querySelector(".modal.add_establishment"))
+modalAddListener(addDepartment, document.querySelector(".modal.add_department"))
+modalAddListener(addCompetence, document.querySelector(".modal.add_competence"))
+modalAddListener(addSemester, document.querySelector(".modal.add_semester"))
+modalAddListener(addGroup, document.querySelector(".modal.add_group"))
