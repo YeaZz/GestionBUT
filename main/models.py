@@ -426,7 +426,7 @@ class Group(models.Model):
     def __str__(self):
         return self.name
 
-    def size(self):
+    def studentCount(self):
         return len(Student.objects.filter(groups=self))
 
     def getDepartmentTree(department):

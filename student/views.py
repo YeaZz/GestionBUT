@@ -41,20 +41,19 @@ def index(request):
         }
     )
 
-def resource(request, resource_id):
-    # Quand on clique sur une ressource
+def resource(request, semester_id, resource_id):
     user = request.user
     student = isStudent(user)
     if student == None:
         return redirect("login")
 
+    semester = Semester.objects.filter(id=semester_id).first()
     resource = Resource.objects.filter(id=resource_id).first()
-    if resource == None:
+    if semester == None or resource == None:
         return redirect("student:index")
 
-    evaluations = Evaluation.objects.filter(resource=resource)
     student_view = {}
-    for evaluation in evaluations:
+    for evaluation in resource.getEvaluations():
         student_view[evaluation] = (
             evaluation.getNote(student),
             evaluation.getRanking(student),
@@ -67,7 +66,43 @@ def resource(request, resource_id):
         request,
         "s_resource.html",
         context={
+            "semester": semester,
             "resource": resource,
+            "student_view": student_view,
+            "lastGrades": student.getLastGrades(5),
+            "usefulLinks": student.department.getUsefulLinks(),
+        }
+    )
+
+def ue(request, semester_id, ue_id):
+    user = request.user
+    student = isStudent(user)
+    if student == None:
+        return redirect("login")
+
+    semester = Semester.objects.filter(id=semester_id).first()
+    ue = UE.objects.filter(id=ue_id).first()
+    if semester == None or ue == None:
+        return redirect("student:index")
+
+    student_view = {}
+    for resource in ue.getResources():
+        student_view[resource] = {}
+        for evaluation in resource.getEvaluations():
+            student_view[resource][evaluation] = (
+                evaluation.getNote(student),
+                evaluation.getRanking(student),
+                evaluation.getAverage(),
+                evaluation.getMax(),
+                evaluation.getMin()
+            )
+
+    return render(
+        request,
+        "s_ue.html",
+        context={
+            "semester": semester,
+            "ue": ue,
             "student_view": student_view,
             "lastGrades": student.getLastGrades(5),
             "usefulLinks": student.department.getUsefulLinks(),

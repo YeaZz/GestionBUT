@@ -8,17 +8,17 @@
 /* GLOBAL STYLING */
 
 /* CUSTOM SCROLLBAR */
-*::-webkit-scrollbar {
+::-webkit-scrollbar {
     width: 10px;
     position: absolute;
 }
 
-*::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
     background-color: lightgray;
     border-radius: 30px;
 }
 
-*::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
     background-color: var(--element-color);
 }
 
@@ -57,6 +57,17 @@ h2 {
     z-index: 99;
     margin-top: 0;
     font-weight: 400;
+}
+
+a {
+    color: inherit;
+    text-underline-offset: 4px;
+    transition: color .3s ease;
+}
+
+a:hover {
+    color: #008bf8;
+    transition: color .3s ease;
 }
 
 strong {
@@ -122,7 +133,14 @@ form:hover .effect-underline:after {
 
 
 
-
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
 
 .modal {
     display: none;
@@ -133,7 +151,8 @@ form:hover .effect-underline:after {
     left: 0;
     overflow: auto;
     z-index: 999;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0,0,0,0.7);
+    animation: fadeIn .5s ease;
 }
 
 .modal-content {
@@ -146,40 +165,6 @@ form:hover .effect-underline:after {
     padding: 45px;
     border-radius: 30px;
     overflow-y: scroll;
-}
-
-
-
-/* PROFILE PAGE */
-
-.info-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 1%;
-    width: 25%;
-    padding: 3%;
-    font-size: 20px;
-}
-
-.info-card > * {
-    width: 100%;
-}
-
-.info-card .info {
-    display: flex;
-    flex-direction: column;
-    margin: 5% 0;
-}
-
-.info-card p {
-    margin: unset;
-}
-
-.info-card .data {
-    border: 1px solid black;
-    padding: 2%;
-    margin-top: 2%;
 }
 
 
@@ -215,25 +200,41 @@ form:hover .effect-underline:after {
     outline: none;
 }
 
+.carousel {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    padding: 25px;
+    overflow-x: auto;
+}
+
+.carousel::-webkit-scrollbar {
+    height: 10px;
+}
+
+.carousel-item {
+    min-width: 20%;
+    min-height: max-content;
+    padding: 25px;
+}
+
 .styled-card {
     position: relative;
     z-index: 1;
     border-radius: 30px;
-    background: var(--primary-color);
-    box-shadow:  20px 20px 60px #d9d9d9,
-                -20px -20px 60px white;
-}
-
-.hoverable {
-    transition: transform .5s ease;
+    border: 2px solid #c3c6ce;
+    transition: transform .5s, border-color .5s, box-shadow .5s ease;
 }
 
 .hoverable:hover,
 .hoverable:focus {
+    cursor: pointer;
     z-index: 2;
     transform: scale(1.02);
-    transition: transform .5s ease;
     outline: none;
+    border-color: #008bf8;
+    box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.25);
+    transition: transform .5s, border-color .5s, box-shadow .5s ease;
 }
 
 .title {
@@ -332,6 +333,10 @@ form:hover .effect-underline:after {
     width: max-content;
 }
 
+.rememberme > a {
+    text-decoration: underline;
+}
+
 .login-button,
 .reset_password-button {
     background: var(--element-color);
@@ -342,6 +347,38 @@ form:hover .effect-underline:after {
     border-radius: 30px;
     margin-top: 10%;
     cursor: pointer;
+}
+
+/* PROFILE PAGE */
+
+.info-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1%;
+    width: 25%;
+    padding: 3%;
+    font-size: 20px;
+}
+
+.info-card > * {
+    width: 100%;
+}
+
+.info-card .info {
+    display: flex;
+    flex-direction: column;
+    margin: 3% 0;
+    gap: 5px;
+}
+
+.info-card p {
+    margin: unset;
+}
+
+.info-card .data {
+    border: 1px solid black;
+    padding: 2%;
 }
 
 
@@ -387,21 +424,10 @@ aside h3 {
     align-items: center;
 }
 
-.link > a {
-    text-decoration: none;
-    color: black;
-    transition: color .3s ease;
-    margin-left: 4%;
-}
-
-.link > a:hover {
-    color: var(--element-color);
-    transition: color .3s ease;
-}
-
 .link > img {
     width: 32px;
     height: 32px;
+    margin-right: 4%;
 }
 
 

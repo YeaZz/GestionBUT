@@ -1,0 +1,73 @@
+{% extends 'head.html' %}
+{% load static %}
+{% block content %}
+
+<div class="wrapper left-side">
+    <h1>{{ semester }}<br>UE {{ semester.number }}.{{ ue.number }}</h1>
+    <h2>{{ ue.name }}</h2>
+    <div class="content">
+        <div class="semester">
+        {% for resource, evaluations in student_view.items %}
+        <div class="resource styled-card">
+            <h2 class="middle">{{ resource }}</h2>
+            {% if not evaluations %}
+            Aucunes notes.
+            {% else %}
+            <div class="evaluations carousel">
+                {% for evaluation, stats in evaluations.items %}
+                <div class="evaluation carousel-item styled-card hoverable">
+                    <h2 class="middle">{{ evaluation }}</h2>
+                    <div class="stats">
+                        <div>
+                            <strong>Note</strong><br>{{ stats.0|default_if_none:"Non noté" }}
+                        </div>
+                        <div>
+                            <strong>Moyenne</strong><br>{{ stats.2|default_if_none:"Aucune" }}
+                        </div>
+                    </div>
+                    <p><strong>Classement</strong><br>{{ stats.1|default_if_none:"Non classé" }}</p>
+                    <div class="stats">
+                        <div>
+                            <strong>Note maximale</strong><br>{{ stats.3|default_if_none:"Aucune" }}
+                        </div>
+                        <div>
+                            <strong>Note minimale</strong><br>{{ stats.4|default_if_none:"Aucune" }}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+
+<aside>
+    <div class="aside-container styled-card">
+        <div class="notes">
+            <h3>Mes dernières notes</h3>
+            {% for grade in lastGrades %}
+            <div class="note">
+                <p>{{ grade }}<br><em>{{ grade.note }}</em></p>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="links">
+            <h3>Liens utiles</h3>
+            {% if not usefulLinks %}
+            Aucun liens utiles.
+            {% else %}
+            {% for link in usefulLinks %}
+            <div class="link">
+                <img src="{% static link.file_path %}" alt="moodle" />
+                <a href="{{ link.link }}" target="_blank">{{ link.name }}</a>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</aside>
+
+{% endblock %}

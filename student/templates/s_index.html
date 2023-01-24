@@ -9,7 +9,7 @@
     <div class="selections">
         <select id="semesterSelection" name="semestre">
             {% for semester in student_view.keys %}
-            <option value="{{ semester.id }}">Semestre {{ semester.number }}</option>
+            <option value="{{ semester.id }}">{{ semester }}</option>
             {% endfor %}
         </select>
         <select id="viewSelection" name="view">
@@ -23,7 +23,7 @@
         <div class="semester {{ semester.id }}">
             {% for resource, evaluations in resources_ues.0.items %}
             <div class="resource styled-card hoverable">
-                <form class="auto" action="{% url 'student:resource' resource_id=resource.id %}" method="post">
+                <form class="auto" action="{% url 'student:resource' semester_id=semester.id resource_id=resource.id %}" method="post">
                     {% csrf_token %}
                     <h2>{{ resource.name }}</h2>
                     <p><strong>Note ressource</strong><br>{{ evaluations.1|default_if_none:"Non noté" }}</p>
@@ -47,23 +47,26 @@
             {% endfor %}
             {% for ue, resources in resources_ues.1.items %}
             <div class="ue styled-card hoverable">
-                <h2>UE{{ semester.number }}.{{ ue.number }}</h2>
-                <p><strong>Note UE</strong><br>{{ resources.1|default_if_none:"Non noté" }}</p>
-                <p><strong>Classement UE</strong><br>{{ resources.2|default_if_none:"Non classé" }}</p>
-                {% for resource, evaluations in resources.0.items %}
-                {% if evaluations %}
-                <div class="styled-card evaluations">
-                    <div class="title">{{ resource.name }}</div>
-                    {% for evaluation, note in evaluations.items %}
-                    <div class="evaluation">
-                        {{ evaluation.name }}
-                        <br>
-                        <em>{{ note|default_if_none:"Non noté" }}</em>
+                <form class="auto" action="{% url 'student:ue' semester_id=semester.id ue_id=ue.id %}" method="post">
+                    {% csrf_token %}
+                    <h2>UE{{ semester.number }}.{{ ue.number }}</h2>
+                    <p><strong>Note UE</strong><br>{{ resources.1|default_if_none:"Non noté" }}</p>
+                    <p><strong>Classement UE</strong><br>{{ resources.2|default_if_none:"Non classé" }}</p>
+                    {% for resource, evaluations in resources.0.items %}
+                    {% if evaluations %}
+                    <div class="styled-card evaluations">
+                        <div class="title">{{ resource.name }}</div>
+                        {% for evaluation, note in evaluations.items %}
+                        <div class="evaluation">
+                            {{ evaluation.name }}
+                            <br>
+                            <em>{{ note|default_if_none:"Non noté" }}</em>
+                        </div>
+                        {% endfor %}
                     </div>
+                    {% endif %}
                     {% endfor %}
-                </div>
-                {% endif %}
-                {% endfor %}
+                </form>
             </div>
             {% endfor %}
         </div>

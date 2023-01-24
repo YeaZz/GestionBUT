@@ -83,6 +83,7 @@ def department(request, establishment_id, department_id):
             "department": department,
             "competences": department.getCompetences(),
             "resources": department.getResources(),
+            "semesters": department.getSemesters(),
             "groups": department.getGroups(),
             "administrator_view": administrator_view,
             "usefulLinks": department.getUsefulLinks()
@@ -141,8 +142,9 @@ def createSemester(request, establishment_id, department_id):
         return redirect("administrator:establishment", establishment_id)
 
     post = request.POST
+    print(post)
     if "number" in post:
-        semester = Semester(department=department, number=post.get(int("number")))
+        semester = Semester(department=department, number=int(post.get("number")))
         semester.save()
 
     return redirect("administrator:department", establishment_id, department_id)
@@ -162,7 +164,7 @@ def createGroup(request, establishment_id, department_id):
     post = request.POST
     if "name" in post and "parent" in post:
         print(post)
-        #group = Semester(department=department, name=post.get("name"))
+        #group = Group(department=department, name=post.get("name"))
         #group.save()
 
     return redirect("administrator:department", establishment_id, department_id)

@@ -7,6 +7,9 @@ urlpatterns = [
     # http://domain/student/
     path('', index, name="index"),
 
-    # http://domain/student/1/
-    path('<resource_id>/', resource, name="resource"),
+    # http://domain/1/student/resource/1/
+    path('<semester_id>/resource/<resource_id>/', resource, name="resource"),
+
+    # http://domain/1/student/ue/1/
+    path('<semester_id>/ue/<ue_id>/', ue, name="ue"),
 ]

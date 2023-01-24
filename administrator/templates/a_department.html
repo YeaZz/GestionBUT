@@ -51,7 +51,7 @@
                     <select name="parent" id="parent">
                         <option value="none">Aucun</option>
                         {% for group in groups %}
-                        <option value="group.id">{{ group.name }}</option>
+                        <option value="{{ group.id }}">{{ group.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -62,33 +62,39 @@
 
     <div class="content">
         <h2>Liste des Competences</h2>
-        <div class="carousel competences">
-            {% for competence in competences %}
-            <div class="carousel-item styled-card hoverable">
-                <h2 class="middle">{{ competence }}</h2>
-                <h2>{{ competence.name }}</h2>
+        <div class="carousel-container styled-card">
+            <div class="carousel competence">
+                {% for competence in competences %}
+                <div class="carousel-item styled-card hoverable">
+                    <h2 class="middle">{{ competence }}</h2>
+                    <h2>{{ competence.name }}</h2>
+                </div>
+                {% endfor %}
+                <div id="add_competence" class="carousel-item plus styled-card hoverable">+</div>
             </div>
-            {% endfor %}
-            <div id="add_competence" class="carousel-item plus styled-card hoverable">+</div>
         </div>
         <h2>Liste des Semestres</h2>
-        <div class="carousel semesters">
-            {% for resource in semesters %}
-            <div class="carousel-item styled-card hoverable">
-                <h2 class="middle">{{ semester }}</h2>
+        <div class="carousel-container styled-card">
+            <div class="carousel semester">
+                {% for semester in semesters %}
+                <div class="carousel-item styled-card hoverable">
+                    <h2 class="middle">{{ semester }}</h2>
+                </div>
+                {% endfor %}
+                <div id="add_semester" class="carousel-item plus styled-card hoverable">+</div>
             </div>
-            {% endfor %}
-            <div id="add_semester" class="carousel-item plus styled-card hoverable">+</div>
         </div>
         <h2>Liste des Groupes</h2>
-        <div class="carousel groups">
-            {% for group in groups %}
-            <div class="carousel-item styled-card hoverable">
-                <h2 class="middle">{{ group }}</h2>
-                <h2>{{ group.size }} étudiants</h2>
+        <div class="carousel-container styled-card">
+            <div class="carousel groups">
+                {% for group in groups %}
+                <div class="carousel-item styled-card hoverable">
+                    <h2 class="middle">{{ group }}</h2>
+                    <h2>{{ group.studentCount }} étudiants</h2>
+                </div>
+                {% endfor %}
+                <div id="add_group" class="carousel-item plus styled-card hoverable">+</div>
             </div>
-            {% endfor %}
-            <div id="add_group" class="carousel-item plus styled-card hoverable">+</div>
         </div>
     </div>
 </div>
