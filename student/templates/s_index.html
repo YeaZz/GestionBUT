@@ -33,13 +33,15 @@
                         {% if not evaluations.0 %}
                         <div class="evaluation">Aucunes notes</div>
                         {% else %}
-                        {% for evaluation, note in evaluations.0.items %}
-                        <div class="evaluation">
-                            {{ evaluation.name }}
-                            <br>
-                            <em>{{ note|default_if_none:"Non noté" }}</em>
+                        <div class="carousel">
+                            {% for evaluation, note in evaluations.0.items %}
+                            <div class="evaluation carousel-item">
+                                {{ evaluation.name }}
+                                <br>
+                                <em>{{ note|default_if_none:"Non noté" }}</em>
+                            </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
                         {% endif %}
                     </div>
                 </form>

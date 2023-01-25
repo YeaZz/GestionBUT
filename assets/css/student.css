@@ -33,6 +33,8 @@
 
 .evaluation {
     margin-top: 1vh;
+    padding: 0;
+    min-width: 19%;
 }
 
 .stats {

@@ -201,6 +201,10 @@ form:hover .effect-underline:after {
     outline: none;
 }
 
+.wrapper select > option {
+    font: inherit;
+}
+
 .carousel-container {
     margin: 0 25px 50px 25px;
     overflow: hidden;
@@ -209,8 +213,8 @@ form:hover .effect-underline:after {
 .carousel {
     display: flex;
     flex-direction: row;
+    width: 100%;
     gap: 25px;
-    padding: 25px;
     overflow-x: auto;
 }
 
