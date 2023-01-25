@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;700&display=swap');
 
 :root {
-    --primary-color: #ffffff;
+    --primary-color: #e8e8e8;
     --element-color: #1D4851;
 }
 
@@ -94,7 +94,7 @@ strong {
 header {
     width: 100%;
     background: var(--element-color);
-    color: var(--primary-color);
+    color: #ffffff;
     font-size: 18px;
 }
 
@@ -157,7 +157,7 @@ form:hover .effect-underline:after {
 
 .modal-content {
     position: relative;
-    background-color: var(--primary-color);
+    background: var(--primary-color);
     width: 60%;
     height: 60%;
     margin: auto;
@@ -189,6 +189,7 @@ form:hover .effect-underline:after {
     z-index: 2;
     padding: 7px 12px;
     border: 1px solid #E8EAED;
+    background: #f5f5f5;
     border-radius: 5px;
     box-shadow: 0 1px 3px -2px #9098A9;
     cursor: pointer;
@@ -198,6 +199,11 @@ form:hover .effect-underline:after {
 
 .wrapper select:focus {
     outline: none;
+}
+
+.carousel-container {
+    margin: 0 25px 50px 25px;
+    overflow: hidden;
 }
 
 .carousel {
@@ -221,8 +227,13 @@ form:hover .effect-underline:after {
 .styled-card {
     position: relative;
     z-index: 1;
+    padding: 25px;
     border-radius: 30px;
     border: 2px solid #c3c6ce;
+    background: #f5f5f5;
+}
+
+.hoverable {
     transition: transform .5s, border-color .5s, box-shadow .5s ease;
 }
 
@@ -276,6 +287,7 @@ form:hover .effect-underline:after {
     border: none;
     border-bottom: 1px solid;
     font: inherit;
+    background: transparent;
 }
 
 .input > input:focus:not([type=checkbox]) {
@@ -400,7 +412,6 @@ aside h3 {
 
 .aside-container {
     position: sticky;
-    padding: 8%;
     margin-right: 15%;
     margin-bottom: 80px;
     top: 80px;
@@ -428,6 +439,7 @@ aside h3 {
     width: 32px;
     height: 32px;
     margin-right: 4%;
+    mix-blend-mode: darken;
 }
 
 
@@ -438,18 +450,15 @@ aside h3 {
 
 footer {
     padding: 30px;
-    background-color: var(--element-color);
+    background: var(--element-color);
     display: flex;
+    color: #ffffff;
     justify-content: space-around;
+
 }
 
 footer h4 {
     font-size: 25px;
-    color: var(--primary-color);
     text-transform: capitalize;
     text-decoration: underline;
-}
-
-footer p {
-    color: var(--primary-color);
 }

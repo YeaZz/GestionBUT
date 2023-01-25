@@ -47,13 +47,13 @@
     {% endfor %}
 
     <div class="content">
-        <h2>Liste des ressources </h2>
+        <h2>Liste des ressources</h2>
         {% for semester, resources in professor_view.items %}
         <div class="semester {{ semester.id }}">
             {% for resource, evaluations in resources.items %}
             <div class="resource styled-card hoverable">
                 <h2>{{ resource }}</h2>
-                <button class="resource-button {{ resource.id }}">Ajouter une évaluation</button>
+                <button class="resource-button {{ resource.id }} hoverable">Ajouter une évaluation</button>
                 {% if evaluations %}
                 <div class="styled-card evaluations">
                     <strong>Notes</strong>
@@ -70,7 +70,7 @@
 </div>
 
 <aside>
-    <div class="aside-container">
+    <div class="aside-container styled-card">
         <div class="links">
             <h3>Liens utiles</h3>
             {% if not usefulLinks %}

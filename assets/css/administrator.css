@@ -3,18 +3,13 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-gap: 50px;
-    margin: 25px;
 }
 
 .establishments > .establishment,
 .establishment > form > .department,
 .departments > .department {
-    position: relative;
-    z-index: 1;
-    padding: 25px;
     width: auto;
     height: max-content;
-    cursor: pointer;
 }
 
 form > .departments {
@@ -46,9 +41,4 @@ form > .departments {
     align-items: center;
     font-size: 70px;
     color: var(--element-color);
-}
-
-.carousel-container {
-    margin: 0 25px 50px 25px;
-    overflow: hidden;
 }

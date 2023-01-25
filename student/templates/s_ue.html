@@ -6,40 +6,40 @@
     <h1>{{ semester }}<br>UE {{ semester.number }}.{{ ue.number }}</h1>
     <h2>{{ ue.name }}</h2>
     <div class="content">
-        <div class="semester">
-        {% for resource, evaluations in student_view.items %}
-        <div class="resource styled-card">
-            <h2 class="middle">{{ resource }}</h2>
-            {% if not evaluations %}
-            Aucunes notes.
-            {% else %}
-            <div class="evaluations carousel">
-                {% for evaluation, stats in evaluations.items %}
-                <div class="evaluation carousel-item styled-card hoverable">
-                    <h2 class="middle">{{ evaluation }}</h2>
-                    <div class="stats">
-                        <div>
-                            <strong>Note</strong><br>{{ stats.0|default_if_none:"Non noté" }}
+        <div class="ue_semester">
+            {% for resource, evaluations in student_view.items %}
+            <div class="ue_resource carousel-container styled-card">
+                <h2 class="middle">{{ resource }}</h2>
+                {% if not evaluations %}
+                Aucunes notes.
+                {% else %}
+                <div class="ue_evaluations carousel">
+                    {% for evaluation, stats in evaluations.items %}
+                    <div class="ue_evaluation carousel-item styled-card hoverable">
+                        <h2 class="middle">{{ evaluation }}</h2>
+                        <div class="stats">
+                            <div>
+                                <strong>Note</strong><br>{{ stats.0|default_if_none:"Non noté" }}
+                            </div>
+                            <div>
+                                <strong>Moyenne</strong><br>{{ stats.2|default_if_none:"Aucune" }}
+                            </div>
                         </div>
-                        <div>
-                            <strong>Moyenne</strong><br>{{ stats.2|default_if_none:"Aucune" }}
+                        <p><strong>Classement</strong><br>{{ stats.1|default_if_none:"Non classé" }}</p>
+                        <div class="stats">
+                            <div>
+                                <strong>Note maximale</strong><br>{{ stats.3|default_if_none:"Aucune" }}
+                            </div>
+                            <div>
+                                <strong>Note minimale</strong><br>{{ stats.4|default_if_none:"Aucune" }}
+                            </div>
                         </div>
                     </div>
-                    <p><strong>Classement</strong><br>{{ stats.1|default_if_none:"Non classé" }}</p>
-                    <div class="stats">
-                        <div>
-                            <strong>Note maximale</strong><br>{{ stats.3|default_if_none:"Aucune" }}
-                        </div>
-                        <div>
-                            <strong>Note minimale</strong><br>{{ stats.4|default_if_none:"Aucune" }}
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
+                {% endif %}
             </div>
-            {% endif %}
-        </div>
-        {% endfor %}
+            {% endfor %}
         </div>
     </div>
 </div>

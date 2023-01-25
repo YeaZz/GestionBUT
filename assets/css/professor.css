@@ -10,12 +10,8 @@
 
 .establishment > .department, .semesters > .semester, /* index */ 
 .semester > .resource, .resource > .evaluations /* department */ {
-    position: relative;
-    z-index: 1;
-    padding: 25px;
     width: 27%;
     height: max-content;
-    cursor: pointer;
 }
 
 .resource > .evaluations /* department */ {

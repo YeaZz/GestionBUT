@@ -12,6 +12,7 @@
     </select>
 
     <div class="content">
+        <h2>Liste des départements</h2>
         {% for establishment, departments in professor_view.items %}
         <div class="establishment {{ establishment.id }}">
             {% for department, semesters in departments.items %}
@@ -47,4 +48,5 @@
         {% endfor %}
     </div>
 </div>
+
 {% endblock %}
