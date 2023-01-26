@@ -3,6 +3,10 @@
 {% block content %}
 
 <div class="wrapper">
+    <div class="history">
+        <a href="{% url 'administrator:index' %}"> < </a>
+    </div>
+
     <div class="modal add_department">
         <div class="modal-content">
             <h2>Ajouter un Département</h2>
@@ -10,10 +14,18 @@
                 {% csrf_token %}
                 <div class="input">
                     <label for="name">Nom du département</label>
-                    <input type="text" name="name" id="name" required>
+                    <input type="number" name="name" id="name">
                 </div>
                 <div class="input">
-                    Liste des départements disponibles:
+                    <label for="min_competence_required">Nombre minimal de compétence à valider</label>
+                    <input type="number" name="min_competence_required" id="min_competence_required">
+                </div>
+                <div class="input">
+                    <label for="min_competence_grade">Note minimale</label>
+                    <input type="number" name="min_competence_grade" id="min_competence_grade">
+                </div>
+                <div class="input">
+                    Liste des départements prédéfinis disponibles:
                     <ul>
                         <li>
                             <input type="checkbox" name="it_department" id="it_department">
@@ -34,15 +46,8 @@
                 <form action="{% url 'administrator:department' establishment_id=establishment.id department_id=department.id %}"  class="auto establishment-form" method="post">
                     {% csrf_token %}
                     <h2>{{ department }}</h2>
-                    {% if not  %}
-                    <p>Aucun semestre.</p>
-                    {% else %}
-                    {% for semester in semesters %}
-                    <div class="semester styled-card">
-                        <h2>{{ semester }}</h2>
-                    </div>
-                    {% endfor %}
-                    {% endif %}
+                    <p>Nombre minimal de compétence à valider : {{ department.min_competence_required|default_if_none:"Non défini" }}</p>
+                    <p>Note minimale d'une compétence : {{ department.min_competence_grade|default_if_none:"Non défini" }}</p>
                 </form>
             </div>
             {% endfor %}

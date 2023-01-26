@@ -82,6 +82,7 @@ def department(request, establishment_id, department_id):
         request,
         "a_department.html",
         context= {
+            "establishment": establishment,
             "department": department,
             "competences": department.getCompetences(),
             "resources": department.getResources(),
@@ -91,6 +92,9 @@ def department(request, establishment_id, department_id):
             "usefulLinks": department.getUsefulLinks()
         }
     )
+
+
+
 
 def createDepartment(request, establishment_id):
     admin = isAdministrator(request.user)
@@ -102,14 +106,15 @@ def createDepartment(request, establishment_id):
         return redirect("administrator:index")
 
     post = request.POST
-    if "name" in post:
+    if "name" in post and "min_competence_grade" in post and "min_competence_required" in post:
         name = post.get("name")
-        if name != "":
-            if "it_department" in post:
-                establishment.createITDepartment(name)
-            else:
-                department = Department(name=name, establishment=establishment)
-                department.save()
+        str_min_competence_grade = post.get("min_competence_grade")
+        str_min_competence_required = post.get("min_competence_required")
+        if "it_department" in post:
+            establishment.createITDepartment()
+        elif name != "":
+            department = Department(name=name, establishment=establishment, min_competence_grade=int(str_min_competence_grade), min_competence_required=int(str_min_competence_required))
+            department.save()
 
     return redirect("administrator:establishment", establishment_id=establishment.id)
 

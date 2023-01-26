@@ -37,6 +37,7 @@ def index(request):
             "establishment": department.establishment,
             "student_view": student_view,
             "lastGrades": student.getLastGrades(5),
+            "validate": department.validateYear(student),
             "usefulLinks": department.getUsefulLinks(),
         }
     )
@@ -70,6 +71,7 @@ def resource(request, semester_id, resource_id):
             "resource": resource,
             "student_view": student_view,
             "lastGrades": student.getLastGrades(5),
+            "validate": semester.department.validateYear(student),
             "usefulLinks": student.department.getUsefulLinks(),
         }
     )
@@ -105,6 +107,7 @@ def ue(request, semester_id, ue_id):
             "ue": ue,
             "student_view": student_view,
             "lastGrades": student.getLastGrades(5),
+            "validate": semester.department.validateYear(student),
             "usefulLinks": student.department.getUsefulLinks(),
         }
     )

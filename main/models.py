@@ -22,8 +22,8 @@ class Establishment(models.Model):
                     professors.append(professor)                    # Insert le prof dans la liste
         return professors
 
-    def createITDepartment(self, name="Informatique"):
-        department = Department(name=name, establishment=self)
+    def createITDepartment(self):
+        department = Department(name="Informatique", establishment=self, min_competence_required=4, min_competence_grade=8)
         department.save()
 
         str_competences = {
@@ -212,9 +212,27 @@ class Establishment(models.Model):
 class Department(models.Model):
     name = models.CharField(max_length=80)
     establishment = models.ForeignKey(Establishment, on_delete=models.CASCADE, default=None, blank=False, null=True)
+    min_competence_grade = models.IntegerField(default=None, blank=False, null=True)
+    min_competence_required = models.IntegerField(default=None, blank=False, null=True)
 
     def __str__(self):
         return "Département " + self.name
+
+    def validateYear(self, student):
+        mcg = self.min_competence_grade
+        mcr = self.min_competence_required
+        if mcg == None or mcr == None:
+            return None
+        grade_sup_to_min = True
+        required_to_min = 0
+        for competence in self.getCompetences():
+            note = competence.getNote(student)
+            if note != None:
+                grade_sup_to_min = grade_sup_to_min and note > mcg
+                if note >= 10:
+                    required_to_min += 1
+        return grade_sup_to_min and required_to_min >= mcr
+
 
     def getCompetences(self):
         return Competence.objects.filter(department=self).order_by("number")
@@ -296,7 +314,7 @@ class Competence(models.Model):
 
     def getNote(self, student):
         nb, sum = 0, 0
-        for ue in self.getUES():
+        for ue in self.getUEs():
             note = ue.getNote(student)
             if note != None:
                 sum += note
@@ -516,8 +534,7 @@ class Evaluation(models.Model):
         return Grade.objects.filter(evaluation=self, student=student).first()
 
     def getNote(self, student):
-        grades = self.getGrade(student)
-        return grades.first().note if len(grades) == 1 else None
+        return self.getGrade(student).note
 
     def getAverage(self):
         grades = self.getGrades()	# Prend les notes de l'évaluation

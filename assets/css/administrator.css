@@ -6,12 +6,6 @@
     margin: 25px;
 }
 
-/* .establishments > .establishment,
-.establishment > form > .department,
-.departments > .department {
-    width: auto;
-} */
-
 form > .departments {
     display: flex;
     flex-direction: column;
@@ -41,7 +35,7 @@ form > .departments {
     padding: 25px;
 }
 
-.input {
+.datas .input {
     width: 80%;
 }
 

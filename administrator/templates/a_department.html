@@ -4,7 +4,7 @@
 
 <div class="wrapper left-side">
     <div class="history">
-        <a href="{% url 'administrator:index' %}"> < </a>
+        <a href="{% url 'administrator:establishment' establishment_id=establishment.id %}"> < </a>
     </div>
 
     {% for competence in competences %}
