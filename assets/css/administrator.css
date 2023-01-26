@@ -3,14 +3,14 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-gap: 50px;
+    margin: 25px;
 }
 
-.establishments > .establishment,
+/* .establishments > .establishment,
 .establishment > form > .department,
 .departments > .department {
     width: auto;
-    height: max-content;
-}
+} */
 
 form > .departments {
     display: flex;
@@ -22,6 +22,8 @@ form > .departments {
     margin-bottom: 0;
 }
 
+.modal-button,
+.delete-button,
 .establishment-button {
     position: relative;
     z-index: 999;
@@ -35,10 +37,25 @@ form > .departments {
     cursor: pointer;
 }
 
-.plus {
+.carousel {
+    padding: 25px;
+}
+
+.input {
+    width: 80%;
+}
+
+.delete-button {
+    background: #ff0000;
+    color: #000000;
+}
+
+.datas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.button-container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    font-size: 70px;
-    color: var(--element-color);
 }

@@ -17,7 +17,7 @@
         <div class="establishment {{ establishment.id }}">
             {% for department, semesters in departments.items %}
             <div class="department styled-card hoverable">
-                <form action="{% url 'professor:department' department_id=department.id %}" class="auto department-form" method="post">
+                <form action="{% url 'professor:department' department_id=department.id %}" class="auto" method="post">
                     {% csrf_token %}
                     <h2 class="middle">{{ department }}</h2>
                     {% if not semesters %}
@@ -31,8 +31,7 @@
                             <div class="resources">
                                 {% for resource in resources %}
                                 <div class="resource">
-                                    <p>{{ resource }}</p>
-                                    <button class="resource-button {{ resource.id }} hoverable">Ajouter une note</button>
+                                    <p><strong>{{ resource }}</strong><br>{{ resource.name }}</p>
                                 </div>
                                 {% endfor %}
                             </div>

@@ -34,7 +34,7 @@
                 <form action="{% url 'administrator:department' establishment_id=establishment.id department_id=department.id %}"  class="auto establishment-form" method="post">
                     {% csrf_token %}
                     <h2>{{ department }}</h2>
-                    {% if not semesters %}
+                    {% if not  %}
                     <p>Aucun semestre.</p>
                     {% else %}
                     {% for semester in semesters %}

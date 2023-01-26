@@ -54,10 +54,12 @@ def createEstablishment(request):
 
     post = request.POST
     if "name" in post:
-        establishment = Establishment(name=post.get("name"))
-        establishment.save()
-        if "it_department" in post:
-            establishment.createITDepartment()
+        name = post.get("name")
+        if name != "":
+            establishment = Establishment(name=name)
+            establishment.save()
+            if "it_department" in post:
+                establishment.createITDepartment()
     return redirect("administrator:index")
 
 def department(request, establishment_id, department_id):
@@ -101,11 +103,13 @@ def createDepartment(request, establishment_id):
 
     post = request.POST
     if "name" in post:
-        if "it_department" in post:
-            establishment.createITDepartment(post.get("name"))
-        else:
-            department = Department(name=post.get("name"), establishment=establishment)
-            department.save()
+        name = post.get("name")
+        if name != "":
+            if "it_department" in post:
+                establishment.createITDepartment(name)
+            else:
+                department = Department(name=name, establishment=establishment)
+                department.save()
 
     return redirect("administrator:establishment", establishment_id=establishment.id)
 
@@ -122,12 +126,63 @@ def createCompetence(request, establishment_id, department_id):
         return redirect("administrator:establishment", establishment_id)
 
     post = request.POST
-    if "number" in post and "name" in post:
-        competence = Competence(department=department, number=int(post.get("number")), name=post.get("name"))
+    if "name" in post and "number" in post:
+        name = post.get("name")
+        str_number = post.get("number")
+        competence = Competence(department=department, number=int(str_number), name=name)
         if "description" in post:
-            competence.description = post.get("description")
+            description = post.get("description")
+            if description != "":
+                competence.description = description
         competence.save()
     return redirect("administrator:department", establishment_id, department_id)
+
+def editCompetence(request, establishment_id, department_id, competence_id):
+    admin = isAdministrator(request.user)
+    if admin == None:
+        return redirect("main:index")
+
+    establishment = Establishment.objects.filter(id=establishment_id).first()
+    department = Department.objects.filter(id=department_id).first()
+    competence = Competence.objects.filter(id=competence_id).first()
+    if establishment == None:
+        return redirect("administrator:index")
+    elif department == None or competence == None:
+        return redirect("administrator:establishment", establishment_id)
+
+    post = request.POST
+    if  "number" in post and "name" in post and "description" in post:
+        str_number = post.get("number")
+        name = post.get("name")
+        description = post.get("description")
+        competence.number = int(str_number)
+        competence.name = name
+        competence.description = description
+        competence.save()
+
+    return redirect("administrator:department", establishment_id, department_id)
+
+def deleteCompetence(request, establishment_id, department_id, competence_id):
+    admin = isAdministrator(request.user)
+    if admin == None:
+        return redirect("main:index")
+
+    establishment = Establishment.objects.filter(id=establishment_id).first()
+    department = Department.objects.filter(id=department_id).first()
+    competence = Competence.objects.filter(id=competence_id).first()
+    if establishment == None:
+        return redirect("administrator:index")
+    elif department == None or competence == None:
+        return redirect("administrator:establishment", establishment_id)
+
+    competence.delete()
+
+    return redirect("administrator:department", establishment_id, department_id)
+
+
+
+
+
 
 def createSemester(request, establishment_id, department_id):
     admin = isAdministrator(request.user)
@@ -142,12 +197,56 @@ def createSemester(request, establishment_id, department_id):
         return redirect("administrator:establishment", establishment_id)
 
     post = request.POST
-    print(post)
     if "number" in post:
-        semester = Semester(department=department, number=int(post.get("number")))
+        str_number = post.get("number")
+        semester = Semester(department=department, number=int(str_number))
         semester.save()
 
     return redirect("administrator:department", establishment_id, department_id)
+
+def editSemester(request, establishment_id, department_id, semester_id):
+    admin = isAdministrator(request.user)
+    if admin == None:
+        return redirect("main:index")
+
+    establishment = Establishment.objects.filter(id=establishment_id).first()
+    department = Department.objects.filter(id=department_id).first()
+    semester = Semester.objects.filter(id=semester_id).first()
+    if establishment == None:
+        return redirect("administrator:index")
+    elif department == None or semester == None:
+        return redirect("administrator:establishment", establishment_id)
+
+    post = request.POST
+    if "number" in post:
+        str_number = post.get("number")
+        semester.number = int(str_number);
+        semester.save()
+
+    return redirect("administrator:department", establishment_id, department_id)
+
+def deleteSemester(request, establishment_id, department_id, semester_id):
+    admin = isAdministrator(request.user)
+    if admin == None:
+        return redirect("main:index")
+
+    establishment = Establishment.objects.filter(id=establishment_id).first()
+    department = Department.objects.filter(id=department_id).first()
+    semester = Semester.objects.filter(id=semester_id).first()
+    if establishment == None:
+        return redirect("administrator:index")
+    elif department == None or semester == None:
+        return redirect("administrator:establishment", establishment_id)
+
+    semester.delete()
+
+    return redirect("administrator:department", establishment_id, department_id)
+
+
+
+
+
+
 
 def createGroup(request, establishment_id, department_id):
     admin = isAdministrator(request.user)
@@ -164,7 +263,58 @@ def createGroup(request, establishment_id, department_id):
     post = request.POST
     if "name" in post and "parent" in post:
         print(post)
-        #group = Group(department=department, name=post.get("name"))
-        #group.save()
+        name = post.get("name")
+        str_parent = post.get("parent")
+        group = Group(department=department, name=name)
+        if str_parent != "none":
+            parent = Group.objects.filter(id=str_parent).first()
+            if parent != None:
+                group.parent = parent
+        group.save()
+
+    return redirect("administrator:department", establishment_id, department_id)
+
+def editGroup(request, establishment_id, department_id, group_id):
+    admin = isAdministrator(request.user)
+    if admin == None:
+        return redirect("main:index")
+
+    establishment = Establishment.objects.filter(id=establishment_id).first()
+    department = Department.objects.filter(id=department_id).first()
+    group = Group.objects.filter(id=group_id).first()
+    if establishment == None:
+        return redirect("administrator:index")
+    elif department == None or group == None:
+        return redirect("administrator:establishment", establishment_id)
+
+    post = request.POST
+    if "name" in post and "parent" in post:
+        name = post.get("name")
+        str_parent = post.get("parent")
+        if str_parent == "none":
+            group.parent = None
+        else:
+            parent = Group.objects.filter(id=str_parent).first()
+            if parent != None:
+                group.parent = parent
+        group.name = name
+        group.save()
+
+    return redirect("administrator:department", establishment_id, department_id)
+
+def deleteGroup(request, establishment_id, department_id, group_id):
+    admin = isAdministrator(request.user)
+    if admin == None:
+        return redirect("main:index")
+
+    establishment = Establishment.objects.filter(id=establishment_id).first()
+    department = Department.objects.filter(id=department_id).first()
+    group = Group.objects.filter(id=group_id).first()
+    if establishment == None:
+        return redirect("administrator:index")
+    elif department == None or group == None:
+        return redirect("administrator:establishment", establishment_id)
+
+    group.delete()
 
     return redirect("administrator:department", establishment_id, department_id)

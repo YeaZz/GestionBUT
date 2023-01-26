@@ -32,9 +32,9 @@
         <h2>Liste des établissements</h2>
         <div class="establishments">
             {% for establishment, departments in administrator_view.items %}
-            <div class="establishment styled-card hoverable">
-                <form action="{% url 'administrator:establishment' establishment_id=establishment.id %}"  class="auto" method="post">
-                    {% csrf_token %}
+            <div class="establishment styled-card">
+                <!-- <form action="{% url 'administrator:establishment' establishment_id=establishment.id %}"  class="auto" method="post">
+                    {% csrf_token %} -->
                     <h2>{{ establishment.name }}</h2>
                     {% if not departments %}
                     <p class="middle">Aucun départment</p>
@@ -42,14 +42,17 @@
                     <div class="departments">
                         {% for department in departments %}
                         <div class="department styled-card hoverable">
-                            <h2>{{ department.name }}</h2>
-                            <p>Nombre de professeurs : {{ department.getProfessors|length }}</p>
-                            <p>Nombre d'étudiants : {{ department.getStudents|length }}</p>
+                            <form action="{% url 'administrator:department' establishment_id=establishment.id department_id=department.id %}" class="auto" method="post">
+                                {% csrf_token %}
+                                <h2>{{ department.name }}</h2>
+                                <p>Nombre de professeurs : {{ department.getProfessors|length }}</p>
+                                <p>Nombre d'étudiants : {{ department.getStudents|length }}</p>
+                            </form>
                         </div>
                         {% endfor %}
                     </div>
                     {% endif %}
-                </form>
+                <!-- </form> -->
             </div>
             {% endfor %}
             <div id="add_establishment" class="establishment plus styled-card hoverable">+</div>

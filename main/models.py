@@ -1,4 +1,6 @@
 import math
+from django.utils.timezone import now
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -286,6 +288,9 @@ class Competence(models.Model):
     def __str__(self):
         return "Compétence " + str(self.number)
 
+    def ueCount(self):
+        return len(self.getUEs())
+
     def getUEs(self):
         return UE.objects.filter(competence=self).order_by("number")
 
@@ -358,6 +363,9 @@ class Semester(models.Model):
     def __str__(self):
         return "Semestre " + str(self.number)
 
+    def resourceCount(self):
+        return len(self.getResources())
+
     def getResources(self):
         return Resource.objects.filter(semester=self).order_by("number")
 
@@ -424,7 +432,7 @@ class Group(models.Model):
     parent = models.ForeignKey('self', on_delete=models.CASCADE, default=None, blank=True, null=True, related_name="children")
 
     def __str__(self):
-        return self.name
+        return "Groupe " + self.name
 
     def studentCount(self):
         return len(Student.objects.filter(groups=self))
@@ -495,6 +503,8 @@ class Evaluation(models.Model):
     name = models.CharField(max_length=50)
     professor = models.ForeignKey(Professor, on_delete=models.CASCADE, default=None, blank=False, null=True)
     resource = models.ForeignKey(Resource, on_delete=models.CASCADE, default=None, blank=False, null=True)
+    group = models.ForeignKey(Group, on_delete=models.DO_NOTHING, default=None, blank=False, null=True)
+    date = models.DateTimeField(default=now)
 
     def __str__(self):
         return self.name
@@ -503,7 +513,7 @@ class Evaluation(models.Model):
         return Grade.objects.filter(evaluation=self)
 
     def getGrade(self, student):
-        return Grade.objects.filter(evaluation=self, student=student)
+        return Grade.objects.filter(evaluation=self, student=student).first()
 
     def getNote(self, student):
         grades = self.getGrade(student)

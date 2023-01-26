@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100;400;700&display=swap');
 
 :root {
     --primary-color: #e8e8e8;
@@ -19,7 +19,7 @@
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: var(--element-color);
+    background-color: #008bf8;
 }
 
 html,
@@ -38,11 +38,14 @@ body {
 }
 
 main {
-    background-color: var(--primary-color);
     display: flex;
     flex-direction: row;
-    padding: 80px 0;
+    padding: 40px 0;
     user-select: none;
+    background: var(--primary-color);
+    min-height: calc(100% - 52px - 40px * 2);
+    height: auto;
+    overflow: auto;
 }
 
 h1 {
@@ -59,13 +62,15 @@ h2 {
     font-weight: 400;
 }
 
-a {
+.forgotpassword > a,
+.link > a {
     color: inherit;
     text-underline-offset: 4px;
     transition: color .3s ease;
 }
 
-a:hover {
+.forgotpassword > a:hover,
+.link > a:hover {
     color: #008bf8;
     transition: color .3s ease;
 }
@@ -213,7 +218,6 @@ form:hover .effect-underline:after {
 .carousel {
     display: flex;
     flex-direction: row;
-    width: 100%;
     gap: 25px;
     overflow-x: auto;
 }
@@ -223,7 +227,7 @@ form:hover .effect-underline:after {
 }
 
 .carousel-item {
-    min-width: 20%;
+    min-width: 18%;
     min-height: max-content;
     padding: 25px;
 }
@@ -252,11 +256,38 @@ form:hover .effect-underline:after {
     transition: transform .5s, border-color .5s, box-shadow .5s ease;
 }
 
+.plus {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 70px;
+    color: var(--element-color);
+}
+
+.history {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 0;
+    left: 25px;
+    height: 52px;
+    cursor: pointer;
+}
+
+.history > a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 40px;
+    font-weight: 100;
+}
+
 .title {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    width: 100%;
+    font-weight: bold;
 }
 
 .title > h2 {
@@ -277,6 +308,7 @@ form:hover .effect-underline:after {
 }
 
 .content > h2 {
+    margin-top: 25px;
     margin-left: 25px;
 }
 
@@ -296,6 +328,12 @@ form:hover .effect-underline:after {
 
 .input > input:focus:not([type=checkbox]) {
     outline: none;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
 }
 
 
@@ -444,25 +482,4 @@ aside h3 {
     height: 32px;
     margin-right: 4%;
     mix-blend-mode: darken;
-}
-
-
-
-
-
-/* FOOTER PART */
-
-footer {
-    padding: 30px;
-    background: var(--element-color);
-    display: flex;
-    color: #ffffff;
-    justify-content: space-around;
-
-}
-
-footer h4 {
-    font-size: 25px;
-    text-transform: capitalize;
-    text-decoration: underline;
 }

@@ -3,6 +3,10 @@
 {% block content %}
 
 <div class="wrapper left-side">
+    <div class="history">
+        <a href="{% url 'professor:index'  %}"> < </a>
+    </div>
+
     <h1>{{ department.establishment }}<br>{{ department }}</h1>
 
     <select id="semesterSelection" name="semestre">
@@ -11,57 +15,26 @@
         {% endfor %}
     </select>
 
-    {% for semester, resources in professor_view.items %}
-    {% for resource in resources.keys %}
-    <div class="modal {{ resource.id }}">
-        <div class="modal-content">
-            <h2>Ajouter une note</h2>
-            {{ resource }}
-            <form action="{% url 'professor:createNote' department_id=department.id resource_id=resource.id %}" method="post">
-                {% csrf_token %}
-                <div class="input">
-                    <label for="name">Nom de l'évaluation</label>
-                    <input type="text" name="name" id="name" required>
-                </div>
-                <div class="input">
-                    <select class="group" name="group">
-                        <option value="none" selected>Veuillez choisir un groupe</option>
-                        {% for group in department.getGroups %}
-                        <option value="{{ group.id }}">{{ group.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                {% for group in department.getGroups %}
-                <div class="students {{ group.id }}">
-                    {% for student in group.students.all %}
-                    <div>{{ student.id.last_name }} {{ student.id.first_name }}</div>
-                    <input type="number" name="note {{ group.id }} {{ student.id.id }}" step="any">
-                    {% endfor %}
-                </div>
-                {% endfor %}
-                <button class="modal-button hoverable">Ajouter</button>
-            </form>
-        </div>
-    </div>
-    {% endfor %}
-    {% endfor %}
-
     <div class="content">
         <h2>Liste des ressources</h2>
         {% for semester, resources in professor_view.items %}
         <div class="semester {{ semester.id }}">
             {% for resource, evaluations in resources.items %}
             <div class="resource styled-card hoverable">
-                <h2>{{ resource }}</h2>
-                <button class="resource-button {{ resource.id }} hoverable">Ajouter une évaluation</button>
-                {% if evaluations %}
-                <div class="styled-card evaluations">
-                    <strong>Notes</strong>
-                    {% for evaluation in evaluations %}
-                    <div class="evaluation">{{ evaluation }} - {{ evaluation.professor }}</div>
-                    {% endfor %}
-                </div>
-                {% endif %}
+                <form action="{% url 'professor:resource' department_id=department.id resource_id=resource.id %}" class="auto" method="post">
+                    {% csrf_token %}
+                    <h2><strong>{{ resource }}</strong><br>{{ resource.name }}</h2>
+                    <div class="styled-card evaluations">
+                        <div class="title">Notes</div>
+                        {% if not evaluations %}
+                        Aucune note.
+                        {% else %}
+                        {% for evaluation in evaluations %}
+                        <div>{{ evaluation }} - {{ evaluation.professor }}</div>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </form>
             </div>
             {% endfor %}
         </div>
@@ -74,7 +47,7 @@
         <div class="links">
             <h3>Liens utiles</h3>
             {% if not usefulLinks %}
-            Aucun liens utiles.
+            Aucun lien utile.
             {% else %}
             {% for link in usefulLinks %}
             <div class="link">

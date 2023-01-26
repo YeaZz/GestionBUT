@@ -3,59 +3,214 @@
 {% block content %}
 
 <div class="wrapper left-side">
+    <div class="history">
+        <a href="{% url 'administrator:index' %}"> < </a>
+    </div>
+
+    {% for competence in competences %}
+    <div class="modal {{ competence.id }} competence">
+        <div class="modal-content">
+            <h1>Modifier une compétence</h1>
+            <h2>{{ competence }}</h2>
+            <form action="{% url 'administrator:deleteCompetence' establishment_id=department.establishment.id department_id=department.id competence_id=competence.id %}" method="post">
+                {% csrf_token %}
+                <button class="delete-button hoverable">Supprimer</button>
+            </form>
+            <form action="{% url 'administrator:editCompetence' establishment_id=department.establishment.id department_id=department.id competence_id=competence.id %}" method="post">
+                {% csrf_token %}
+                <div class="datas">
+                    <div class="data">
+                        <div class="input">
+                            <label for="number">Numéro de la compétence</label>
+                            <input type="number" name="number" id="number" value="{{ competence.number }}" required>
+                        </div>
+                        <div class="input">
+                            <label for="name">Nom de la compétence</label>
+                            <input type="text" name="name" id="name" value="{{ competence.name }}" required>
+                        </div>
+                        <div class="input">
+                            <label for="description">Description de la compétence</label>
+                            <textarea name="description" id="description" value="{{ competence.description }}" cols="30" rows="10"></textarea>
+                        </div>
+                    </div>
+                    <div class="data">
+                        <div class="ues">
+                            <h2>UEs</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="button-container">
+                    <button class="modal-button hoverable">Modifier</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+
+
+    {% for semester in semesters %}
+    <div class="modal {{ semester.id }} semester">
+        <div class="modal-content">
+            <h1>Modifier un semestre</h1>
+            <h2>{{ semester }}</h2>
+            <form action="{% url 'administrator:deleteSemester' establishment_id=department.establishment.id department_id=department.id semester_id=semester.id %}" method="post">
+                {% csrf_token %}
+                <button class="delete-button hoverable">Supprimer</button>
+            </form>
+            <form action="{% url 'administrator:editSemester' establishment_id=department.establishment.id department_id=department.id semester_id=semester.id %}" method="post">
+                {% csrf_token %}
+                <div class="datas">
+                    <div class="data">
+                        <div class="input">
+                            <label for="number">Numéro du semestre</label>
+                            <input type="number" name="number" id="number" value="{{ semester.number }}" required>
+                        </div>
+                    </div>
+                    <div class="data">
+                        <div class="resources">
+                            <h2>Ressources</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="button-container">
+                    <button class="modal-button hoverable">Modifier</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+
+
+    {% for group in groups %}
+    <div class="modal {{ group.id }} group">
+        <div class="modal-content">
+            <h1>Modifier un groupe</h1>
+            <h2>{{ group }}</h2>
+            <form action="{% url 'administrator:deleteGroup' establishment_id=department.establishment.id department_id=department.id group_id=group.id %}" method="post">
+                {% csrf_token %}
+                <button class="delete-button hoverable">Supprimer</button>
+            </form>
+            <form action="{% url 'administrator:editGroup' establishment_id=department.establishment.id department_id=department.id group_id=group.id %}" class="form" method="post">
+                {% csrf_token %}
+                <div class="datas">
+                    <div class="data">
+                        <div class="input">
+                            <label for="name">Nom du groupe</label>
+                            <input type="text" name="name" id="name" value="{{ group.name }}" required>
+                        </div>
+                        <div class="input">
+                            <label for="parent">Groupe parent</label>
+                            <select name="parent" id="parent">
+                                <option value="none">Aucun</option>
+                                {% for sub_group in groups %}
+                                {% if sub_group.id != group.id %}
+                                <option value="{{ sub_group.id }}" {% if group.parent.id == sub_group.id %}selected{% endif %}>{{ sub_group.name }}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="data">
+                        <div class="students">
+                            <h2>Etudiants</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="button-container">
+                    <button class="modal-button hoverable">Modifier</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+
+
     <div class="modal add_competence">
         <div class="modal-content">
-            <h2>Ajouter une compétence</h2>
+            <h1>Ajouter une compétence</h1>
             <form action="{% url 'administrator:createCompetence' establishment_id=department.establishment.id department_id=department.id %}" method="post">
                 {% csrf_token %}
-                <div class="input">
-                    <label for="number">Numéro de la compétence</label>
-                    <input type="number" name="number" id="number" required>
+                <div class="datas">
+                    <div class="data">
+                        <div class="input">
+                            <label for="number">Numéro de la compétence</label>
+                            <input type="number" name="number" id="number" required>
+                        </div>
+                        <div class="input">
+                            <label for="name">Nom de la compétence</label>
+                            <input type="text" name="name" id="name" required>
+                        </div>
+                        <div class="input">
+                            <label for="description">Description de la compétence</label>
+                            <textarea name="description" id="description" cols="30" rows="10"></textarea>
+                        </div>
+                    </div>
+                    <div class="data">
+                        <div class="ues">
+                            <h2>UEs</h2>
+                        </div>
+                    </div>
                 </div>
-                <div class="input">
-                    <label for="name">Nom de la compétence</label>
-                    <input type="text" name="name" id="name" required>
+                <div class="button-container">
+                    <button class="establishment-button hoverable">Ajouter</button>
                 </div>
-                <div class="input">
-                    <label for="description">Description de la compétence</label>
-                    <textarea name="description" id="description" cols="30" rows="10"></textarea>
-                </div>
-                <button class="establishment-button hoverable">Ajouter</button>
             </form>
         </div>
     </div>
     <div class="modal add_semester">
         <div class="modal-content">
-            <h2>Ajouter un semestre</h2>
+            <h1>Ajouter un semestre</h1>
             <form action="{% url 'administrator:createSemester' establishment_id=department.establishment.id department_id=department.id %}" method="post">
                 {% csrf_token %}
-                <div class="input">
-                    <label for="number">Numéro du semestre</label>
-                    <input type="number" name="number" id="number" required>
+                <div class="datas">
+                    <div class="data">
+                        <div class="input">
+                            <label for="number">Numéro du semestre</label>
+                            <input type="number" name="number" id="number" required>
+                        </div>
+                    </div>
+                    <div class="data">
+                        <div class="resources">
+                            <h2>Ressources</h2>
+                        </div>
+                    </div>
                 </div>
-                <button class="establishment-button hoverable">Ajouter</button>
+                <div class="button-container">
+                    <button class="establishment-button hoverable">Ajouter</button>
+                </div>
             </form>
         </div>
     </div>
     <div class="modal add_group">
         <div class="modal-content">
-            <h2>Ajouter un groupe</h2>
+            <h1>Ajouter un groupe</h1>
             <form action="{% url 'administrator:createGroup' establishment_id=department.establishment.id department_id=department.id %}" method="post">
                 {% csrf_token %}
-                <div class="input">
-                    <label for="name">Nom du groupe</label>
-                    <input type="text" name="name" id="name" required>
+                <div class="datas">
+                    <div class="data">
+                        <div class="input">
+                            <label for="name">Nom du groupe</label>
+                            <input type="text" name="name" id="name" required>
+                        </div>
+                        <div class="input">
+                            <label for="parent">Groupe parent</label>
+                            <select name="parent" id="parent">
+                                <option value="none">Aucun</option>
+                                {% for group in groups %}
+                                <option value="{{ group.id }}">{{ group.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="data">
+                        <div class="students">
+                            <h2>Etudiants</h2>
+                        </div>
+                    </div>
                 </div>
-                <div class="input">
-                    <label for="parent">Groupe parent</label>
-                    <select name="parent" id="parent">
-                        <option value="none">Aucun</option>
-                        {% for group in groups %}
-                        <option value="{{ group.id }}">{{ group.name }}</option>
-                        {% endfor %}
-                    </select>
+                <div class="button-container">
+                    <button class="establishment-button hoverable">Ajouter</button>
                 </div>
-                <button class="establishment-button hoverable">Ajouter</button>
             </form>
         </div>
     </div>
@@ -63,9 +218,9 @@
     <div class="content">
         <h2>Liste des Competences</h2>
         <div class="carousel-container styled-card">
-            <div class="carousel competence">
+            <div class="carousel">
                 {% for competence in competences %}
-                <div class="carousel-item styled-card hoverable">
+                <div class="competence {{ competence.id }} carousel-item styled-card hoverable">
                     <h2 class="middle">{{ competence }}</h2>
                     <h2>{{ competence.name }}</h2>
                 </div>
@@ -75,10 +230,11 @@
         </div>
         <h2>Liste des Semestres</h2>
         <div class="carousel-container styled-card">
-            <div class="carousel semester">
+            <div class="carousel">
                 {% for semester in semesters %}
-                <div class="carousel-item styled-card hoverable">
+                <div class="semester {{ semester.id }} carousel-item styled-card hoverable">
                     <h2 class="middle">{{ semester }}</h2>
+                    <p>{{ semester.resourceCount }} ressources</p>
                 </div>
                 {% endfor %}
                 <div id="add_semester" class="carousel-item plus styled-card hoverable">+</div>
@@ -86,11 +242,11 @@
         </div>
         <h2>Liste des Groupes</h2>
         <div class="carousel-container styled-card">
-            <div class="carousel groups">
+            <div class="carousel">
                 {% for group in groups %}
-                <div class="carousel-item styled-card hoverable">
+                <div class="group {{ group.id }} carousel-item styled-card hoverable">
                     <h2 class="middle">{{ group }}</h2>
-                    <h2>{{ group.studentCount }} étudiants</h2>
+                    <p>{{ group.studentCount }} étudiants</p>
                 </div>
                 {% endfor %}
                 <div id="add_group" class="carousel-item plus styled-card hoverable">+</div>

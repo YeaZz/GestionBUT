@@ -12,7 +12,7 @@ Array.from(modals).forEach(modal => {
     modal.addEventListener("click", (event) => {
         if (event.target == modal) {
             modal.style.display = "none"
-            document.body.style.overflow = "auto"
+            document.body.style.overflowY = "overlay"
         }
     })
 })

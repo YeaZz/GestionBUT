@@ -3,9 +3,14 @@
 {% block content %}
 
 <div class="wrapper left-side">
+    <div class="history">
+        <a href="{% url 'student:index'  %}"> < </a>
+    </div>
+
     <h1>{{ semester }}<br>{{ resource }} </h1>
     <h2>{{ resource.name }}</h2>
     <div class="content">
+        <h2>Liste des évaluations</h2>
         <div class="semester">
             {% for evaluation, stats in student_view.items %}
             <div class="resource styled-card hoverable">
@@ -21,10 +26,10 @@
                 <p><strong>Classement</strong><br>{{ stats.1|default_if_none:"Non classé" }}</p>
                 <div class="stats">
                     <div>
-                        <strong>Note maximale</strong><br>{{ stats.3|default_if_none:"Aucune" }}
+                        <strong>Note minimale</strong><br>{{ stats.4|default_if_none:"Aucune" }}
                     </div>
                     <div>
-                        <strong>Note minimale</strong><br>{{ stats.4|default_if_none:"Aucune" }}
+                        <strong>Note maximale</strong><br>{{ stats.3|default_if_none:"Aucune" }}
                     </div>
                 </div>
             </div>
@@ -37,16 +42,20 @@
     <div class="aside-container styled-card">
         <div class="notes">
             <h3>Mes dernières notes</h3>
+            {% if not lastGrades %}
+            Aucune note.
+            {% else %}
             {% for grade in lastGrades %}
             <div class="note">
                 <p>{{ grade }}<br><em>{{ grade.note }}</em></p>
             </div>
             {% endfor %}
+            {% endif %}
         </div>
         <div class="links">
             <h3>Liens utiles</h3>
             {% if not usefulLinks %}
-            Aucun liens utiles.
+            Aucun lien utile.
             {% else %}
             {% for link in usefulLinks %}
             <div class="link">

@@ -25,13 +25,13 @@
             <div class="resource styled-card hoverable">
                 <form class="auto" action="{% url 'student:resource' semester_id=semester.id resource_id=resource.id %}" method="post">
                     {% csrf_token %}
-                    <h2>{{ resource.name }}</h2>
+                    <h2><strong>{{ resource }}</strong><br>{{ resource.name }}</h2>
                     <p><strong>Note ressource</strong><br>{{ evaluations.1|default_if_none:"Non noté" }}</p>
                     <p><strong>Classement ressource</strong><br>{{ evaluations.2|default_if_none:"Non classé" }}</p>
                     <div class="styled-card evaluations">
                         <div class="title">Notes</div>
                         {% if not evaluations.0 %}
-                        <div class="evaluation">Aucunes notes</div>
+                        Aucunes notes.
                         {% else %}
                         <div class="carousel">
                             {% for evaluation, note in evaluations.0.items %}
@@ -51,22 +51,26 @@
             <div class="ue styled-card hoverable">
                 <form class="auto" action="{% url 'student:ue' semester_id=semester.id ue_id=ue.id %}" method="post">
                     {% csrf_token %}
-                    <h2>UE{{ semester.number }}.{{ ue.number }}</h2>
+                    <h2><strong>UE {{ ue.number }}</strong></h2>
                     <p><strong>Note UE</strong><br>{{ resources.1|default_if_none:"Non noté" }}</p>
                     <p><strong>Classement UE</strong><br>{{ resources.2|default_if_none:"Non classé" }}</p>
                     {% for resource, evaluations in resources.0.items %}
-                    {% if evaluations %}
                     <div class="styled-card evaluations">
                         <div class="title">{{ resource.name }}</div>
-                        {% for evaluation, note in evaluations.items %}
-                        <div class="evaluation">
-                            {{ evaluation.name }}
-                            <br>
-                            <em>{{ note|default_if_none:"Non noté" }}</em>
+                        {% if not evaluations %}
+                        Aucunes notes.
+                        {% else %}
+                        <div class="carousel">
+                            {% for evaluation, note in evaluations.items %}
+                            <div class="evaluation carousel-item">
+                                {{ evaluation.name }}
+                                <br>
+                                <em>{{ note|default_if_none:"Non noté" }}</em>
+                            </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
+                        {% endif %}
                     </div>
-                    {% endif %}
                     {% endfor %}
                 </form>
             </div>
@@ -80,16 +84,20 @@
     <div class="aside-container styled-card">
         <div class="notes">
             <h3>Mes dernières notes</h3>
+            {% if not lastGrades %}
+            <p>Aucune note.</p>
+            {% else %}
             {% for grade in lastGrades %}
             <div class="note">
                 <p>{{ grade }}<br><em>{{ grade.note }}</em></p>
             </div>
             {% endfor %}
+            {% endif %}
         </div>
         <div class="links">
             <h3>Liens utiles</h3>
             {% if not usefulLinks %}
-            Aucun liens utiles.
+            Aucun lien utile.
             {% else %}
             {% for link in usefulLinks %}
             <div class="link">

@@ -1,0 +1,114 @@
+{% extends 'head.html' %}
+{% load static %}
+{% block content %}
+
+<div class="wrapper left-side">
+    <div class="history">
+        <a href="{% url 'professor:department' department_id=department.id %}"> < </a>
+    </div>
+
+    <h1>{{ semester }}<br>{{ resource }} </h1>
+    <h2>{{ resource.name }}</h2>
+
+    {% for evaluation in professor_view %}
+    <div class="modal {{ evaluation.id }}">
+        <div class="modal-content">
+            <h2>Modifier une note</h2>
+            <form action="{% url 'professor:deleteEvaluation' department_id=department.id resource_id=resource.id evaluation_id=evaluation.id %}" method="post">
+                {% csrf_token %}
+                <button class="delete-button hoverable">Supprimer</button>
+            </form>
+            <p>{{ evaluation }}</p>
+            <form action="{% url 'professor:editEvaluation' department_id=department.id resource_id=resource.id evaluation_id=evaluation.id %}" method="post">
+                {% csrf_token %}
+                <div class="input">
+                    <select id="group" class="group" name="group">
+                        {% for group in department.getGroups %}
+                        <option value="{{ group.id }}" {% if evaluation.group.id == group.id %}selected{% endif %}>{{ group.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% for group in department.getGroups %}
+                <div class="students {{ group.id }}">
+                    {% for student in group.students.all %}
+                    <div>{{ student.id.last_name }} {{ student.id.first_name }}</div>
+                    <input type="number" name="note {{ group.id }} {{ student.id.id }}" value="{{ grades|get_item:evaluation|get_item:student|float }}" step="0.1">
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                <button class="modal-button hoverable">Modifier</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+    <div class="modal add_evaluation">
+        <div class="modal-content">
+            <h2>Ajouter une évaluation</h2>
+            <form action="{% url 'professor:createEvaluation' department_id=department.id resource_id=resource.id %}" method="post">
+                {% csrf_token %}
+                <div class="input">
+                    <label for="name">Nom de l'évaluation</label>
+                    <input type="text" name="name" id="name" required>
+                </div>
+                <div class="input">
+                    <select class="group" name="group">
+                        <option value="none" selected>Veuillez choisir un groupe</option>
+                        {% for group in department.getGroups %}
+                        <option value="{{ group.id }}">{{ group.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% for group in department.getGroups %}
+                <div class="students {{ group.id }}">
+                    {% for student in group.students.all %}
+                    <div>{{ student.id.last_name }} {{ student.id.first_name }}</div>
+                    <input type="number" name="note {{ group.id }} {{ student.id.id }}" step="0.1">
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                <button class="modal-button hoverable">Ajouter</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="content">
+        <h2>Liste des évaluations</h2>
+        <div class="semester">
+            <div id="add_evaluation" class="evaluation plus styled-card hoverable">+</div>
+            {% for evaluation, stats in professor_view.items %}
+            <div class="evaluation {{ evaluation.id }} styled-card hoverable">
+                <h2 class="middle">{{ evaluation }}</h2>
+                <p><strong>Moyenne</strong><br>{{ stats.0|default_if_none:"Aucune" }}</p>
+                <div class="stats">
+                    <div>
+                        <strong>Note minimale</strong><br>{{ stats.2|default_if_none:"Aucune" }}
+                    </div>
+                    <div>
+                        <strong>Note maximale</strong><br>{{ stats.1|default_if_none:"Aucune" }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<aside>
+    <div class="aside-container styled-card">
+        <div class="links">
+            <h3>Liens utiles</h3>
+            {% if not usefulLinks %}
+            Aucun lien utile.
+            {% else %}
+            {% for link in usefulLinks %}
+            <div class="link">
+                <img src="{% static link.file_path %}" alt="moodle" />
+                <a href="{{ link.link }}" target="_blank">{{ link.name }}</a>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</aside>
+
+{% endblock %}

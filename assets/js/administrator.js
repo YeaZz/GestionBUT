@@ -1,19 +1,24 @@
-const addEstablishment = document.getElementById("add_establishment")
-const addDepartment = document.getElementById("add_department")
-const addCompetence = document.getElementById("add_competence")
-const addSemester = document.getElementById("add_semester")
-const addGroup = document.getElementById("add_group")
-
-function modalAddListener(add, modal) {
-    if (add == undefined || modal == undefined) return
-    add.addEventListener("click", () => {
+function cardAddListener(card, modal) {
+    if (card == undefined || modal == undefined) return
+    card.addEventListener("click", () => {
         modal.style.display = "block"
-        document.body.style.overflow = "hidden"
+        document.body.style.overflowY = "hidden"
     })
 }
 
-modalAddListener(addEstablishment, document.querySelector(".modal.add_establishment"))
-modalAddListener(addDepartment, document.querySelector(".modal.add_department"))
-modalAddListener(addCompetence, document.querySelector(".modal.add_competence"))
-modalAddListener(addSemester, document.querySelector(".modal.add_semester"))
-modalAddListener(addGroup, document.querySelector(".modal.add_group"))
+function addListeners(name) {
+    cardAddListener(document.getElementById("add_" + name), document.querySelector(".modal.add_" + name))
+    const cards = document.querySelectorAll(".carousel-item." + name)
+    if (cards.length == 0) return
+    Array.from(cards).forEach(card => {
+        let value = card.classList[1]
+        let current = document.getElementsByClassName("modal " + value + " " + name)[0]
+        cardAddListener(card, current)
+    })
+}
+
+addListeners("establishment")
+addListeners("department")
+addListeners("competence")
+addListeners("semester")
+addListeners("group")

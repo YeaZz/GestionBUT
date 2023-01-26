@@ -3,18 +3,15 @@ const semesterChoice = document.getElementById("semesterSelection")
 
 const students = document.querySelectorAll(".students")
 const groupChoices = document.querySelectorAll(".group")
-const resourceButtons = document.querySelectorAll(".resource-button")
-const departmentForms = document.querySelectorAll(".department-form")
 
-const resourceModals = document.querySelectorAll(".modal")
-
+// Changer d'établissement
 if (establishmentChoice != undefined) {
     displayEstablishment()
 
     establishmentChoice.addEventListener("click", () => {
         displayEstablishment()
     })
-    
+
     function displayEstablishment() {
         Array.from(establishmentChoice.options).forEach(option => {
             let value = option.value
@@ -27,6 +24,7 @@ if (establishmentChoice != undefined) {
     }
 }
 
+// Changer de semestre via les <select>
 if (semesterChoice != undefined) {
     displaySemester()
 
@@ -46,9 +44,10 @@ if (semesterChoice != undefined) {
     }
 }
 
+// Ajouter une note
 if (students.length > 0) {
-
     Array.from(groupChoices).forEach(select => {
+        displayStudents(select)
         select.addEventListener("click", () => {
             displayStudents(select)
         })
@@ -66,33 +65,23 @@ if (students.length > 0) {
     }
 }
 
-Array.from(resourceButtons).forEach(button => {
-    button.addEventListener("click", () => {
-        const form = button.closest("form")
-        if (form != undefined && button.classList[1] != undefined) {
-            const action = button.closest("form").action.split("?")[0]
-            button.closest("form").action = action + "?resource=" + button.classList[1]
-        }
-        showModal(button.classList[1])
-    })
-})
-
-function showModal(resource) {
-    Array.from(resourceModals).forEach(modal => {
-        if (modal.classList[1] == resource) {
-            modal.style.display = "block"
-            document.body.style.overflow = "hidden"
-        }
+function cardAddListener(card, modal) {
+    if (card == undefined || modal == undefined) return
+    card.addEventListener("click", () => {
+        modal.style.display = "block"
+        document.body.style.overflowY = "hidden"
     })
 }
 
-const queryString = window.location.search;
-if (queryString != "") {
-    const urlParams = new URLSearchParams(queryString);
-    if (urlParams.has("resource")) {
-        const resource = urlParams.get("resource")
-        showModal(resource)
-    }
+addListeners("evaluation")
+
+function addListeners(name) {
+    cardAddListener(document.getElementById("add_" + name), document.querySelector(".modal.add_" + name))
+    const cards = document.querySelectorAll("." + name)
+    if (cards.length == 0) return
+    Array.from(cards).forEach(card => {
+        let value = card.classList[1]
+        let current = document.getElementsByClassName("modal " + value)[0]
+        cardAddListener(card, current)
+    })
 }
-
-

@@ -3,18 +3,22 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: center;
     gap: 50px;
     margin: 25px;
 }
 
 .establishment > .department, .semesters > .semester, /* index */ 
-.semester > .resource, .resource > .evaluations /* department */ {
+.semester > .resource, .resource > .evaluations, /* department */
+.semester > .evaluation {
     width: 27%;
     height: max-content;
 }
 
-.resource > .evaluations /* department */ {
+.semester > .evaluation {
+    height: auto;
+}
+
+.resource > form > .evaluations /* department */ {
     width: unset;
     margin-top: 25px;
 }
@@ -38,7 +42,9 @@
 }
 
 .modal-button,
-.resource-button {
+.resource-button,
+.delete-button {
+    display: block;
     position: relative;
     z-index: 999;
     height: 3em;
@@ -49,6 +55,11 @@
     border: none;
     border-radius: 30px;
     cursor: pointer;
+}
+
+.delete-button {
+    background: #ff0000;
+    color: #000000;
 }
 
 .students {
@@ -66,4 +77,8 @@
     height: 50px;
     padding: 0 5%;
     font: inherit;
+}
+
+.input {
+    margin: 2% 0;
 }

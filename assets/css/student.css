@@ -9,12 +9,8 @@
 
 .resource, .ue,
 .evaluations {
-    position: relative;
-    z-index: 1;
-    padding: 25px;
     width: 27%;
     height: max-content;
-    cursor: pointer;
 }
 
 .evaluations {
@@ -26,19 +22,13 @@
     margin-top: 25px;
 }
 
-.title {
-    width: 100%;
-    font-weight: bold;
-}
-
 .evaluation {
-    margin-top: 1vh;
+    margin-top: -25px;
+    min-width: 18%;
     padding: 0;
-    min-width: 19%;
 }
 
-.stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 10px;
+.carousel {
+    width: 100%;
+    padding: 25px 0;
 }

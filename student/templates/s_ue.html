@@ -3,15 +3,20 @@
 {% block content %}
 
 <div class="wrapper left-side">
+    <div class="history">
+        <a href="{% url 'student:index'  %}"> < </a>
+    </div>
+
     <h1>{{ semester }}<br>UE {{ semester.number }}.{{ ue.number }}</h1>
     <h2>{{ ue.name }}</h2>
     <div class="content">
+        <h2>Liste des UEs</h2>
         <div class="ue_semester">
             {% for resource, evaluations in student_view.items %}
             <div class="ue_resource carousel-container styled-card">
                 <h2 class="middle">{{ resource }}</h2>
                 {% if not evaluations %}
-                Aucunes notes.
+                Aucune note.
                 {% else %}
                 <div class="ue_evaluations carousel">
                     {% for evaluation, stats in evaluations.items %}
@@ -19,19 +24,25 @@
                         <h2 class="middle">{{ evaluation }}</h2>
                         <div class="stats">
                             <div>
-                                <strong>Note</strong><br>{{ stats.0|default_if_none:"Non noté" }}
+                                <strong>Note</strong>
+                                <br>
+                                {{ stats.0|default_if_none:"Non noté" }}
                             </div>
                             <div>
-                                <strong>Moyenne</strong><br>{{ stats.2|default_if_none:"Aucune" }}
+                                <strong>Moyenne</strong>
+                                <br>
+                                {{ stats.2|default_if_none:"Aucune" }}
                             </div>
                         </div>
-                        <p><strong>Classement</strong><br>{{ stats.1|default_if_none:"Non classé" }}</p>
+                        <p><strong>Classement</strong>
+                            <br>
+                            {{ stats.1|default_if_none:"Non classé" }}</p>
                         <div class="stats">
                             <div>
-                                <strong>Note maximale</strong><br>{{ stats.3|default_if_none:"Aucune" }}
+                                <strong>Note minimale</strong><br>{{ stats.4|default_if_none:"Aucune" }}
                             </div>
                             <div>
-                                <strong>Note minimale</strong><br>{{ stats.4|default_if_none:"Aucune" }}
+                                <strong>Note maximale</strong><br>{{ stats.3|default_if_none:"Aucune" }}
                             </div>
                         </div>
                     </div>
@@ -48,16 +59,20 @@
     <div class="aside-container styled-card">
         <div class="notes">
             <h3>Mes dernières notes</h3>
+            {% if not lastGrades %}
+            Aucune note.
+            {% else %}
             {% for grade in lastGrades %}
             <div class="note">
                 <p>{{ grade }}<br><em>{{ grade.note }}</em></p>
             </div>
             {% endfor %}
+            {% endif %}
         </div>
         <div class="links">
             <h3>Liens utiles</h3>
             {% if not usefulLinks %}
-            Aucun liens utiles.
+            Aucun lien utile.
             {% else %}
             {% for link in usefulLinks %}
             <div class="link">
