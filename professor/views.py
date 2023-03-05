@@ -10,7 +10,7 @@ def get_item(dictionary, key):
     return dictionary.get(key)
 
 @register.filter
-def float(float):
+def get_float(float):
     return str(float).replace(",", ".")
 
 @login_required

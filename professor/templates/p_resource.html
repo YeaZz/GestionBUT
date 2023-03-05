@@ -32,7 +32,7 @@
                 <div class="students {{ group.id }}">
                     {% for student in group.students.all %}
                     <div>{{ student.id.last_name }} {{ student.id.first_name }}</div>
-                    <input type="number" name="note {{ group.id }} {{ student.id.id }}" value="{{ grades|get_item:evaluation|get_item:student|float }}" step="0.1">
+                    <input type="number" name="note {{ group.id }} {{ student.id.id }}" value="{{ grades|get_item:evaluation|get_item:student|get_float }}" step="0.1">
                     {% endfor %}
                 </div>
                 {% endfor %}
