@@ -445,6 +445,7 @@ class Evaluation(models.Model):
     resource = models.ForeignKey(Resource, on_delete=models.CASCADE, default=None, blank=False, null=True)
     group = models.ForeignKey(Group, on_delete=models.DO_NOTHING, default=None, blank=False, null=True)
     date = models.DateTimeField(default=now)
+    max_note = models.IntegerField(default=20, blank=True, null=False)
     coef = models.FloatField(default=1, blank=True, null=False)
 
     def __str__(self):
