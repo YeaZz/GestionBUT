@@ -96,7 +96,6 @@ if (importInput != undefined) {
         reader = new FileReader();
         reader.onload = function() {
             lines = reader.result.split('\r\n')
-            lines.shift()
             lines.pop()
             lines.forEach(line => {
                 [id, note] = line.split(';')
