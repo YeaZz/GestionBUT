@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 
 from main.models import *
 from main.views import isStudent
 
-# Create your views here.
+@login_required
 def index(request):
     user = request.user
     student = isStudent(user)
@@ -42,6 +43,7 @@ def index(request):
         }
     )
 
+@login_required
 def resource(request, semester_id, resource_id):
     user = request.user
     student = isStudent(user)
@@ -76,6 +78,7 @@ def resource(request, semester_id, resource_id):
         }
     )
 
+@login_required
 def ue(request, semester_id, ue_id):
     user = request.user
     student = isStudent(user)

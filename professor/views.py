@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.template.defaulttags import register
+from django.contrib.auth.decorators import login_required
 
 from main.models import *
 from main.views import isProfessor, isStudent
@@ -12,7 +13,7 @@ def get_item(dictionary, key):
 def float(float):
     return str(float).replace(",", ".")
 
-# Create your views here.
+@login_required
 def index(request):
     user = request.user
     professor = isProfessor(user)
@@ -35,6 +36,7 @@ def index(request):
         }
     )
 
+@login_required
 def department(request, department_id):
     user = request.user
     professor = isProfessor(user)
@@ -61,6 +63,7 @@ def department(request, department_id):
         }
     )
 
+@login_required
 def resource(request, department_id, resource_id):
     user = request.user
     professor = isProfessor(user)
@@ -98,6 +101,7 @@ def resource(request, department_id, resource_id):
         }
     )
 
+@login_required
 def createEvaluation(request, department_id, resource_id):
     user = request.user
     professor = isProfessor(user)
@@ -129,6 +133,7 @@ def createEvaluation(request, department_id, resource_id):
 
     return redirect("professor:resource", department_id=department.id, resource_id=resource_id)
 
+@login_required
 def editEvaluation(request, department_id, resource_id, evaluation_id):
     user = request.user
     professor = isProfessor(user)
@@ -166,6 +171,7 @@ def editEvaluation(request, department_id, resource_id, evaluation_id):
 
     return redirect("professor:resource", department_id=department_id, resource_id=resource_id)
 
+@login_required
 def deleteEvaluation(request, department_id, resource_id, evaluation_id):
     user = request.user
     professor = isProfessor(user)

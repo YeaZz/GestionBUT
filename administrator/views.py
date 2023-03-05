@@ -1,13 +1,14 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 
 from main.models import *
 from main.views import isAdministrator
 
-# Create your views here.
-def index(request):
-    admin = isAdministrator(request.user)
-    if admin == None:
-        return redirect("login")
+@login_required
+def index(request: HttpResponse):
+    if isAdministrator(request.user) == None:
+        return redirect("main:index")
 
     administrator_view = {}
     establishments = Establishment.objects.all()
@@ -22,12 +23,12 @@ def index(request):
         }
     )
 
-def establishment(request, establishment_id):
-    admin = isAdministrator(request.user)
-    if admin == None:
-        return redirect("login")
+@login_required
+def establishment(request: HttpResponse, establishment_id: int):
+    if isAdministrator(request.user) == None:
+        return redirect("main:index")
 
-    establishment = Establishment.objects.filter(id=establishment_id).first()
+    establishment = Establishment.objects.get(id=establishment_id)
     if establishment == None:
         return redirect("administrator:index")
 
@@ -44,13 +45,10 @@ def establishment(request, establishment_id):
         }
     )
 
-def createEstablishment(request):
-    admin = isAdministrator(request.user)
-    if admin == None:
+@login_required
+def createEstablishment(request: HttpResponse):
+    if isAdministrator(request.user) == None or request.method != "POST":
         return redirect("main:index")
-
-    if request.method != "POST":
-        return redirect("administrator:index")
 
     post = request.POST
     if "name" in post:
@@ -60,15 +58,16 @@ def createEstablishment(request):
             establishment.save()
             if "it_department" in post:
                 establishment.createITDepartment()
+
     return redirect("administrator:index")
 
-def department(request, establishment_id, department_id):
-    admin = isAdministrator(request.user)
-    if admin == None:
+@login_required
+def department(request: HttpResponse, establishment_id: int, department_id: int):
+    if isAdministrator(request.user) == None:
         return redirect("login")
 
-    establishment = Establishment.objects.filter(id=establishment_id).first()
-    department = Department.objects.filter(id=department_id).first()
+    establishment = Establishment.objects.get(id=establishment_id)
+    department = Department.objects.get(id=department_id)
     if establishment == None:
         return redirect("administrator:index")
     elif department == None:
@@ -84,24 +83,17 @@ def department(request, establishment_id, department_id):
         context= {
             "establishment": establishment,
             "department": department,
-            "competences": department.getCompetences(),
-            "resources": department.getResources(),
-            "semesters": department.getSemesters(),
-            "groups": department.getGroups(),
             "administrator_view": administrator_view,
-            "usefulLinks": department.getUsefulLinks()
         }
     )
 
 
-
-
-def createDepartment(request, establishment_id):
-    admin = isAdministrator(request.user)
-    if admin == None:
+@login_required
+def createDepartment(request: HttpResponse, establishment_id: int):
+    if isAdministrator(request.user) == None:
         return redirect("main:index")
 
-    establishment = Establishment.objects.filter(id=establishment_id).first()
+    establishment = Establishment.objects.get(id=establishment_id)
     if establishment == None or request.method != "POST":
         return redirect("administrator:index")
 
@@ -118,13 +110,13 @@ def createDepartment(request, establishment_id):
 
     return redirect("administrator:establishment", establishment_id=establishment.id)
 
-def createCompetence(request, establishment_id, department_id):
-    admin = isAdministrator(request.user)
-    if admin == None:
+@login_required
+def createCompetence(request: HttpResponse, establishment_id: int, department_id: int):
+    if isAdministrator(request.user) == None:
         return redirect("main:index")
 
-    establishment = Establishment.objects.filter(id=establishment_id).first()
-    department = Department.objects.filter(id=department_id).first()
+    establishment = Establishment.objects.get(id=establishment_id)
+    department = Department.objects.get(id=department_id)
     if establishment == None:
         return redirect("administrator:index")
     elif department == None or request.method != "POST":
@@ -140,16 +132,17 @@ def createCompetence(request, establishment_id, department_id):
             if description != "":
                 competence.description = description
         competence.save()
+
     return redirect("administrator:department", establishment_id, department_id)
 
-def editCompetence(request, establishment_id, department_id, competence_id):
-    admin = isAdministrator(request.user)
-    if admin == None:
+@login_required
+def editCompetence(request: HttpResponse, establishment_id: int, department_id: int, competence_id: int):
+    if isAdministrator(request.user) == None:
         return redirect("main:index")
 
-    establishment = Establishment.objects.filter(id=establishment_id).first()
-    department = Department.objects.filter(id=department_id).first()
-    competence = Competence.objects.filter(id=competence_id).first()
+    establishment = Establishment.objects.get(id=establishment_id)
+    department = Department.objects.get(id=department_id)
+    competence = Competence.objects.get(id=competence_id)
     if establishment == None:
         return redirect("administrator:index")
     elif department == None or competence == None:
@@ -167,14 +160,14 @@ def editCompetence(request, establishment_id, department_id, competence_id):
 
     return redirect("administrator:department", establishment_id, department_id)
 
-def deleteCompetence(request, establishment_id, department_id, competence_id):
-    admin = isAdministrator(request.user)
-    if admin == None:
+@login_required
+def deleteCompetence(request: HttpResponse, establishment_id: int, department_id: int, competence_id: int):
+    if isAdministrator(request.user) == None:
         return redirect("main:index")
 
-    establishment = Establishment.objects.filter(id=establishment_id).first()
-    department = Department.objects.filter(id=department_id).first()
-    competence = Competence.objects.filter(id=competence_id).first()
+    establishment = Establishment.objects.get(id=establishment_id)
+    department = Department.objects.get(id=department_id)
+    competence = Competence.objects.get(id=competence_id)
     if establishment == None:
         return redirect("administrator:index")
     elif department == None or competence == None:
@@ -189,13 +182,14 @@ def deleteCompetence(request, establishment_id, department_id, competence_id):
 
 
 
-def createSemester(request, establishment_id, department_id):
+@login_required
+def createSemester(request: HttpResponse, establishment_id: int, department_id: int):
     admin = isAdministrator(request.user)
     if admin == None:
         return redirect("main:index")
 
-    establishment = Establishment.objects.filter(id=establishment_id).first()
-    department = Department.objects.filter(id=department_id).first()
+    establishment = Establishment.objects.get(id=establishment_id)
+    department = Department.objects.get(id=department_id)
     if establishment == None:
         return redirect("administrator:index")
     elif department == None or request.method != "POST":
@@ -209,14 +203,15 @@ def createSemester(request, establishment_id, department_id):
 
     return redirect("administrator:department", establishment_id, department_id)
 
-def editSemester(request, establishment_id, department_id, semester_id):
+@login_required
+def editSemester(request: HttpResponse, establishment_id: int, department_id: int, semester_id: int):
     admin = isAdministrator(request.user)
     if admin == None:
         return redirect("main:index")
 
-    establishment = Establishment.objects.filter(id=establishment_id).first()
-    department = Department.objects.filter(id=department_id).first()
-    semester = Semester.objects.filter(id=semester_id).first()
+    establishment = Establishment.objects.get(id=establishment_id)
+    department = Department.objects.get(id=department_id)
+    semester = Semester.objects.get(id=semester_id)
     if establishment == None:
         return redirect("administrator:index")
     elif department == None or semester == None:
@@ -230,14 +225,15 @@ def editSemester(request, establishment_id, department_id, semester_id):
 
     return redirect("administrator:department", establishment_id, department_id)
 
-def deleteSemester(request, establishment_id, department_id, semester_id):
+@login_required
+def deleteSemester(request: HttpResponse, establishment_id: int, department_id: int, semester_id: int):
     admin = isAdministrator(request.user)
     if admin == None:
         return redirect("main:index")
 
-    establishment = Establishment.objects.filter(id=establishment_id).first()
-    department = Department.objects.filter(id=department_id).first()
-    semester = Semester.objects.filter(id=semester_id).first()
+    establishment = Establishment.objects.get(id=establishment_id)
+    department = Department.objects.get(id=department_id)
+    semester = Semester.objects.get(id=semester_id)
     if establishment == None:
         return redirect("administrator:index")
     elif department == None or semester == None:
@@ -253,13 +249,14 @@ def deleteSemester(request, establishment_id, department_id, semester_id):
 
 
 
+@login_required
 def createGroup(request, establishment_id, department_id):
     admin = isAdministrator(request.user)
     if admin == None:
         return redirect("main:index")
 
-    establishment = Establishment.objects.filter(id=establishment_id).first()
-    department = Department.objects.filter(id=department_id).first()
+    establishment = Establishment.objects.get(id=establishment_id)
+    department = Department.objects.get(id=department_id)
     if establishment == None:
         return redirect("administrator:index")
     elif department == None or request.method != "POST":
@@ -272,21 +269,22 @@ def createGroup(request, establishment_id, department_id):
         str_parent = post.get("parent")
         group = Group(department=department, name=name)
         if str_parent != "none":
-            parent = Group.objects.filter(id=str_parent).first()
+            parent = Group.objects.get(id=str_parent)
             if parent != None:
                 group.parent = parent
         group.save()
 
     return redirect("administrator:department", establishment_id, department_id)
 
+@login_required
 def editGroup(request, establishment_id, department_id, group_id):
     admin = isAdministrator(request.user)
     if admin == None:
         return redirect("main:index")
 
-    establishment = Establishment.objects.filter(id=establishment_id).first()
-    department = Department.objects.filter(id=department_id).first()
-    group = Group.objects.filter(id=group_id).first()
+    establishment = Establishment.objects.get(id=establishment_id)
+    department = Department.objects.get(id=department_id)
+    group = Group.objects.get(id=group_id)
     if establishment == None:
         return redirect("administrator:index")
     elif department == None or group == None:
@@ -299,7 +297,7 @@ def editGroup(request, establishment_id, department_id, group_id):
         if str_parent == "none":
             group.parent = None
         else:
-            parent = Group.objects.filter(id=str_parent).first()
+            parent = Group.objects.get(id=str_parent)
             if parent != None:
                 group.parent = parent
         group.name = name
@@ -307,14 +305,15 @@ def editGroup(request, establishment_id, department_id, group_id):
 
     return redirect("administrator:department", establishment_id, department_id)
 
+@login_required
 def deleteGroup(request, establishment_id, department_id, group_id):
     admin = isAdministrator(request.user)
     if admin == None:
         return redirect("main:index")
 
-    establishment = Establishment.objects.filter(id=establishment_id).first()
-    department = Department.objects.filter(id=department_id).first()
-    group = Group.objects.filter(id=group_id).first()
+    establishment = Establishment.objects.get(id=establishment_id)
+    department = Department.objects.get(id=department_id)
+    group = Group.objects.get(id=group_id)
     if establishment == None:
         return redirect("administrator:index")
     elif department == None or group == None:

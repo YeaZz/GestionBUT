@@ -1,10 +1,10 @@
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
 
 from main.models import Student, Professor, Administrator
 
-# Create your views here.
-def index(request):
+def index(request: HttpResponse):
     user = request.user
 
     # Redirecting to related page
@@ -18,20 +18,19 @@ def index(request):
     return redirect("login")
 
 
-def isStudent(user):
+def isStudent(user: User) -> None | Student:
     try:
         return Student.objects.get(id=user if isinstance(user, int) else user.id)
     except Student.DoesNotExist:
         return None
-        
 
-def isProfessor(user):
+def isProfessor(user: User) -> None | Professor:
     try:
         return Professor.objects.get(id=user if isinstance(user, int) else user.id)
     except Professor.DoesNotExist:
         return None
 
-def isAdministrator(user):
+def isAdministrator(user: User) -> None | Administrator:
     try:
         return Administrator.objects.get(id=user if isinstance(user, int) else user.id)
     except Administrator.DoesNotExist:
