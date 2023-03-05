@@ -17,13 +17,32 @@
 
     <div class="content">
         <h2>Liste des ressources</h2>
+
+        <div class="semester-grid">
+            <div>Ressource</div>
+            <div>Nom</div>
+            <div>Evaluations</div>
+            {% for semester, resources in professor_view.items %}
+            {% for resource, evaluations in resources.items %}
+            <div>{{ resource }}</div>
+            <div style="white-space: nowrap;">{{ resource.name }}</div>
+            <div class="notes carousel">
+                {% for evaluation in evaluations %}
+                <div>{{ evaluation }}</div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+            {% endfor %}
+        </div>
+
         {% for semester, resources in professor_view.items %}
         <div class="semester {{ semester.id }}">
             {% for resource, evaluations in resources.items %}
             <div class="resource styled-card hoverable">
                 <form action="{% url 'professor:resource' department_id=department.id resource_id=resource.id %}" class="auto" method="post">
                     {% csrf_token %}
-                    <h2><strong>{{ resource }}</strong><br>{{ resource.name }}</h2>
+                    <h2><strong>{{ resource }}</strong></h2>
+                    <p>{{ resource.name }}</p>
                     <div class="styled-card evaluations">
                         <div class="title">Notes</div>
                         {% if not evaluations %}

@@ -53,3 +53,7 @@ form > .departments {
     display: flex;
     justify-content: center;
 }
+
+.carousel::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+}

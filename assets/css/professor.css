@@ -82,3 +82,19 @@
 .input {
     margin: 2% 0;
 }
+
+.semester-grid {
+    display: grid;
+    grid-template-columns: 1fr 3fr 5fr;
+    margin: 25px;
+}
+
+.semester-grid > * {
+    border: black solid 1px;
+    padding: 5px;
+    height: 50px;
+}
+
+.semester-grid > .notes {
+    overflow-x: scroll;
+}
