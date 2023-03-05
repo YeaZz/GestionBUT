@@ -47,6 +47,10 @@
             <form action="{% url 'professor:createEvaluation' department_id=department.id resource_id=resource.id %}" method="post">
                 {% csrf_token %}
                 <div class="input">
+                    <label for="name">Importer une note</label>
+                    <input type="file" id="import_evaluation">
+                </div>
+                <div class="input">
                     <label for="name">Nom de l'évaluation</label>
                     <input type="text" name="name" id="name" required>
                 </div>

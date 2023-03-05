@@ -4,6 +4,8 @@ const semesterChoice = document.getElementById("semesterSelection")
 const students = document.querySelectorAll(".students")
 const groupChoices = document.querySelectorAll(".group")
 
+const importInput = document.getElementById("import_evaluation")
+
 // Changer d'établissement
 if (establishmentChoice != undefined) {
     displayEstablishment()
@@ -84,4 +86,32 @@ function addListeners(name) {
         let current = document.getElementsByClassName("modal " + value)[0]
         cardAddListener(card, current)
     })
+}
+
+if (importInput != undefined) {
+
+    const students = importInput.parentNode.parentNode.getElementsByClassName("students")
+
+    importInput.onchange = function() {
+        reader = new FileReader();
+        reader.onload = function() {
+            lines = reader.result.split('\r\n')
+            lines.shift()
+            lines.pop()
+            lines.forEach(line => {
+                [id, note] = line.split(';')
+                note = note.replace(',', '.')
+                Array.from(students).forEach(student => {
+                    Array.from(student.children).forEach(child => {
+                        if (child.tagName == "INPUT" && child.name == ("note " + student.classList[1] + " " + id)) {
+                            child.value = +note
+                        }
+                    })
+                })
+            })
+        }
+
+        if (importInput.files.length > 0)
+            reader.readAsText(importInput.files[0])
+    }
 }
