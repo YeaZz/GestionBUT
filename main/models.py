@@ -92,112 +92,34 @@ class Establishment(models.Model):
 
         str_resources = {
             semesters[0]: {
-                1: (
-                    "Initiation au développement",
-                    [ues[1][0], ues[2][0]]
-                ),
-                2: (
-                    "Développement d'interfaces web",
-                    [ues[1][0], ues[5][0], ues[6][0]]
-                ),
-                3: (
-                    "Introduction à l'architecture des ordinateurs",
-                    [ues[2][0], ues[3][0]]
-                ),
-                4: (
-                    "Introduction aux systèmes d'exploitation et à leur fonctionnement",
-                    [ues[3][0]]
-                ),
-                5: (
-                    "Introduction aux bases de données et SQL",
-                    [ues[4][0]]
-                ),
-                6: (
-                    "Mathématiques discrètes",
-                    [ues[2][0], ues[4][0]]
-                ),
-                7: (
-                    "Outils mathématiques fondamentaux",
-                    [ues[2][0]]
-                ),
-                8: (
-                    "Introduction à la gestion des organisations",
-                    [ues[5][0], ues[6][0]]
-                ),
-                9: (
-                    "Introduction à l'économie durable et numérique",
-                    [ues[4][0], ues[6][0]]
-                ),
-                10: (
-                    "Anglais",
-                    [ues[1][0], ues[3][0], ues[6][0]]
-                ),
-                11: (
-                    "Base de la communication",
-                    [ues[3][0], ues[5][0], ues[6][0]]
-                ),
-                12: (
-                    "Projet professionnel et personnel",
-                    [ues[6][0]]
-                )
+                1: ("Initiation au développement", [ues[1][0], ues[2][0]]),
+                2: ("Développement d'interfaces web", [ues[1][0], ues[5][0], ues[6][0]]),
+                3: ("Introduction à l'architecture des ordinateurs", [ues[2][0], ues[3][0]]),
+                4: ("Introduction aux systèmes d'exploitation et à leur fonctionnement", [ues[3][0]]),
+                5: ("Introduction aux bases de données et SQL", [ues[4][0]]),
+                6: ("Mathématiques discrètes", [ues[2][0], ues[4][0]]),
+                7: ("Outils mathématiques fondamentaux", [ues[2][0]]),
+                8: ("Introduction à la gestion des organisations", [ues[5][0], ues[6][0]]),
+                9: ("Introduction à l'économie durable et numérique", [ues[4][0], ues[6][0]]),
+                10: ("Anglais", [ues[1][0], ues[3][0], ues[6][0]]),
+                11: ("Base de la communication", [ues[3][0], ues[5][0], ues[6][0]]),
+                12: ("Projet professionnel et personnel", [ues[6][0]])
             },
             semesters[1]: {
-                1: (
-                    "Développement orienté objets",
-                    [ues[1][0], ues[2][0]]
-                ),
-                2: (
-                    "Développement d'applications avec IHM",
-                    [ues[1][0], ues[5][0], ues[6][0]]
-                ),
-                3: (
-                    "Qualité de développement",
-                    [ues[1][0], ues[5][0]]
-                ),
-                4: (
-                    "Communication et fonctionnement bas niveau",
-                    [ues[2][0], ues[3][0]]
-                ),
-                5: (
-                    "Introduction aux services réseaux",
-                    [ues[3][0]]
-                ),
-                6: (
-                    "Exploitation d'une base de données",
-                    [ues[4][0]]
-                ),
-                7: (
-                    "Graphes",
-                    [ues[2][0], ues[5][0]]
-                ),
-                8: (
-                    "Outils numériques pour les statistiques descriptives",
-                    [ues[4][0]]
-                ),
-                9: (
-                    "Méthodes numériques",
-                    [ues[2][0]]
-                ),
-                10: (
-                    "Introduction à la gestion des systèmes d'information",
-                    [ues[4][0], ues[5][0]]
-                ),
-                11: (
-                    "Introduction au droit",
-                    [ues[6][0]]
-                ),
-                12: (
-                    "Anglais",
-                    [ues[3][0], ues[4][0], ues[5][0], ues[6][0]]
-                ),
-                13: (
-                    "Communication technique",
-                    [ues[1][0], ues[3][0], ues[5][0], ues[6][0]]
-                ),
-                14: (
-                    "Projet professionnel et personnel",
-                    [ues[6][0]]
-                )
+                1: ("Développement orienté objets", [ues[1][0], ues[2][0]]),
+                2: ("Développement d'applications avec IHM", [ues[1][0], ues[5][0], ues[6][0]]),
+                3: ("Qualité de développement", [ues[1][0], ues[5][0]]),
+                4: ("Communication et fonctionnement bas niveau", [ues[2][0], ues[3][0]]),
+                5: ("Introduction aux services réseaux", [ues[3][0]]),
+                6: ("Exploitation d'une base de données",[ues[4][0]]),
+                7: ("Graphes", [ues[2][0], ues[5][0]]),
+                8: ("Outils numériques pour les statistiques descriptives", [ues[4][0]]),
+                9: ("Méthodes numériques", [ues[2][0]]),
+                10: ("Introduction à la gestion des systèmes d'information", [ues[4][0], ues[5][0]]),
+                11: ("Introduction au droit", [ues[6][0]]),
+                12: ("Anglais", [ues[3][0], ues[4][0], ues[5][0], ues[6][0]]),
+                13: ("Communication technique", [ues[1][0], ues[3][0], ues[5][0], ues[6][0]]),
+                14: ("Projet professionnel et personnel", [ues[6][0]])
             }
         }
         # R1.2 => (1=semestre, 2=number)
@@ -354,8 +276,8 @@ class UE(models.Model):
             for evaluation in resource.getEvaluations():    # Loop les évaluations associés
                 note = evaluation.getNote(student)              # Prend la note de l'étudiant de l'évaluation
                 if note != None:                                # Si la note existe
-                    sum += note                                     # Ajoute la note à la somme
-                    nb += 1                                         # Incrémente le nombre de note
+                    sum += note * evaluation.coef                   # Ajoute la note à la somme
+                    nb += evaluation.coef                           # Incrémente le nombre de note
         return round(sum / nb, 2) if nb > 0 else None   # Si le nombre de note > 0, retourne une moyenne, sinon None
 
     def getRanking(self, student):
@@ -416,8 +338,8 @@ class Resource(models.Model):
         for evaluation in self.getEvaluations():
             note = evaluation.getNote(student)
             if note != None:
-                sum += note
-                nb += 1
+                sum += note * evaluation.coef
+                nb += evaluation.coef
         return round(sum / nb, 2) if nb > 0 else None
 
     def getRanking(self, student):
@@ -523,6 +445,7 @@ class Evaluation(models.Model):
     resource = models.ForeignKey(Resource, on_delete=models.CASCADE, default=None, blank=False, null=True)
     group = models.ForeignKey(Group, on_delete=models.DO_NOTHING, default=None, blank=False, null=True)
     date = models.DateTimeField(default=now)
+    coef = models.FloatField(default=1, blank=True, null=False)
 
     def __str__(self):
         return self.name
@@ -585,13 +508,16 @@ class Grade(models.Model):
     evaluation = models.ForeignKey(Evaluation, on_delete=models.CASCADE, default=None, blank=False, null=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE, default=None, blank=False, null=True)
     note = models.FloatField(default=0, blank=False, null=False)
-    coef = models.FloatField(default=1, blank=True, null=False)
 
     def __str__(self):
-        return self.evaluation.name
+        return self.evaluation.name + " " + self.student
 
-    def calcNote(self):
-        return self.note * self.coef
+class Coefficient(models.Model):
+    class Meta:
+        unique_together = (("ue", "resource"),)
+    ue = models.ForeignKey(UE, on_delete=models.CASCADE, default=None, blank=False, null=True)
+    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, default=None, blank=False, null=True)
+    coef = models.IntegerField(default=None, blank=False, null=False)
 
 def load():
     empty()
