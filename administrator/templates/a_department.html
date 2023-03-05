@@ -7,7 +7,7 @@
         <a href="{% url 'administrator:establishment' establishment_id=establishment.id %}"> < </a>
     </div>
 
-    {% for competence in competences %}
+    {% for competence in department.getCompetences %}
     <div class="modal {{ competence.id }} competence">
         <div class="modal-content">
             <h1>Modifier une compétence</h1>
@@ -48,7 +48,7 @@
     {% endfor %}
 
 
-    {% for semester in semesters %}
+    {% for semester in department.getSemesters %}
     <div class="modal {{ semester.id }} semester">
         <div class="modal-content">
             <h1>Modifier un semestre</h1>
@@ -81,7 +81,7 @@
     {% endfor %}
 
 
-    {% for group in groups %}
+    {% for group in department.getGroups %}
     <div class="modal {{ group.id }} group">
         <div class="modal-content">
             <h1>Modifier un groupe</h1>
@@ -102,7 +102,7 @@
                             <label for="parent">Groupe parent</label>
                             <select name="parent" id="parent">
                                 <option value="none">Aucun</option>
-                                {% for sub_group in groups %}
+                                {% for sub_group in department.getGroups %}
                                 {% if sub_group.id != group.id %}
                                 <option value="{{ sub_group.id }}" {% if group.parent.id == sub_group.id %}selected{% endif %}>{{ sub_group.name }}</option>
                                 {% endif %}
@@ -219,10 +219,10 @@
         <h2>Liste des Competences</h2>
         <div class="carousel-container styled-card">
             <div class="carousel">
-                {% for competence in competences %}
+                {% for competence in department.getCompetences %}
                 <div class="competence {{ competence.id }} carousel-item styled-card hoverable">
                     <h2 class="middle">{{ competence }}</h2>
-                    <h2>{{ competence.name }}</h2>
+                    <p>{{ competence.name }}</p>
                 </div>
                 {% endfor %}
                 <div id="add_competence" class="carousel-item plus styled-card hoverable">+</div>
@@ -231,7 +231,7 @@
         <h2>Liste des Semestres</h2>
         <div class="carousel-container styled-card">
             <div class="carousel">
-                {% for semester in semesters %}
+                {% for semester in department.getSemesters %}
                 <div class="semester {{ semester.id }} carousel-item styled-card hoverable">
                     <h2 class="middle">{{ semester }}</h2>
                     <p>{{ semester.resourceCount }} ressources</p>
@@ -243,7 +243,7 @@
         <h2>Liste des Groupes</h2>
         <div class="carousel-container styled-card">
             <div class="carousel">
-                {% for group in groups %}
+                {% for group in department.getGroups %}
                 <div class="group {{ group.id }} carousel-item styled-card hoverable">
                     <h2 class="middle">{{ group }}</h2>
                     <p>{{ group.studentCount }} étudiants</p>
@@ -262,7 +262,7 @@
             {% if not usefulLinks %}
             Aucun liens utiles.
             {% else %}
-            {% for link in usefulLinks %}
+            {% for link in department.getUsefulLinks %}
             <div class="link">
                 <img src="{% static link.file_path %}" alt="{{ link.name }}" />
                 <a href="{{ link.link }}" target="_blank">{{ link.name }}</a>
