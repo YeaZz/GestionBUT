@@ -196,7 +196,7 @@
                             <label for="parent">Groupe parent</label>
                             <select name="parent" id="parent">
                                 <option value="none">Aucun</option>
-                                {% for group in groups %}
+                                {% for group in department.getGroups %}
                                 <option value="{{ group.id }}">{{ group.name }}</option>
                                 {% endfor %}
                             </select>
