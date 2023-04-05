@@ -173,6 +173,16 @@ form:hover .effect-underline:after {
     overflow-y: scroll;
 }
 
+.modal-content-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 50px;
+}
+
+.modal-content-header > * {
+    margin: 0;
+}
 
 
 
@@ -410,9 +420,8 @@ form:hover .effect-underline:after {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 1%;
-    width: 25%;
-    padding: 3%;
+    margin: 25px;
+    width: 500px;
     font-size: 20px;
 }
 
@@ -432,8 +441,9 @@ form:hover .effect-underline:after {
 }
 
 .info-card .data {
-    border: 1px solid black;
+    border: 1px solid var(--element-color);
     padding: 2%;
+    user-select: text;
 }
 
 

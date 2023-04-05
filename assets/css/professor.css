@@ -83,18 +83,83 @@
     margin: 2% 0;
 }
 
-.semester-grid {
-    display: grid;
-    grid-template-columns: 1fr 3fr 5fr;
+.grid-semester {
+    width: calc(100% - 50px);
     margin: 25px;
+    table-layout: fixed;
 }
 
-.semester-grid > * {
-    border: black solid 1px;
+.grid-semester, td, th {
+    border: 1px solid var(--element-color);
+    border-collapse: collapse;
+}
+
+td > a {
+    margin-left: 10px;
+    color: black;
+    text-underline-offset: 4px;
+    transition: color .3s ease;
+}
+
+td > a:hover {
+    color: #008bf8;
+    transition: color .3s ease;
+}
+
+.grid-semester tr {
+    height: 55px;
+}
+
+.grid-resource-id {
+    width: 10%;
+}
+
+.grid-resource-name {
+    width: 50%;
+}
+
+.grid-resource-evals {
+    width: auto;
+}
+
+.grid-evaluations {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    overflow: auto;
+    margin: 0 10px;
+    max-width: 100%;
+}
+
+.grid-evaluations::-webkit-scrollbar {
+    height: 15px;
+}
+
+.grid-evaluations > * {
     padding: 5px;
-    height: 50px;
+    width: max-content;
+    cursor: pointer;
+    margin: 10px 0;
 }
 
-.semester-grid > .notes {
-    overflow-x: scroll;
+#add_evaluation {
+    text-align: center;
+    min-width: 20px;
+}
+
+.grid-students {
+    margin: 25px;
+    display: flex;
+    flex-direction: column;
+    height: 800px;
+    overflow: auto;
+}
+
+.search {
+    margin: 25px;
+    width: auto;
+}
+
+input:disabled {
+    cursor: not-allowed;
 }

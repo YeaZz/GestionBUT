@@ -17,25 +17,49 @@
 
     <div class="content">
         <h2>Liste des ressources</h2>
-
-        <div class="semester-grid">
-            <div>Ressource</div>
-            <div>Nom</div>
-            <div>Evaluations</div>
-            {% for semester, resources in professor_view.items %}
-            {% for resource, evaluations in resources.items %}
-            <div>{{ resource }}</div>
-            <div style="white-space: nowrap;">{{ resource.name }}</div>
-            <div class="notes carousel">
-                {% for evaluation in evaluations %}
-                <div>{{ evaluation }}</div>
+        {% for semester, resources in professor_view.items %}
+        <table class="grid-semester {{ semester.id }}">
+            <thead>
+                <tr>
+                    <th class="grid-resource-id">Ressource</th>
+                    <th class="grid-resource-name">Nom</th>
+                    <th class="grid-resource-evals">Evaluations</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resource, evaluations in resources.items %}
+                <tr>
+                    <td class="middle">R{{ resource.semester.number }}.{{ resource.number }}</td>
+                    <td style="white-space: nowrap;"><a href="{% url 'professor:resource' department_id=department.id resource_id=resource.id %}">{{ resource.name }}</a></td>
+                    <td>
+                        <div class="grid-evaluations">
+                            {% if resource in professor_resources|get_item:semester %}
+                            <div id="add_evaluation" class="add_grid-evaluation {{ resource.id }} grid-evaluation styled-card">+</div>
+                            {% endif %}
+                            {% for evaluation in evaluations %}
+                            <div class="grid-evaluation {{ evaluation.id }} styled-card">{{ evaluation }}</div>
+                            {% endfor %}
+                        </div>
+                    </td>
+                </tr>
                 {% endfor %}
+            </tbody>
+        </table>
+        {% endfor %}
+
+        <h2>Liste des étudiants</h2>
+        <div class="search input styled-card">
+            <input id="student_search" type="text" placeholder="Recherche par le nom...">
+        </div>
+        <div class="grid-students">
+            {% for student in students %}
+            <div class="student {{ student.id.id }} styled-card">
+                {{ student.getFullName }}
             </div>
-            {% endfor %}
             {% endfor %}
         </div>
 
-        {% for semester, resources in professor_view.items %}
+        <!-- {% for semester, resources in professor_view.items %}
         <div class="semester {{ semester.id }}">
             {% for resource, evaluations in resources.items %}
             <div class="resource styled-card hoverable">
@@ -57,8 +81,139 @@
             </div>
             {% endfor %}
         </div>
-        {% endfor %}
+        {% endfor %} -->
     </div>
+
+    {% for student in students %}
+    <div class="modal student {{ student.id.id }}">
+        <div class="modal-content">
+            <h2>{{ student.getFullName }}</h2>
+            <div class="info-card">
+                <div class="info">
+                    <p>Identifiant</p>
+                    <p class="data">{{ student.id.username }}</p>
+                </div>
+                <div class="info">
+                    <p>Email</p>
+                    <p class="data">{{ student.id.email }}</p>
+                </div>
+            </div>
+            <table class="grid-semester">
+                <thead>
+                    <tr>
+                        <th class="grid-resource-id">Ressource</th>
+                        <th class="grid-resource-name">Nom</th>
+                        <th class="grid-resource-evals">Evaluations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for resource in student.getResources %}
+                    <tr>
+                        <td class="middle">R{{ resource.semester.number }}.{{ resource.number }}</td>
+                        <td style="white-space: nowrap;">
+                            <a href="{% url 'professor:resource' department_id=department.id resource_id=resource.id %}">{{ resource.name }}</a>
+                        </td>
+                        <td>
+                            <div class="grid-evaluations">
+                                {% for evaluation in resource.getEvaluations %}
+                                <div class="grid-evaluation middle styled-card">{{ evaluation }}<br>{{ professor_view|get_item:resource.semester|get_item:resource|get_item:evaluation|get_item:student }}</div>
+                                {% endfor %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% for semester, resources in professor_view.items %}
+    {% for resource, evaluations in resources.items %}
+    {% for evaluation, grades in evaluations.items %}
+    <div class="modal {{ evaluation.id }}">
+        <div class="modal-content">
+            <div class="modal-content-header">
+                <h2>Modifier une note</h2>
+                <form action="{% url 'professor:deleteEvaluation' department_id=department.id resource_id=resource.id evaluation_id=evaluation.id %}" method="post">
+                    {% csrf_token %}
+                    <button class="delete-button hoverable">Supprimer</button>
+                </form>
+            </div>
+            <p>{{ evaluation }}</p>
+            <form action="{% url 'professor:editEvaluation' department_id=department.id resource_id=resource.id evaluation_id=evaluation.id %}" method="post">
+                {% csrf_token %}
+                <div class="input">
+                    <label for="max_note">Note maximale</label>
+                    <input type="number" id="max_note" value="{{ evaluation.max_note }}" disabled>
+                </div>
+                <div class="input">
+                    <label for="coef">Coefficient</label>
+                    <input type="number" name="coef" id="coef" step="0.1" value="{{ evaluation.coef|get_float }}" min="0.0" required>
+                </div>
+                <div class="input">
+                    <select id="group" class="group" name="group">
+                        {% for group in department.getGroups %}
+                        <option value="{{ group.id }}" {% if evaluation.group.id == group.id %}selected{% endif %}>{{ group.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% for group in department.getGroups %}
+                <div class="students {{ group.id }}">
+                    {% for student in group.students.all %}
+                    <div>{{ student.id.last_name }} {{ student.id.first_name }}</div>
+                    <input type="number" name="note {{ group.id }} {{ student.id.id }}" value="{{ grades|get_item:student|get_float }}" step="0.01">
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                <button class="modal-button hoverable">Confirmer</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+    <div class="modal add_grid-evaluation {{ resource.id }}">
+        <div class="modal-content">
+            <h2>{{ resource }} : Ajouter une évaluation</h2>
+            <form action="{% url 'professor:createEvaluation' department_id=department.id resource_id=resource.id %}" method="post">
+                {% csrf_token %}
+                <div class="input">
+                    <label for="import_evaluation">Importer une note</label>
+                    <input type="file" id="import_evaluation">
+                </div>
+                <div class="input">
+                    <label for="name">Nom de l'évaluation</label>
+                    <input type="text" name="name" id="name" required>
+                </div>
+                <div class="input">
+                    <label for="max_note">Note maximale</label>
+                    <input type="number" name="max_note" id="max_note" step="1" value="20" min="1" required>
+                </div>
+                <div class="input">
+                    <label for="coef">Coefficient</label>
+                    <input type="number" name="coef" id="coef" step="0.1" value="1.0" min="0.0" required>
+                </div>
+                <div class="input">
+                    <select class="group" name="group">
+                        <option value="none" selected>Veuillez choisir un groupe</option>
+                        {% for group in department.getGroups %}
+                        <option value="{{ group.id }}">{{ group.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% for group in department.getGroups %}
+                <div class="students {{ group.id }}">
+                    {% for student in group.students.all %}
+                    <div>{{ student.id.last_name }} {{ student.id.first_name }}</div>
+                    <input type="number" name="note {{ group.id }} {{ student.id.id }}" step="0.1">
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                <button class="modal-button hoverable">Ajouter</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+    {% endfor %}
 </div>
 
 <aside>

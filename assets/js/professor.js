@@ -6,6 +6,9 @@ const groupChoices = document.querySelectorAll(".group")
 
 const importInput = document.getElementById("import_evaluation")
 
+const studentInput = document.getElementById("student_search")
+const studentContainer = document.querySelector(".grid-students")
+
 // Changer d'établissement
 if (establishmentChoice != undefined) {
     displayEstablishment()
@@ -37,9 +40,9 @@ if (semesterChoice != undefined) {
     function displaySemester() {
         Array.from(semesterChoice.options).forEach(option => {
             let value = option.value
-            let currentSemester = document.getElementsByClassName("semester " + value)[0]
+            let currentSemester = document.getElementsByClassName("grid-semester " + value)[0]
             if (currentSemester == undefined) return
-            if (option.selected) currentSemester.style.display = "flex"
+            if (option.selected) currentSemester.style.display = "table"
             else currentSemester.style.display = "none"
             return
         })
@@ -67,6 +70,7 @@ if (students.length > 0) {
     }
 }
 
+// Listener sur les cartes d'ajout d'évaluations
 function cardAddListener(card, modal) {
     if (card == undefined || modal == undefined) return
     card.addEventListener("click", () => {
@@ -76,9 +80,16 @@ function cardAddListener(card, modal) {
 }
 
 addListeners("evaluation")
+addListeners("grid-evaluation")
 
 function addListeners(name) {
-    cardAddListener(document.getElementById("add_" + name), document.querySelector(".modal.add_" + name))
+    const resources = document.querySelectorAll(".add_" + name)
+    Array.from(resources).filter(resource => !resource.classList.contains('modal')).forEach(resource => {
+        let value = resource.classList[1]
+        let current = document.getElementsByClassName("modal add_" + name + " " + value)[0]
+        cardAddListener(resource, current)
+    })
+
     const cards = document.querySelectorAll("." + name)
     if (cards.length == 0) return
     Array.from(cards).forEach(card => {
@@ -93,7 +104,7 @@ if (importInput != undefined) {
     const students = importInput.parentNode.parentNode.getElementsByClassName("students")
 
     importInput.onchange = function() {
-        reader = new FileReader();
+        let reader = new FileReader();
         reader.onload = function() {
             lines = reader.result.split('\r\n')
             lines.pop()
@@ -113,4 +124,36 @@ if (importInput != undefined) {
         if (importInput.files.length > 0)
             reader.readAsText(importInput.files[0])
     }
+}
+
+if (studentInput != undefined && studentContainer != undefined) {
+
+    const studentList = Array.from(studentContainer.children)
+
+    studentList.forEach((student) => {
+        let studentId = student.classList[1]
+        let card = document.getElementsByClassName("modal student " + studentId)[0]
+        cardAddListener(student, card)
+    })
+
+    function filteredStudents() {
+        let selection = []
+        let input = studentInput.value.toLocaleLowerCase()
+        Array.from(studentList).forEach((student) => {
+            if (student.innerHTML.toLocaleLowerCase().includes(input))
+                selection.push(student)
+        })
+        return selection
+    }
+
+    function render(students) {
+        studentContainer.innerHTML = ""
+        Array.from(students).forEach((student) => {
+            studentContainer.appendChild(student)
+        })
+    }
+
+    studentInput.addEventListener("input", () => {
+        render(filteredStudents())
+    })
 }

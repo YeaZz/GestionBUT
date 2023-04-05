@@ -310,8 +310,12 @@ class Semester(models.Model):
         return Resource.objects.filter(semester=self).order_by("number")
 
     def getProfessorResources(self, professor):
-        resources = Resource.objects.filter(semester=self).order_by("number")
-        return list(set(resources & professor.resources.all()))
+        professor_resources = []
+        resources = Resource.objects.filter(semester=self).order_by("id")
+        for resource in professor.resources.all():
+            if resource in resources:
+                professor_resources.append(resource)
+        return professor_resources
 
     def getUEs(self):
         ues = []								# Liste de retour
@@ -399,11 +403,17 @@ class Student(models.Model):
     def __str__(self):
         return self.id.username
 
+    def getFullName(self):
+        return f"{self.id.first_name} {self.id.last_name}"
+
     def getGrades(self):
         return Grade.objects.filter(student=self)
 
     def getLastGrades(self, amount):
         return self.getGrades()[:amount]
+
+    def getResources(self):
+        return self.department.getResources()
 
 class Professor(models.Model):
     id = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
@@ -458,7 +468,10 @@ class Evaluation(models.Model):
         return Grade.objects.filter(evaluation=self, student=student).first()
 
     def getNote(self, student):
-        return self.getGrade(student).note
+        grade = self.getGrade(student)
+        if grade == None:
+            return None
+        return grade.note
 
     def getAverage(self):
         grades = self.getGrades()	# Prend les notes de l'évaluation
@@ -511,7 +524,7 @@ class Grade(models.Model):
     note = models.FloatField(default=0, blank=False, null=False)
 
     def __str__(self):
-        return self.evaluation.name + " " + self.student
+        return self.evaluation.name
 
 class Coefficient(models.Model):
     class Meta:
