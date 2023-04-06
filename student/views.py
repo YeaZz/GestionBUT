@@ -6,6 +6,8 @@ from main.views import isStudent
 
 @login_required
 def index(request):
+
+    # Auth security
     user = request.user
     student = isStudent(user)
     if student == None:
@@ -13,17 +15,18 @@ def index(request):
 
     department = student.department
 
+    # Method body
     student_view = {}
     for semester in department.getSemesters():
         student_view[semester] = {}, {}
 
-        # Vue ressource
+        # Resource view
         for resource in semester.getResources():
             student_view[semester][0][resource] = {}, resource.getNote(student), resource.getRanking(student)
             for evaluation in resource.getEvaluations():
                 student_view[semester][0][resource][0][evaluation] = evaluation.getNote(student)
 
-        # Vue UE
+        # UE view
         for ue in semester.getUEs():
             student_view[semester][1][ue] = {}, ue.getNote(student), ue.getRanking(student)
             for resource in ue.getResources():
@@ -45,16 +48,20 @@ def index(request):
 
 @login_required
 def resource(request, semester_id, resource_id):
+
+    # Auth security
     user = request.user
     student = isStudent(user)
     if student == None:
         return redirect("login")
 
+    # Query parameters
     semester = Semester.objects.filter(id=semester_id).first()
     resource = Resource.objects.filter(id=resource_id).first()
     if semester == None or resource == None:
         return redirect("student:index")
 
+    # Method body
     student_view = {}
     for evaluation in resource.getEvaluations():
         student_view[evaluation] = (
@@ -80,16 +87,20 @@ def resource(request, semester_id, resource_id):
 
 @login_required
 def ue(request, semester_id, ue_id):
+
+    # Auth security
     user = request.user
     student = isStudent(user)
     if student == None:
         return redirect("login")
 
+    # Query parameters
     semester = Semester.objects.filter(id=semester_id).first()
     ue = UE.objects.filter(id=ue_id).first()
     if semester == None or ue == None:
         return redirect("student:index")
 
+    # Method body
     student_view = {}
     for resource in ue.getResources():
         student_view[resource] = {}

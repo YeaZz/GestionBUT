@@ -1,3 +1,4 @@
+// Card : add listener on add cards
 function cardAddListener(card, modal) {
     if (card == undefined || modal == undefined) return
     card.addEventListener("click", () => {
@@ -6,6 +7,7 @@ function cardAddListener(card, modal) {
     })
 }
 
+// Card : add listeners on cards
 function addListeners(name) {
     cardAddListener(document.getElementById("add_" + name), document.querySelector(".modal.add_" + name))
     const cards = document.querySelectorAll(".carousel-item." + name)

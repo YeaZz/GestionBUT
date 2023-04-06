@@ -1,6 +1,7 @@
 const semesterChoice = document.getElementById("semesterSelection")
 const viewChoice = document.getElementById("viewSelection")
 
+// Select : change semester
 if (semesterChoice != undefined) {
     displaySemester()
 
@@ -20,6 +21,7 @@ if (semesterChoice != undefined) {
     }
 }
 
+// Select : change view
 if (viewChoice != undefined) {
     const resources = document.getElementsByClassName("resource")
     const ues = document.getElementsByClassName("ue")

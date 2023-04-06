@@ -11,11 +11,13 @@
     <div class="modal {{ competence.id }} competence">
         <div class="modal-content">
             <h1>Modifier une compétence</h1>
-            <h2>{{ competence }}</h2>
-            <form action="{% url 'administrator:deleteCompetence' establishment_id=department.establishment.id department_id=department.id competence_id=competence.id %}" method="post">
-                {% csrf_token %}
-                <button class="delete-button hoverable">Supprimer</button>
-            </form>
+            <div class="modal-content-header">
+                <h2>{{ competence }}</h2>
+                <form action="{% url 'administrator:deleteCompetence' establishment_id=department.establishment.id department_id=department.id competence_id=competence.id %}" method="post">
+                    {% csrf_token %}
+                    <button class="delete-button hoverable">Supprimer</button>
+                </form>
+            </div>
             <form action="{% url 'administrator:editCompetence' establishment_id=department.establishment.id department_id=department.id competence_id=competence.id %}" method="post">
                 {% csrf_token %}
                 <div class="datas">
@@ -52,11 +54,13 @@
     <div class="modal {{ semester.id }} semester">
         <div class="modal-content">
             <h1>Modifier un semestre</h1>
-            <h2>{{ semester }}</h2>
-            <form action="{% url 'administrator:deleteSemester' establishment_id=department.establishment.id department_id=department.id semester_id=semester.id %}" method="post">
-                {% csrf_token %}
-                <button class="delete-button hoverable">Supprimer</button>
-            </form>
+            <div class="modal-content-header">
+                <h2>{{ semester }}</h2>
+                <form action="{% url 'administrator:deleteSemester' establishment_id=department.establishment.id department_id=department.id semester_id=semester.id %}" method="post">
+                    {% csrf_token %}
+                    <button class="delete-button hoverable">Supprimer</button>
+                </form>
+            </div>
             <form action="{% url 'administrator:editSemester' establishment_id=department.establishment.id department_id=department.id semester_id=semester.id %}" method="post">
                 {% csrf_token %}
                 <div class="datas">
@@ -85,11 +89,14 @@
     <div class="modal {{ group.id }} group">
         <div class="modal-content">
             <h1>Modifier un groupe</h1>
-            <h2>{{ group }}</h2>
-            <form action="{% url 'administrator:deleteGroup' establishment_id=department.establishment.id department_id=department.id group_id=group.id %}" method="post">
-                {% csrf_token %}
-                <button class="delete-button hoverable">Supprimer</button>
-            </form>
+
+            <div class="modal-content-header">
+                <h2>{{ group }}</h2>
+                <form action="{% url 'administrator:deleteGroup' establishment_id=department.establishment.id department_id=department.id group_id=group.id %}" method="post">
+                    {% csrf_token %}
+                    <button class="delete-button hoverable">Supprimer</button>
+                </form>
+            </div>
             <form action="{% url 'administrator:editGroup' establishment_id=department.establishment.id department_id=department.id group_id=group.id %}" class="form" method="post">
                 {% csrf_token %}
                 <div class="datas">

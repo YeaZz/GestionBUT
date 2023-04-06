@@ -4,12 +4,12 @@ const semesterChoice = document.getElementById("semesterSelection")
 const students = document.querySelectorAll(".students")
 const groupChoices = document.querySelectorAll(".group")
 
-const importInput = document.getElementById("import_evaluation")
+const importInputs = document.querySelectorAll(".import_evaluation")
 
 const studentInput = document.getElementById("student_search")
 const studentContainer = document.querySelector(".grid-students")
 
-// Changer d'établissement
+// Select : change semester
 if (establishmentChoice != undefined) {
     displayEstablishment()
 
@@ -29,7 +29,7 @@ if (establishmentChoice != undefined) {
     }
 }
 
-// Changer de semestre via les <select>
+// Select : change semester
 if (semesterChoice != undefined) {
     displaySemester()
 
@@ -49,7 +49,7 @@ if (semesterChoice != undefined) {
     }
 }
 
-// Ajouter une note
+// Modal : Select : display students by choosen group
 if (students.length > 0) {
     Array.from(groupChoices).forEach(select => {
         displayStudents(select)
@@ -70,7 +70,7 @@ if (students.length > 0) {
     }
 }
 
-// Listener sur les cartes d'ajout d'évaluations
+// Card : add listener on add cards
 function cardAddListener(card, modal) {
     if (card == undefined || modal == undefined) return
     card.addEventListener("click", () => {
@@ -79,9 +79,7 @@ function cardAddListener(card, modal) {
     })
 }
 
-addListeners("evaluation")
-addListeners("grid-evaluation")
-
+// Card : add listeners on cards
 function addListeners(name) {
     const resources = document.querySelectorAll(".add_" + name)
     Array.from(resources).filter(resource => !resource.classList.contains('modal')).forEach(resource => {
@@ -99,33 +97,40 @@ function addListeners(name) {
     })
 }
 
-if (importInput != undefined) {
+addListeners("evaluation")
+addListeners("grid-evaluation")
 
-    const students = importInput.parentNode.parentNode.getElementsByClassName("students")
+// Modal : import a CSV files containing notes
+if (importInputs != undefined) {
 
-    importInput.onchange = function() {
-        let reader = new FileReader();
-        reader.onload = function() {
-            lines = reader.result.split('\r\n')
-            lines.pop()
-            lines.forEach(line => {
-                [id, note] = line.split(';')
-                note = note.replace(',', '.')
-                Array.from(students).forEach(student => {
-                    Array.from(student.children).forEach(child => {
-                        if (child.tagName == "INPUT" && child.name == ("note " + student.classList[1] + " " + id)) {
-                            child.value = +note
-                        }
+    Array.from(importInputs).forEach(importInput => {
+        const students = importInput.parentNode.parentNode.getElementsByClassName("students")
+
+        importInput.onchange = function() {
+            let reader = new FileReader();
+            reader.onload = function() {
+                lines = reader.result.split('\r\n')
+                lines.pop()
+                lines.forEach(line => {
+                    [id, note] = line.split(';')
+                    note = note.replace(',', '.')
+                    Array.from(students).forEach(student => {
+                        Array.from(student.children).forEach(child => {
+                            if (child.tagName == "INPUT" && child.name == ("note " + student.classList[1] + " " + id)) {
+                                child.value = +note
+                            }
+                        })
                     })
                 })
-            })
-        }
+            }
 
-        if (importInput.files.length > 0)
-            reader.readAsText(importInput.files[0])
-    }
+            if (importInput.files.length > 0)
+                reader.readAsText(importInput.files[0])
+        }
+    })
 }
 
+// Students page : filter by name
 if (studentInput != undefined && studentContainer != undefined) {
 
     const studentList = Array.from(studentContainer.children)

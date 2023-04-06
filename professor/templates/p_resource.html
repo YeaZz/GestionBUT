@@ -41,14 +41,14 @@
         </div>
     </div>
     {% endfor %}
-    <div class="modal add_evaluation">
+    <div class="modal add_evaluation {{ resource.id }}">
         <div class="modal-content">
             <h2>Ajouter une évaluation</h2>
             <form action="{% url 'professor:createEvaluation' department_id=department.id resource_id=resource.id %}" method="post">
                 {% csrf_token %}
                 <div class="input">
                     <label for="name">Importer une note</label>
-                    <input type="file" id="import_evaluation">
+                    <input type="file" id="import_evaluation" class="import_evaluation">
                 </div>
                 <div class="input">
                     <label for="name">Nom de l'évaluation</label>
@@ -86,7 +86,7 @@
     <div class="content">
         <h2>Liste des évaluations</h2>
         <div class="semester">
-            <div id="add_evaluation" class="evaluation plus styled-card hoverable">+</div>
+            <div id="add_evaluation" class="add_evaluation {{ resource.id }} plus styled-card hoverable">+</div>
             {% for evaluation, stats in professor_view.items %}
             <div class="evaluation {{ evaluation.id }} styled-card hoverable">
                 <h2 class="middle">{{ evaluation }}</h2>

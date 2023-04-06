@@ -11,11 +11,13 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-import os
+import mimetypes
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+mimetypes.add_type("text/javascript", ".js", True)
+mimetypes.add_type("text/css", ".css", True)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -27,7 +29,8 @@ SECRET_KEY ="django-insecure-^tia4%+jhnqlm%_8i5dc-6bwf*47-aol--eqxcl0_hdix3gmj4"
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    #"192.168.1.22"
+    "127.0.0.1",
+    "192.168.1.22"
 ]
 
 
@@ -125,8 +128,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATIC_ROOT = BASE_DIR / 'static/'
+
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'assets')
+    BASE_DIR / 'assets',
 ]
 
 # Default primary key field type

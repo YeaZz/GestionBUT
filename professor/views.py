@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from main.models import *
 from main.views import isProfessor, isStudent
 
+# Filters (methods) for templates
+
 @register.filter
 def get_item(dictionary, key):
     return dictionary.get(key)
@@ -15,13 +17,19 @@ def get_float(float):
         return ""
     return str(float).replace(",", ".")
 
+
+
+
 @login_required
 def index(request):
+
+    # Auth security
     user = request.user
     professor = isProfessor(user)
     if professor == None:
         return redirect("login")
 
+    # Method body
     professor_view = {}
     for establishment in professor.getEtablishments():
         professor_view[establishment] = {}
@@ -40,15 +48,19 @@ def index(request):
 
 @login_required
 def department(request, department_id):
+
+    # Auth security
     user = request.user
     professor = isProfessor(user)
     if professor == None:
         return redirect("login")
 
+    # Query parameters
     department = Department.objects.filter(id=department_id).first()
     if department == None:
         return redirect("professor:index")
 
+    # Method body
     professor_view = {}
     professor_resources = {}
     for semester in department.getSemesters():
@@ -77,11 +89,14 @@ def department(request, department_id):
 
 @login_required
 def resource(request, department_id, resource_id):
+
+    # Auth security
     user = request.user
     professor = isProfessor(user)
     if professor == None:
         return redirect("login")
 
+    # Query parameters
     department = Department.objects.filter(id=department_id).first()
     resource = Resource.objects.filter(id=resource_id).first()
     if department == None:
@@ -89,6 +104,7 @@ def resource(request, department_id, resource_id):
     elif resource == None:
         return redirect("professor:department", department_id=department_id)
 
+    # Method body
     professor_view = {}
     grades = {}
     for evaluation in resource.getEvaluations():
@@ -115,11 +131,14 @@ def resource(request, department_id, resource_id):
 
 @login_required
 def createEvaluation(request, department_id, resource_id):
+
+    # Auth security
     user = request.user
     professor = isProfessor(user)
     if professor == None:
         return redirect("main:index")
 
+    # Query parameters
     department = Department.objects.filter(id=department_id).first()
     resource = Resource.objects.filter(id=resource_id).first()
     if request.method != "POST" or department == None:
@@ -127,6 +146,7 @@ def createEvaluation(request, department_id, resource_id):
     elif resource == None or resource not in professor.getResources(department):
         return redirect("professor:department", department_id=department.id)
 
+    # Method body
     post = request.POST
     if "name" in post and "max_note" in post and "coef" in post and "group" in post:
         name = post.get("name")
@@ -149,11 +169,14 @@ def createEvaluation(request, department_id, resource_id):
 
 @login_required
 def editEvaluation(request, department_id, resource_id, evaluation_id):
+
+    # Auth security
     user = request.user
     professor = isProfessor(user)
     if professor == None:
         return redirect("main:index")
 
+    # Query parameters
     department = Department.objects.filter(id=department_id).first()
     resource = Resource.objects.filter(id=resource_id).first()
     evaluation = Evaluation.objects.filter(id=evaluation_id).first()
@@ -162,6 +185,7 @@ def editEvaluation(request, department_id, resource_id, evaluation_id):
     elif resource == None or resource not in professor.getResources(department) or evaluation == None:
         return redirect("professor:department", department_id=department.id)
 
+    # Method body
     post = request.POST
     if "group" in post and "coef" in post:
         str_group = post.get("group")
@@ -189,11 +213,14 @@ def editEvaluation(request, department_id, resource_id, evaluation_id):
 
 @login_required
 def deleteEvaluation(request, department_id, resource_id, evaluation_id):
+
+    # Auth security
     user = request.user
     professor = isProfessor(user)
     if professor == None:
         return redirect("main:index")
 
+    # Query parameters
     department = Department.objects.filter(id=department_id).first()
     resource = Resource.objects.filter(id=resource_id).first()
     evaluation = Evaluation.objects.filter(id=evaluation_id).first()
@@ -202,6 +229,7 @@ def deleteEvaluation(request, department_id, resource_id, evaluation_id):
     elif resource == None or resource not in professor.getResources(department) or evaluation == None:
         return redirect("professor:department", department_id=department.id)
 
+    # Method body
     evaluation.delete()
 
     return redirect("professor:department", department_id=department_id)
